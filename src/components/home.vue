@@ -34,19 +34,19 @@
   active-text-color="#ffd04b">
   <el-menu-item index="1" @click="outerVisible = true">登陆</el-menu-item>
   <el-submenu index="2">
-    <template slot="title">菜单</template>
-    <el-menu-item index="2-1">选项1</el-menu-item>
-    <el-menu-item index="2-2">选项2</el-menu-item>
-    <el-menu-item index="2-3">选项3</el-menu-item>
+    <template slot="title">书单</template>
+    <el-menu-item index="2-1">人文</el-menu-item>
+    <el-menu-item index="2-2">文学</el-menu-item>
+    <el-menu-item index="2-3">生活</el-menu-item>
     <el-submenu index="2-4">
-      <template slot="title">选项4</template>
-      <el-menu-item index="2-4-1">选项1</el-menu-item>
-      <el-menu-item index="2-4-2">选项2</el-menu-item>
-      <el-menu-item index="2-4-3">选项3</el-menu-item>
+      <template slot="title">技能</template>
+      <el-menu-item index="2-4-1">IT技术</el-menu-item>
+      <el-menu-item index="2-4-2">摄影</el-menu-item>
+      <el-menu-item index="2-4-3">烹饪</el-menu-item>
     </el-submenu>
   </el-submenu>
   <el-menu-item index="3" disabled>消息中心</el-menu-item>
-  <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+  <el-menu-item index="4"><a href="#" target="_blank">订单管理</a></el-menu-item>
 </el-menu>
 </div>
 </el-col>
@@ -57,43 +57,80 @@
     <el-aside width="200px">Aside</el-aside>
     <!-- 主体部分 -->
     <el-container>
-      <el-main>   <div class="block">
-    <el-carousel height="300px">
-      <el-carousel-item v-for="item in 4" :key="item">
-        <h3>{{ item }}</h3>
+      <el-main> 
+        <!--走马灯  -->
+      <div class="block">
+    <el-carousel height="700px">
+      <el-carousel-item  v-for="item in homeList" :key="item">
+         <img  v-bind:src="item.url" class="homelist-img">
       </el-carousel-item>
     </el-carousel>
   </div>
+  <div class="block">
+<el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
+    <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+    <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+    <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+  </el-tabs>
+  </div>
+  <!-- ADS卡片 -->
   <div class="select-card">
-   <el-row>
+   <el-row :gutter="10">
  
-  <el-col :span="8" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
-    <el-card shadow="hover" :body-style="{ padding: '0px' }">
-      <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+  <el-col :span="6" v-for="(item, index) in adsList" :key="index" >
+    <el-card shadow="hover" :body-style="{ padding: '10px' }">
+      <img  v-bind:src="item.url" class="image">
       <div style="padding: 10px;">
-        <span>好吃的汉堡</span>
+        <span class="sub-tit">{{item.title}}</span><br>
         <div class="bottom clearfix">
-          <time class="time">{{ currentDate }}</time>
-          <el-button type="text" class="button">操作按钮</el-button>
+          <p class="time" v-html="item.content"></p>
+          <el-button type="text" class="button" @click="handleDetail();">操作按钮</el-button>
         </div>
       </div>
     </el-card>
   </el-col>
 </el-row>
 </div>
+  
+
+ 
   </el-main>
       <el-footer> 
   <el-dialog title="用户登陆" :visible.sync="outerVisible">
+  <!-- 登陆面板 -->
+ 
+   
     <el-dialog
       width="30%"
-      title="登陆成功"
+      title="用户注册"
       :visible.sync="innerVisible"
       append-to-body>
+      <!-- 注册 -->
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+  <el-form-item label="邮箱" prop="mail">
+    <el-input type="e-mail" v-model="ruleForm.email" autocomplete="off"></el-input>
+  </el-form-item>
+  <el-form-item label="密码" prop="pass">
+    <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+  </el-form-item>
+  <el-form-item label="确认密码" prop="checkPass">
+    <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+  </el-form-item>
+  <el-form-item label="年龄" prop="age">
+    <el-input v-model.number="ruleForm.age"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+    <el-button @click="resetForm('ruleForm')">重置</el-button>
+  </el-form-item>
+</el-form>
     </el-dialog>
 
     <div slot="footer" class="dialog-footer">
       <el-button @click="outerVisible = false">取 消</el-button>
-      <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>
+      <el-button type="success" icon="el-icon-check"  @click="outerVisible = false">登陆</el-button>
+      <el-button type="primary" icon="el-icon-plus"  @click="innerVisible = true">注册账号</el-button>
     </div>
   </el-dialog>
   </el-footer>
@@ -105,14 +142,111 @@
 <script>
  export default {
     data() {
+      // 登陆验证
+ var checkAge = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('年龄不能为空'));
+        }
+        setTimeout(() => {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          } else {
+            if (value < 18) {
+              callback(new Error('必须年满18岁'));
+            } else {
+              callback();
+            }
+          }
+        }, 1000);
+      };
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.ruleForm.checkPass !== '') {
+            this.$refs.ruleForm.validateField('checkPass');
+          }
+          callback();
+        }
+      };
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.ruleForm.pass) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      }
+
       return {
+         ruleForm: {
+          pass: '',
+          checkPass: '',
+          age: ''
+        },
+        rules: {
+          pass: [
+            { validator: validatePass, trigger: 'blur' }
+          ],
+          checkPass: [
+            { validator: validatePass2, trigger: 'blur' }
+          ],
+          age: [
+            { validator: checkAge, trigger: 'blur' }
+          ]
+        },
+      
+        homeList:[
+          {
+            title:'ad',
+            url:require('../assets/images/homepages/book1.jpg'),
+            aim:''
+          },
+           {
+            title:'ad',
+            url:require('../assets/images/homepages/book2.jpg'),
+            aim:''
+          },
+           {
+            title:'ad',
+            url:require('../assets/images/homepages/book3.jpg'),
+            aim:''
+          }, {
+            title:'ad',
+            url:require('../assets/images/homepages/book4.jpg'),
+            aim:''
+          }
+        ],
+        adsList: [
+            {
+              title:'The Polaroid Book',
+              url:require('../assets/images/homepages/add1.jpg'),
+               content: '宝丽来珍藏版摄影--光影盛宴',
+               aim:''},
+            {
+              title : 'The Polaroid Book--the story about Polaroid',
+              url: require('../assets/images/homepages/add2.jpg'),
+               content: '新书发售，白金收藏',
+               aim:''},
+            { 
+              title:'买书送女朋友' ,
+              url:require('../assets/images/homepages/add3.jpg'),
+               content: '快过来抱走我',
+               aim:''},
+            { title:'公益藏书活动',
+             url: require('../assets/images/homepages/add4.jpg'),
+              content: '响应世界沙雕日，你敢买我敢送',
+              aim:''}
+            ],
         activeIndex: '1',
         activeIndex2: '1',
         currentDate:new Date(),
          input3: '',
       select: '',
         outerVisible: false,
-        innerVisible: false
+        innerVisible: false,
+        activeName: 'second',
       };
     },
      mounted() {
@@ -123,6 +257,9 @@
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      handleDetail(){
+
       },
       remoteMethod(query) {
         if (query !== '') {
@@ -137,6 +274,22 @@
         } else {
           this.options = [];
         }
+      },
+         submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
+       handleClick(tab, event) {
+        console.log(tab, event);
       }
     }
     
@@ -255,5 +408,23 @@
   }
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
+  }
+    .image {
+    width: 382px;
+    height: 520px;
+    display: block;
+  }
+  
+.sub-tit {
+    font-weight: bolder;
+    font-size: 16px;
+    float: left;
+    /*width: 100%;*/
+  }
+  .homelist-img{
+     
+    width: 100%;
+    height: 100%;
+  
   }
 </style>
