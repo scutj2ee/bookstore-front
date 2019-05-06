@@ -1,13 +1,21 @@
 <template>
   <div id="app">
-    
-    <router-view/>
+     <!-- 这里开始定义页面的整体架构 -->
+    <transition>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+    data() {
+      return {}
+    },
+    methods: {},
 }
 </script>
 
@@ -18,6 +26,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+ 
 }
 </style>

@@ -6,7 +6,7 @@ v-loading="totalLoading"
   <el-row>
   <el-col :span="8"><div class="grid-content left">
   <!-- logo -->
-   <img src="../assets/images/logo/logo.png" width="50px" height="50px" float="left" position="center" margin-top="30px">
+   <img src="../../assets/images/logo/logo.png" width="50px" height="50px" float="left" position="center" margin-top="30px">
    
   </div>
   </el-col>
@@ -51,8 +51,8 @@ v-loading="totalLoading"
   <el-menu-item index="3" >
   消息中心
  </el-menu-item>
-  <el-menu-item index="4" >订单管理</el-menu-item>
-  <el-menu-item index="5" @click="handleGetBookSheet();">书栏</el-menu-item>
+  <el-menu-item index="4" @click="handleGetItem();" >订单管理</el-menu-item>
+  <el-menu-item index="5" @click="handleGetBookSheet();" >书栏</el-menu-item>
 </el-menu>
 </div>
 </el-col>
@@ -71,7 +71,6 @@ v-loading="totalLoading"
       <div class="block">
     <el-carousel height="700px">
       <el-carousel-item  v-for="item in homeList" :key="item">
-
          <img  v-bind:src="item.url" class="homelist-img">
       </el-carousel-item>
     </el-carousel>
@@ -89,11 +88,6 @@ v-loading="totalLoading"
         <span class="sub-tit">{{item.title}}</span><br>
         <div class="bottom clearfix">
           <p class="time" v-html="item.content"></p>
-          <el-rate
-  v-model="item.star"
-  disabled
- >
-</el-rate>
           <el-button type="info" class="button" @click="handleDetail();" icon="el-icon-caret-right" >点击参与</el-button>
         </div>
       </div>
@@ -140,28 +134,36 @@ v-loading="totalLoading"
     </el-tab-pane>
     <el-tab-pane label="热点" name="third">
     <!-- 热点 -->
-   <div class="block">
-  <el-timeline>
-    <el-timeline-item timestamp="2018/4/12" placement="top">
-      <el-card>
-        <h4>更新 Github 模板</h4>
-        <p>王小虎 提交于 2018/4/12 20:46</p>
-      </el-card>
-    </el-timeline-item>
-    <el-timeline-item timestamp="2018/4/3" placement="top">
-      <el-card>
-        <h4>更新 Github 模板</h4>
-        <p>王小虎 提交于 2018/4/3 20:46</p>
-      </el-card>
-    </el-timeline-item>
-    <el-timeline-item timestamp="2018/4/2" placement="top">
-      <el-card>
-        <h4>更新 Github 模板</h4>
-        <p>王小虎 提交于 2018/4/2 20:46</p>
-      </el-card>
-    </el-timeline-item>
-  </el-timeline>
-</div>
+   <el-table
+    v-loading="loading"
+      :data="hotForm"
+      style="width: 100%">
+      <el-table-column
+        prop="id"
+        label="热度"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="bookName"
+        label="书名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="writer"
+        label="作者"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="content"
+        label="简介"
+        width="360">
+      </el-table-column>
+      <el-table-column
+        prop="date"
+        label="日期"
+        width="180">
+      </el-table-column>
+      </el-table>
   </el-tab-pane>
     <el-tab-pane label="留言板" name="fourth">留言板</el-tab-pane>
   </el-tabs>
@@ -174,7 +176,7 @@ v-loading="totalLoading"
       <el-footer> 
   <el-dialog title="用户登陆" :visible.sync="outerVisible" width="30%" >
   <!-- 登陆面板 -->
-   <img src="../assets/images/logo/logo.png" style="width:80px; height:80px;" >
+   <img src="../../assets/images/logo/logo.png" style="width:80px; height:80px;" >
  <el-form :model="loginForm" status-icon :rules="rules" ref="loginForm" label-width="70px" class="demo-ruleForm">
  <el-form-item label="账号" prop="userName">
     <el-input type="text" v-model="loginForm.userName" autocomplete="off"></el-input>
@@ -231,7 +233,7 @@ v-loading="totalLoading"
 </template>
 <script>
  export default {
-   name: 'home',
+   name: 'index',
     data() {
       // 登陆验证
  
@@ -256,7 +258,6 @@ v-loading="totalLoading"
       }
 
       return {
-      
         loginForm:{
           userName:'',
           password:'',
@@ -291,22 +292,21 @@ v-loading="totalLoading"
         homeList:[
           {
             title:'ad',
-            url:require('../assets/images/homepages/book1.jpg'),
-            aim:''
-
-          },
-           {
-            title:'ad',
-            url:require('../assets/images/homepages/book2.jpg'),
+            url:require('../../assets/images/homepages/book1.jpg'),
             aim:''
           },
            {
             title:'ad',
-            url:require('../assets/images/homepages/book3.jpg'),
+            url:require('../../assets/images/homepages/book2.jpg'),
+            aim:''
+          },
+           {
+            title:'ad',
+            url:require('../../assets/images/homepages/book3.jpg'),
             aim:''
           }, {
             title:'ad',
-            url:require('../assets/images/homepages/book4.jpg'),
+            url:require('../../assets/images/homepages/book4.jpg'),
             aim:''
           }
         ],
@@ -314,28 +314,23 @@ v-loading="totalLoading"
         adsList: [
             {
               title:'The Polaroid Book',
-              url:require('../assets/images/homepages/add1.jpg'),
+              url:require('../../assets/images/homepages/add1.jpg'),
                content: '宝丽来珍藏版摄影--光影盛宴',
-               aim:'',
-               star: 4
-               },
+               aim:''},
             {
               title : 'The Polaroid Book--the story of Polaroid',
-              url: require('../assets/images/homepages/add2.jpg'),
+              url: require('../../assets/images/homepages/add2.jpg'),
                content: '新书发售，白金收藏',
-                aim:'',
-               star: 4},
+               aim:''},
             { 
               title:'买书送女朋友' ,
-              url:require('../assets/images/homepages/add3.jpg'),
+              url:require('../../assets/images/homepages/add3.jpg'),
                content: '快过来抱走我',
-                aim:'',
-               star: 4},
+               aim:''},
             { title:'公益藏书活动',
-             url: require('../assets/images/homepages/add4.jpg'),
+             url: require('../../assets/images/homepages/add4.jpg'),
               content: '响应世界沙雕日，你敢买我敢送',
-             aim:'',
-               star: 4}
+              aim:''}
             ],
             hotForm:[],
         activeIndex: '1',
