@@ -1,5 +1,6 @@
 <template>
 
+
  <el-table
     :data="tableData"
     stripe

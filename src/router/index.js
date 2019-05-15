@@ -6,6 +6,7 @@ import { resolve } from 'url';
 Vue.use(Router)
 
 const router= new Router({
+  mode:'history',
   routes: [
     {
       path: '/',
@@ -41,6 +42,16 @@ const router= new Router({
       component: resolve => require(['../pages/home/cart.vue'], resolve),
       name: 'cart',
     }
+    , {
+      path: '/home/bookcart',
+      component: resolve => require(['../pages/home/bookCart.vue'], resolve),
+      name: 'bookcart',
+    },
+      , {
+        path: '/test',
+        component: resolve => require(['../pages/test/test.vue'], resolve),
+        name: 'test',
+      }
   ]
 })
 export default router

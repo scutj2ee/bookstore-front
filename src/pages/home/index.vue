@@ -35,9 +35,12 @@ v-loading="totalLoading"
   background-color="#545c64"
   text-color="#fff"
   active-text-color="#ffd04b">
-  <el-menu-item index="1" @click="outerVisible = true"><svg-icon icon="el-icon-user" />登陆</el-menu-item>
+  <el-menu-item index="1" @click="outerVisible = true"><i class="el-icon-view"></i>登陆</el-menu-item>
   <el-submenu index="2">
-    <template slot="title">书单</template>
+  
+    <template slot="title">
+    <i class="el-icon-collection"></i>
+    书单</template>
     <el-menu-item index="2-1">人文</el-menu-item>
     <el-menu-item index="2-2">文学</el-menu-item>
     <el-menu-item index="2-3">生活</el-menu-item>
@@ -49,10 +52,10 @@ v-loading="totalLoading"
     </el-submenu>
   </el-submenu>
   <el-menu-item index="3" >
-  消息中心
+   <i class="el-icon-bell"></i>消息中心
  </el-menu-item>
-  <el-menu-item index="4" @click="handleGetItem();" >订单管理</el-menu-item>
-  <el-menu-item index="5" @click="handleGetBookSheet();" >书栏</el-menu-item>
+  <el-menu-item index="4" @click="handleGetItem();" ><i class="el-icon-tickets"></i>订单管理</el-menu-item>
+  <el-menu-item index="5" @click="handleGetBookSheet()" ><i class="el-icon-goods"></i>书栏</el-menu-item>
 </el-menu>
 </div>
 </el-col>
@@ -134,36 +137,29 @@ v-loading="totalLoading"
     </el-tab-pane>
     <el-tab-pane label="热点" name="third">
     <!-- 热点 -->
-   <el-table
-    v-loading="loading"
-      :data="hotForm"
-      style="width: 100%">
-      <el-table-column
-        prop="id"
-        label="热度"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="bookName"
-        label="书名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="writer"
-        label="作者"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="content"
-        label="简介"
-        width="360">
-      </el-table-column>
-      <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
-      </el-table-column>
-      </el-table>
+      <!-- 热点 -->
+   <div class="block">
+  <el-timeline>
+    <el-timeline-item timestamp="2018/4/12" placement="top">
+      <el-card>
+        <h4>更新 Github 模板</h4>
+        <p>王小虎 提交于 2018/4/12 20:46</p>
+      </el-card>
+    </el-timeline-item>
+    <el-timeline-item timestamp="2018/4/3" placement="top">
+      <el-card>
+        <h4>更新 Github 模板</h4>
+        <p>王小虎 提交于 2018/4/3 20:46</p>
+      </el-card>
+    </el-timeline-item>
+    <el-timeline-item timestamp="2018/4/2" placement="top">
+      <el-card>
+        <h4>更新 Github 模板</h4>
+        <p>王小虎 提交于 2018/4/2 20:46</p>
+      </el-card>
+    </el-timeline-item>
+  </el-timeline>
+</div>
   </el-tab-pane>
     <el-tab-pane label="留言板" name="fourth">留言板</el-tab-pane>
   </el-tabs>
@@ -389,7 +385,7 @@ v-loading="totalLoading"
        handleClick(tab, event) {
         console.log(tab, event);
       }, handleGetBookSheet(){
-
+this.$router.push({path: '/home/bookcart'});
       }
     }
     
