@@ -35,11 +35,11 @@ v-loading="totalLoading"
   background-color="#545c64"
   text-color="#fff"
   active-text-color="#ffd04b">
-  <el-menu-item index="1" @click="outerVisible = true"><i class="el-icon-view"></i>登陆</el-menu-item>
+  <el-menu-item index="1" @click="outerVisible = true"><i class="el-icon-user"></i>登陆</el-menu-item>
   <el-submenu index="2">
   
     <template slot="title">
-    <i class="el-icon-collection"></i>
+    <i class="el-icon-notebook-1"></i>
     书单</template>
     <el-menu-item index="2-1">人文</el-menu-item>
     <el-menu-item index="2-2">文学</el-menu-item>
@@ -56,6 +56,7 @@ v-loading="totalLoading"
  </el-menu-item>
   <el-menu-item index="4" @click="handleGetItem();" ><i class="el-icon-tickets"></i>订单管理</el-menu-item>
   <el-menu-item index="5" @click="handleGetBookSheet()" ><i class="el-icon-goods"></i>书栏</el-menu-item>
+ 
 </el-menu>
 </div>
 </el-col>
@@ -65,7 +66,29 @@ v-loading="totalLoading"
   <el-container>
     <el-aside width="200px">
     <!-- 侧栏 -->
-
+<el-collapse v-model="activeNames" @change="handleChange"  >
+  <el-collapse-item title="生活 LIFE" name="1">
+  <i class="el-icon-s-promotion"></i>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+  </el-collapse-item>
+  <el-collapse-item title="科技 TECHNOLOGY" name="2" >
+  <i class="el-icon-s-opportunity"></i>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+  </el-collapse-item>
+  <el-collapse-item title="效率 EFFICIENCY" name="3">
+  <i class="el-icon-s-data"></i>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+  </el-collapse-item>
+  <el-collapse-item title="文学 LITERATURE" name="4">
+  <i class="el-icon-notebook-1"></i>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+  </el-collapse-item>
+</el-collapse>
     </el-aside>
     <!-- 主体部分 -->
     <el-container>
@@ -101,37 +124,34 @@ v-loading="totalLoading"
     </el-tab-pane>
     <el-tab-pane label="畅销榜" name="second">
     <!-- 畅销榜 -->
-   
-    <el-table
-    v-loading="loading"
-      :data="hotForm"
-      style="width: 100%">
-      <el-table-column
-        prop="id"
-        label="热度"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="bookName"
-        label="书名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="writer"
-        label="作者"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="content"
-        label="简介"
-        width="360">
-      </el-table-column>
-      <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
-      </el-table-column>
-      </el-table>
+    <div class="hot-card">
+   <el-row :gutter="20">
+  <el-col :span="6" v-for="(item, index) in hotForm" :key="index" >
+    <el-card shadow="hover" :body-style="{ padding: '5px' }">
+      <img  v-bind:src="item.image_url" class="book_image">
+        <span class="sub-tit">{{item.name}}</span><br>
+       
+        <!-- <p v-html="item.outline"></p>
+          <p v-html="item.author"></p>
+          <p class="price"  v-html="item.price">活动价：￥</p> -->
+        <div class="bottom clearfix">
+           <div class="card-show">
+           {{item.outline}}</div><br>
+           <div class="card-show">
+           {{item.author }}</div><br>
+           <div class="price">活动价：￥ {{item.member_price}}</div><br>
+           <div class="card-show">市场价：￥<del>
+           {{item.price }}</del></div>
+          
+         
+          
+          <el-button type="info" class="button" @click="handleDetail();" icon="el-icon-caret-right" >查看详情</el-button>
+      </div>
+    </el-card>
+  </el-col>
+</el-row>
+</div>
+  
      
     
     </el-tab-pane>
@@ -228,6 +248,8 @@ v-loading="totalLoading"
 
 </template>
 <script>
+import books from "../../assets/js/book.js";
+import adLists from "../../assets/js/adList.js"
  export default {
    name: 'index',
     data() {
@@ -254,6 +276,7 @@ v-loading="totalLoading"
       }
 
       return {
+         activeNames: ['1'],
         loginForm:{
           userName:'',
           password:'',
@@ -307,28 +330,8 @@ v-loading="totalLoading"
           }
         ],
         //活动广告
-        adsList: [
-            {
-              title:'The Polaroid Book',
-              url:require('../../assets/images/homepages/add1.jpg'),
-               content: '宝丽来珍藏版摄影--光影盛宴',
-               aim:''},
-            {
-              title : 'The Polaroid Book--the story of Polaroid',
-              url: require('../../assets/images/homepages/add2.jpg'),
-               content: '新书发售，白金收藏',
-               aim:''},
-            { 
-              title:'买书送女朋友' ,
-              url:require('../../assets/images/homepages/add3.jpg'),
-               content: '快过来抱走我',
-               aim:''},
-            { title:'公益藏书活动',
-             url: require('../../assets/images/homepages/add4.jpg'),
-              content: '响应世界沙雕日，你敢买我敢送',
-              aim:''}
-            ],
-            hotForm:[],
+        adsList: ad,
+            hotForm:book,
         activeIndex: '1',
         activeIndex2: '1',
         currentDate:new Date(),
@@ -386,6 +389,9 @@ v-loading="totalLoading"
         console.log(tab, event);
       }, handleGetBookSheet(){
 this.$router.push({path: '/home/bookcart'});
+      },
+      handleChange(val) {
+        console.log(val);
       }
     }
     
@@ -403,7 +409,7 @@ this.$router.push({path: '/home/bookcart'});
     background-color: #B3C0D1;
     color: #333;
     text-align: center;
-    line-height: 60px;
+    line-height: 80px;
   }
   
   .el-aside {
@@ -453,7 +459,7 @@ this.$router.push({path: '/home/bookcart'});
   }
   
   .bottom {
-    margin-top: 13px;
+    margin-top: 2px;
     line-height: 12px;
   }
 
@@ -461,12 +467,14 @@ this.$router.push({path: '/home/bookcart'});
     padding: 0;
     float: right;
   }
-
+ .book_image {
+    width: 100%;
+    display: inline-block;
+  }
   .image {
     width: 100%;
     display: block;
   }
-
   .clearfix:before,
   .clearfix:after {
       display: table;
@@ -476,9 +484,20 @@ this.$router.push({path: '/home/bookcart'});
   .clearfix:after {
       clear: both
   }
+  .hot-card{
+    width: 100%;
+    height: 25%;
+  }
   .select-card{
     width: 100%;
     height: 25%;
+  }
+  .card-show{
+    border:10px;
+    padding:5px;
+    margin-top:15px;
+    font-size:15px;
+    color:#999;
   }
    .el-row {
     margin-bottom: 20px;
@@ -522,5 +541,9 @@ this.$router.push({path: '/home/bookcart'});
     width: 100%;
     height: 100%;
   
+  }
+  .price{
+    color:red;
+    font-size:18px;
   }
 </style>
