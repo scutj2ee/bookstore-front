@@ -1,4 +1,5 @@
 <template>
+ 
 <el-container 
 v-loading="totalLoading"
 >
@@ -52,7 +53,7 @@ v-loading="totalLoading"
     </el-submenu>
   </el-submenu>
   <el-menu-item index="3" >
-   <i class="el-icon-bell"></i>消息中心
+   <i class="el-icon-bell"></i><router-link to="/home/bookcart">消息中心</router-link>
  </el-menu-item>
   <el-menu-item index="4" @click="handleGetItem();" ><i class="el-icon-tickets"></i>订单管理</el-menu-item>
   <el-menu-item index="5" @click="handleGetBookSheet()" ><i class="el-icon-goods"></i>书栏</el-menu-item>

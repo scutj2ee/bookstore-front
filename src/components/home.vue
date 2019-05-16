@@ -6,7 +6,7 @@ v-loading="totalLoading"
   <el-row>
   <el-col :span="8"><div class="grid-content left">
   <!-- logo -->
-   <img src="../assets/images/logo/logo.png" width="50px" height="50px" float="left" position="center" margin-top="30px">
+  <router-link to="/home/homepage"> <img  src="../assets/images/logo/logo.png" width="50px" height="50px" float="left" position="center" margin-top="30px"></router-link>
    
   </div>
   </el-col>
@@ -34,11 +34,15 @@ v-loading="totalLoading"
   @select="handleSelect"
   background-color="#545c64"
   text-color="#fff"
-  active-text-color="#ffd04b">
-  <el-menu-item index="1" @click="outerVisible = true"><svg-icon icon="el-icon-user" />登陆</el-menu-item>
+  active-text-color="#ffd04b"
+  default-active="/home/homepage"
+  :router="true"
+  >
+  <el-menu-item  @click="outerVisible = true"><i class="el-icon-user"></i>登陆</el-menu-item>
   <el-submenu index="2">
-    <template slot="title">书单</template>
-    <el-menu-item index="2-1">人文</el-menu-item>
+    <template slot="title">
+    <i class="el-icon-notebook-1"></i>书单</template>
+    <el-menu-item index="/home/detail">人文</el-menu-item>
     <el-menu-item index="2-2">文学</el-menu-item>
     <el-menu-item index="2-3">生活</el-menu-item>
     <el-submenu index="2-4">
@@ -49,127 +53,51 @@ v-loading="totalLoading"
     </el-submenu>
   </el-submenu>
   <el-menu-item index="3" >
+  <i class="el-icon-bell"></i>
   消息中心
  </el-menu-item>
-  <el-menu-item index="4" >订单管理</el-menu-item>
-  <el-menu-item index="5" @click="handleGetBookSheet();">书栏</el-menu-item>
+  <el-menu-item index="4" >
+  <i class="el-icon-tickets"></i>
+  订单管理</el-menu-item>
+  <el-menu-item  @click="handleGetBookSheet();"><i class="el-icon-goods"></i>书栏</el-menu-item>
 </el-menu>
 </div>
 </el-col>
 </el-row>
 
 </el-header>
-  <el-container>
+ <el-container>
     <el-aside width="200px">
     <!-- 侧栏 -->
-
+<!-- 侧栏 -->
+<el-collapse v-model="activeNames" @change="handleChange"  >
+  <el-collapse-item title="生活 LIFE" name="1">
+  <i class="el-icon-s-promotion"></i>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+  </el-collapse-item>
+  <el-collapse-item title="科技 TECHNOLOGY" name="2" >
+  <i class="el-icon-s-opportunity"></i>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+  </el-collapse-item>
+  <el-collapse-item title="效率 EFFICIENCY" name="3">
+  <i class="el-icon-s-data"></i>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+  </el-collapse-item>
+  <el-collapse-item title="文学 LITERATURE" name="4">
+  <i class="el-icon-notebook-1"></i>
+    <div><el-link type="primary">主要链接</el-link></div>
+    <div><el-link type="primary">主要链接</el-link></div>
+  </el-collapse-item>
+</el-collapse>
     </el-aside>
     <!-- 主体部分 -->
-    <el-container>
+   <el-container>
       <el-main> 
-        <!--走马灯  -->
-      <div class="block">
-    <el-carousel height="700px">
-      <el-carousel-item  v-for="item in homeList" :key="item">
-
-         <img  v-bind:src="item.url" class="homelist-img">
-      </el-carousel-item>
-    </el-carousel>
-  </div>
-  <div class="block">
-<el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="最新活动" name="first">
-      <!-- ADS卡片 -->
-  <div class="select-card">
-   <el-row :gutter="10">
-  <el-col :span="6" v-for="(item, index) in adsList" :key="index" >
-    <el-card shadow="hover" :body-style="{ padding: '10px' }">
-      <img  v-bind:src="item.url" class="image">
-      <div style="padding: 10px;">
-        <span class="sub-tit">{{item.title}}</span><br>
-        <div class="bottom clearfix">
-          <p class="time" v-html="item.content"></p>
-          <el-rate
-  v-model="item.star"
-  disabled
- >
-</el-rate>
-          <el-button type="info" class="button" @click="handleDetail();" icon="el-icon-caret-right" >点击参与</el-button>
-        </div>
-      </div>
-    </el-card>
-  </el-col>
-</el-row>
-</div>
-    </el-tab-pane>
-    <el-tab-pane label="畅销榜" name="second">
-    <!-- 畅销榜 -->
-   
-    <el-table
-    v-loading="loading"
-      :data="hotForm"
-      style="width: 100%">
-      <el-table-column
-        prop="id"
-        label="热度"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="bookName"
-        label="书名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="writer"
-        label="作者"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="content"
-        label="简介"
-        width="360">
-      </el-table-column>
-      <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
-      </el-table-column>
-      </el-table>
-     
-    
-    </el-tab-pane>
-    <el-tab-pane label="热点" name="third">
-    <!-- 热点 -->
-   <div class="block">
-  <el-timeline>
-    <el-timeline-item timestamp="2018/4/12" placement="top">
-      <el-card>
-        <h4>更新 Github 模板</h4>
-        <p>王小虎 提交于 2018/4/12 20:46</p>
-      </el-card>
-    </el-timeline-item>
-    <el-timeline-item timestamp="2018/4/3" placement="top">
-      <el-card>
-        <h4>更新 Github 模板</h4>
-        <p>王小虎 提交于 2018/4/3 20:46</p>
-      </el-card>
-    </el-timeline-item>
-    <el-timeline-item timestamp="2018/4/2" placement="top">
-      <el-card>
-        <h4>更新 Github 模板</h4>
-        <p>王小虎 提交于 2018/4/2 20:46</p>
-      </el-card>
-    </el-timeline-item>
-  </el-timeline>
-</div>
-  </el-tab-pane>
-    <el-tab-pane label="留言板" name="fourth">留言板</el-tab-pane>
-  </el-tabs>
-  </div>
-
-  
-
- 
+       <router-view class="view"></router-view>
   </el-main>
       <el-footer> 
   <el-dialog title="用户登陆" :visible.sync="outerVisible" width="30%" >
@@ -225,9 +153,8 @@ v-loading="totalLoading"
   </el-dialog>
   </el-footer>
     </el-container>
-  </el-container>
-</el-container>
-
+    </el-container>
+    </el-container>
 </template>
 <script>
  export default {
@@ -394,7 +321,7 @@ v-loading="totalLoading"
        handleClick(tab, event) {
         console.log(tab, event);
       }, handleGetBookSheet(){
-
+this.$router.push({path: '/home/bookcart'});
       }
     }
     

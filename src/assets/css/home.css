@@ -1,0 +1,117 @@
+.home-logo{
+  position: relative;
+  float: right;
+  height: 75px;
+  width: 140px;
+  margin-right: -110px;
+  margin-top: 2px;
+}
+
+.home-logo img{width:72%;height:75px;float: right;}
+
+.nav{
+  position: absolute;
+  float: left;
+  margin-top: 10px;
+  margin-left: 100px;
+  width: 100%;
+}
+
+.head-el-menu {
+  font-size: 14.5px;
+}
+
+.head-el-menu-item {
+  font-size: 14.5px;
+}
+
+.head-el-submenu {
+  font-size: 14.5px;
+}
+
+.head-el-submenu span {
+  font-size: 14.5px;
+}
+
+.login {
+  position: relative;
+  float: left;
+  display: inline;
+  margin-top:25px;
+  margin-left: 20px;
+  width: 100px;
+  height:65px;
+}
+
+.home-sidebar {
+  position: absolute;
+  display: block;
+  float: left;
+  min-width: 120px;
+  margin-top: 90px;
+  /*margin-left: -18px;*/
+}
+
+.home-crumbs {
+  position: absolute;
+  display: block;
+  width: 900px;
+  height: 30px;
+  margin-left: 150px;
+  margin-top: 100px;
+}
+
+.redister {
+  position: relative;
+  display: inline;
+  float: left;
+}
+
+.userLogin {
+  width: 945px;
+  height:800px;
+  margin: 0 auto;
+  padding: 0 ;
+}
+
+.managerLogin {
+  width: 945px;
+  height:800px;
+  margin: 0 auto;
+  padding: 0 ;
+}
+
+.return-login {
+  position: relative;
+  display: inline;
+  float: left;
+  margin-top: -40px;
+}
+
+.home-contents {
+  width: 1150px;
+}
+
+/* 留给每个组件自定义margin-top
+.bottom {
+  position: fixed;
+  bottom:0px;
+  left:0px;
+  z-index:999;
+  width:100%;
+  background:#000;
+  color: #fff;
+  font-size: 12px;
+  height: 160px;
+} */
+
+.floating {
+  position:fixed;
+  top:90%;
+  left:85%;
+  width:140px;
+  height:50px;
+  margin:-50px 0 0 -50px;
+  background-color: orange;
+  z-index:999;
+}
