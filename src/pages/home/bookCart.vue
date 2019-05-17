@@ -1,59 +1,72 @@
 <template>
+<div class="bookCart">
 <el-container>
-  <el-header>
-   <el-row>
-  <el-col :span="6"><div class="grid-content ">
-  <!-- logo -->
-   <img src="../../assets/images/logo/logo.png" width="50px" height="50px" float="right" position="center" margin-top="30px">
-   
-  <h1>购物车</h1>
-  </div></el-col>
-  <el-col :span="12"><div class="grid-content ">
+  <el-header class="sub-header">
+
   <el-steps :active="active" finish-status="success" align-center>
   <el-step title="加入书栏" icon="el-icon-goods"></el-step>
   <el-step title="填写清单" icon="el-icon-edit"></el-step>
   <el-step title="付款结算" icon="el-icon-tickets"></el-step>
 </el-steps>
-    </div></el-col>
-  <el-col :span="6"><div class="grid-content "></div></el-col>
-</el-row>
+
   </el-header>
   <el-main>
   <el-table
     :data="tableData"
     stripe
-    style="width: 100%" v-show="tableData.length" highlight-current-row>
-    <el-table-column label="选择" width="100" style="color:red" :render-header="renderHeader">
-            
-                    <el-checkbox prop="checked"></el-checkbox>
-                
-            </el-table-column>
+    style="width: 100%" 
+    v-show="tableData.length" 
+    highlight-current-row>
+    <el-table-column 
+    label="选择" 
+    width="100" 
+    style="color:red" 
+    :render-header="renderHeader"
+    align="center">
+  <el-checkbox 
+  prop="is_check"
+  ></el-checkbox>
+</el-table-column>
     <el-table-column
       prop="id"
       label="序号"
-      width="180">
+      width="180"
+      align="center">
     </el-table-column>
     <el-table-column
       prop="name"
       label="商品名称"
-      width="180">
+      width="180"
+      align="center">
     </el-table-column>
      <el-table-column
       prop="price"
       label="单价"
-      width="180">
+      width="180"
+      align="center">
     </el-table-column>
      <el-table-column
-      prop="num"
-      label="数量"
-      width="220">
-      <el-input-number  @change="handleGetTotal(tableData.id,value)" :min="1" :max="10" ></el-input-number>
-    </el-table-column>
-    
-    <el-table-column
       prop="number"
-      label="总价">
+      label="数量"
+      width="220"
+      align="center">
+      <template slot-scope="scope">
+      <el-input-number v-model="scope.row.number"   :min="1" :max="10"  ></el-input-number>
+      </template>
     </el-table-column>
+    <el-table-column
+      prop="total"
+      label="总价"
+      align="center">
+    </el-table-column>
+    <el-table-column 
+     label="图片" 
+     width="120" 
+     align="center">
+      <template slot-scope="scope">
+         <img v-bind:src="scope.row.image_url" style="width: 100px;height:100px;" >
+      </template>
+  </el-table-column>
     <el-table-column label="删除功能">
             
                     <el-popover placement="top" width="160" v-model="tableData.remove">
@@ -67,18 +80,24 @@
                     </el-popover>
             </el-table-column>
   </el-table>
+ <div >
+ <div class="btn_box">
+ <el-button style="margin-top: 12px; background-color:#f6a7ba " icon="el-icon-arrow-right" circle  @click="next" :disabled="isDisabled" ></el-button>
  
-   <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
-   
-    <template v-for="item in btnArr">
-    <el-button style="margin-top: 12px;" type="primary" @click="pay" >去付款</el-button>
-    </template>
+ </div>
+ <div v-show="show" class="btn_box">
+      <transition name="el-fade-in-linear">
+         <el-button   type="primary" @click="pay" icon="el-icon-bank-card" circle ></el-button>
+      </transition>
+      </div>
+  </div>
 
-
    
-  </el-main>
-  <el-footer>
-  <el-dialog title="地址选择" 
+   
+    
+   
+    
+<el-dialog title="地址选择" 
   :visible.sync="outerVisible" 
   width="60%" 
   center>
@@ -134,20 +153,22 @@
     </el-dialog>
     <div slot="footer" class="dialog-footer">
       <el-button @click="outerVisible = false" icon="el-icon-arrow-left">取 消</el-button>
-      <el-button type="success" icon="el-icon-check"  @click="onSubmit; outerVisible = false">确认信息</el-button>
+      <el-button type="success" icon="el-icon-check"  @click="onSubmit; outerVisible = false; show = !show">确认信息</el-button>
       <el-button type="primary" icon="el-icon-plus"  @click="outerVisible= false;innerVisible=true">添加地址</el-button>
     </div>
   </el-dialog>
-  </el-footer>
+   
+  </el-main>
+ 
 </el-container>
  
- 
+ </div>
 </template>
 <script>
 // 引入外部js文件
 import areaJs from '../../assets/js/select_area.js';//引入省市区联级json
 import areaSelectedJs from '../../assets/js/area.js';//引入本地一些已保存地址json
-import goodsJs from '../../assets/js/goods.js';//引入本地已保存商品信息json
+import carts from '../../assets/js/cart.js';//引入本地已保存商品信息json
  export default {
     data() {
             var checkAge = (rule, value, callback) => {
@@ -185,9 +206,10 @@ import goodsJs from '../../assets/js/goods.js';//引入本地已保存商品信�
         outerVisible:false,//选择地址
         innerVisible:false,//添加地址
         paymentVisiable:false,//付款按钮
-        writed:0,
+        show: false,
+        isDisabled: false,
         active: 1,
-        tableData: goods,
+        tableData: cart,
                     count: 0,
                     istrue: false,
                     addressForm2: {
@@ -205,19 +227,29 @@ import goodsJs from '../../assets/js/goods.js';//引入本地已保存商品信�
                     },          
       };
     },
+    mounted(){
+  this.$watch("tableData",function () {
+    for(let i=0;i<tableData.length;i++){
+      this.tableData[i].total=this.tableData[i].number*this.tableData[i].price;
+    }
+  
+});
+    },
+    watch:{
 
-    methods: {
+     
+    },
+
+    methods:{
       // 控制进度条
       next() {
        
-        if(this.writed==0){
           this.outerVisible=true;
-        }
         if (this.active++ > 2) this.active = 0;
       },
       //提交地址
        onSubmit() {
-        this. writed=1;
+        this. writed=!this.writed;
         console.log('submit!');
         this. paymentVisiable=true;
       },
@@ -243,22 +275,18 @@ import goodsJs from '../../assets/js/goods.js';//引入本地已保存商品信�
   }
 </script>
 <style>
+.btn_box{
+  display:inline;
+}
+.sub-header{
+  background:#d2f3e0;
+}
  .el-header, .el-footer {
-    background-color: #B3C0D1;
     color: #333;
     text-align: center;
     line-height: 0px;
   }
-  
-  .el-aside {
-    background-color: #D3DCE6;
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
-  
   .el-main {
-    background-color: #E9EEF3;
     color: #333;
     text-align: center;
     line-height: 160px;

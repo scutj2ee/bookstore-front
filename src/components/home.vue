@@ -2,27 +2,39 @@
 <el-container 
 v-loading="totalLoading"
 >
-  <el-header >
+  <el-header class="el-header">
   <el-row>
   <el-col :span="8"><div class="grid-content left">
   <!-- logo -->
-  <router-link to="/home/homepage"> <img  src="../assets/images/logo/logo.png" width="50px" height="50px" float="left" position="center" margin-top="30px"></router-link>
-   
+  <div class="round">
+  <div class="logo-image">
+  <router-link to="/home/homepage"> <img  src="../assets/images/logo/logo.png" width="50px" height="50px"   margin-top="30px"></router-link>
+  </div>
+  
+   </div>
   </div>
   </el-col>
   <el-col :span="8"><div class="grid-content center">
   <!-- 搜索栏 -->
- <div style="margin-top: 0px;margin-right:50px">
-  <el-input type="text" placeholder="请输入内容" v-model="input3" class="input-with-select">
+  <div class="outter">
+  <div class="inner" >
+  <el-input type="text" placeholder="请输入内容" v-model="input3" class="searchClass">
+  <div slot="prepend">
+        <div class="centerClass">
     <el-select v-model="select" slot="prepend" placeholder="请选择">
       <el-option label="书名" value="1"></el-option>
       <el-option label="作者" value="2"></el-option>
       <el-option label="类别" value="3"></el-option>
     </el-select>
+    </div>
+    <div class="centerClass">    
+    <div class="line"></div>  
+    </div> 
+    </div>
     <el-button type="primary" slot="append" icon="el-icon-search"></el-button>
   </el-input>
 </div>
-
+  </div>
   </div>
   </el-col>
   <el-col :span="8"><div class="grid-content">
@@ -32,9 +44,9 @@ v-loading="totalLoading"
   class="el-menu-demo"
   mode="horizontal"
   @select="handleSelect"
-  background-color="#545c64"
+  background-color="#f6a7ba"
   text-color="#fff"
-  active-text-color="#ffd04b"
+  active-text-color="#d2f3e0"
   default-active="/home/homepage"
   :router="true"
   >
@@ -56,10 +68,10 @@ v-loading="totalLoading"
   <i class="el-icon-bell"></i>
   消息中心
  </el-menu-item>
-  <el-menu-item index="4" >
+  <el-menu-item index="/home/order" >
   <i class="el-icon-tickets"></i>
   订单管理</el-menu-item>
-  <el-menu-item  @click="handleGetBookSheet();"><i class="el-icon-goods"></i>书栏</el-menu-item>
+  <el-menu-item index="/home/bookcart" ><i class="el-icon-goods"></i>书栏</el-menu-item>
 </el-menu>
 </div>
 </el-col>
@@ -320,40 +332,72 @@ v-loading="totalLoading"
       },
        handleClick(tab, event) {
         console.log(tab, event);
-      }, handleGetBookSheet(){
-this.$router.push({path: '/home/bookcart'});
-      }
+      }, 
+//       handleGetBookSheet(){
+// this.$router.push({path: '/home/bookcart'});
+//       }
     }
     
   }
 </script>
 <style >
 
+@import "../assets/css/search.css";
+.round{
+  height: 60px;
+  width: 60px;
+  background-color:#d2f3e0;
+  border-radius:50%;
+  position:absolute;
+}
+
 .logo-image{
-  height: 20%;
+  position:relative;
+  top:50%;
+  left:50%;
+  margin:-25px 0 0 -25px;
+ 
+ height: 20%;
   width: 20%;
   position: absolute;
  
 }
+.outter{
+   height: 60px;
+  width: 400px;
+  position:absolute;
+}
+.inner{
+position:relative;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+   
+}
 .el-header, .el-footer {
-    background-color: #B3C0D1;
+    background-color: #feb9c8;
     color: #333;
     text-align: center;
     line-height: 60px;
+    
   }
   
   .el-aside {
-    background-color: #D3DCE6;
+    background-color: #d2f3e0;
     color: #333;
     text-align: center;
     line-height: 200px;
+    
   }
   
   .el-main {
-    background-color: #E9EEF3;
+    background-color: #f5fbf1;
     color: #333;
     text-align: center;
     line-height: 160px;
+    min-height:100vh;
+
+
   }
   
   body > .el-container {

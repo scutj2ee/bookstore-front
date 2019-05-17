@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import home from '@/components/home' //新添加，之后在下方的component: NewContact才会生效
-import bookShelf from '../pages/admin/book/bookShelf.vue'
 import { resolve } from 'url';
 Vue.use(Router)
 
@@ -18,6 +17,7 @@ const router= new Router({
       name: 'home',
       component: resolve=>require(['../components/home.vue'],resolve), 
       children:[{
+        //TODO:子页面定义
         path: '/home/detail',
       component: resolve => require(['../pages/home/detail.vue'], resolve),
       name: 'detail',
@@ -27,18 +27,32 @@ const router= new Router({
           component: resolve => require(['../pages/home/checkpsw.vue'], resolve),
           name: 'checkpsw',
         meta: { title: '更改用户密码' }
+      }, {
+        path: '/home/order',
+        component: resolve => require(['../pages/home/order.vue'], resolve),
+        name: 'order',
+        meta: {
+          title: '订单中心'
+        }
       }
       , {
-
         path: '/home/homepage',
         component: resolve => require(['../pages/home/homepage.vue'], resolve),
         name: 'homepage',
         meta: {
           title: '书城主页'
         }
+      }
+      , {
+
+        path: '/home/bookcart',
+        component: resolve => require(['../pages/home/bookCart.vue'], resolve),
+        name: 'bookcart',
+        meta: {
+          title: '购物车'
+        }
 
       }
-
     ]
     }, {
 
@@ -49,17 +63,18 @@ const router= new Router({
          title: '书城主页'
        }
 
-     },{
+     }
+     ,{
       path: '/home/cart',
       component: resolve => require(['../pages/home/cart.vue'], resolve),
       name: 'cart',
     }
-    , {
-      path: '/home/bookcart',
-      component: resolve => require(['../pages/home/bookCart.vue'], resolve),
-      name: 'bookcart',
-    },
-       {
+    // , {
+    //   path: '/home/bookcart',
+    //   component: resolve => require(['../pages/home/bookCart.vue'], resolve),
+    //   name: 'bookcart',
+    // }
+       ,{
         path: '/test',
         component: resolve => require(['../pages/test/test.vue'], resolve),
         name: 'test',
@@ -74,15 +89,27 @@ const router= new Router({
         component: resolve => require(['../pages/admin/book/bookShelf.vue'], resolve),
         name: 'bookShelf',
         meta: {
-          title: '新书上架'
-        }
+          title: '书架管理'
           }
+        }, {
+          path: '/admin/bookshelf/add',
+          component: resolve => require(['../pages/admin/book/addBook.vue'], resolve),
+          name: 'add',
+          meta: {
+            title: '新书上架'
+          },
+        }, {
+
+          path: '/admin/user',
+          component: resolve => require(['../pages/admin/user/user.vue'], resolve),
+          name: 'user',
+          meta: {
+            title: '用户管理'
+          }
+
+        }
+
         ]
-      }, 
-      
-      {
-        path: '/bookshelf',
-         component:bookShelf,
       }
     
   ]

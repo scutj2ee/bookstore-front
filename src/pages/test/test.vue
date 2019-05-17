@@ -1,51 +1,72 @@
+
 <template>
- <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="hideSider">
-    <el-submenu index="1">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航一</span>
-      </template>
-      <el-menu-item-group>
-        <span slot="title">分组一</span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="分组2">
-        <el-menu-item index="1-3">选项3</el-menu-item>
-      </el-menu-item-group>
-      <el-submenu index="1-4">
-        <span slot="title">选项4</span>
-        <el-menu-item index="1-4-1">选项1</el-menu-item>
-      </el-submenu>
-    </el-submenu>
-    <el-menu-item index="2">
-      <i class="el-icon-menu"></i>
-      <span slot="title">导航二</span>
-    </el-menu-item>
-    <el-menu-item index="3" disabled>
-      <i class="el-icon-document"></i>
-      <span slot="title">导航三</span>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <i class="el-icon-setting"></i>
-      <span slot="title">导航四</span>
-    </el-menu-item>
-  </el-menu>
+
+  <div class="search bar2">
+        <form>
+            <input type="text" placeholder="请输入您要搜索的内容...">
+            <button type="submit"></button>
+        </form>
+    </div>
 </template>
+ 
 <script>
-// 引入外部js文件
-
-// 测试完每次记得清理每一个组件
-  export default {
-    data() {
-      return {
-      	show:true,
-      }
-    },
-    methods: {
-      
-    }
-
+export default {
+  data () {
+    return {
+      input: '',
+      select: ''
+    };
   }
-
+};
 </script>
+<style>
+@import "http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"
+ div.search {padding: 30px 0;}
+
+        form {
+            position: relative;
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        input, button {
+            border: none;
+            outline: none;
+        }
+
+        input {
+            width: 100%;
+            height: 42px;
+            padding-left: 13px;
+        }
+
+        button {
+            height: 42px;
+            width: 42px;
+            cursor: pointer;
+            position: absolute;
+        }
+
+     .bar2 {background: #DABB52;}
+        .bar2 input, .bar2 button {
+            border-radius: 3px;
+        }
+        .bar2 input {
+            background: #F9F0DA;
+        }
+        .bar2 button {
+            height: 26px;
+            width: 26px;
+            top: 8px;
+            right: 8px;
+            background: #F15B42;
+        }
+        .bar2 button:before {
+            content: "\f105";
+            font-family: FontAwesome;
+            color: #F9F0DA;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+</style>

@@ -1,9 +1,10 @@
 <template>
-  <div id="app">
-  <!-- 头部导航 -->
-  <header class="header">
+  <div id="admin">
+  <el-container>
+  <el-header>
   <el-row>
-   <el-col :span="24">
+  <el-col :span="6"></el-col>
+   <el-col :span="12">
     <el-menu default-active="5" class="el-menu-demo" mode="horizontal" @select="">
     <el-menu-item index="1">高级插件</el-menu-item>
     <el-menu-item index="2">在线商城</el-menu-item>
@@ -12,49 +13,120 @@
     <el-menu-item index="5">活动发布</el-menu-item>
     </el-menu>
    </el-col>
+   <el-col :span="6"></el-col>
   </el-row>
-  </header>
-  <div style="position: relative;height: 60px;width: 100%;"></div>
-  <main>
-    <!-- 左侧导航 -->
-   <div class="main-left">
-    <el-menu default-active="/admin/bookshelf" class="el-menu-vertical-demo" :router="true">
-    <el-menu-item index="/admin/bookshelf" :class="{'isActive': active}">活动发布</el-menu-item>
-    <el-menu-item index="/activeManage" :class="{'isActive': !active}">活动管理</el-menu-item>
+  </el-header>
+  <el-container>
+    <el-aside width="200px">
+    <el-col >
+   
+    <el-menu
+    default-active="/admin/bookshelf"
+      class="el-menu-vertical-demo"
+      @open="handleOpen"
+      @close="handleClose"
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+      :router="true">
+      <el-submenu index="1">
+        <template slot="title">
+          <i class="el-icon-notebook-1"></i>
+          <span>书架管理</span>
+        </template>
+          <el-menu-item index="/admin/bookshelf">查看</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">添加</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item>
+      </el-submenu>
+      <el-menu-item index="/admin/user">
+        <i class="el-icon-user"></i>
+        <span slot="title">用户管理</span>
+      </el-menu-item>
+      <el-submenu index="3" >
+       <template slot="title">
+        <i class="el-icon-document"></i>
+        <span slot="title">分类管理</span>
+        </template>
+          <el-menu-item index="/admin/bookshelf">查看</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">添加</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item>
+      </el-submenu>
+      <el-submenu index="3" >
+       <template slot="title">
+        <i class="el-icon-document"></i>
+        <span slot="title">订单管理</span>
+        </template>
+          <el-menu-item index="/admin/bookshelf">查看</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">添加</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item>
+      </el-submenu>
     </el-menu>
-   </div>
-    <!-- 右侧主内容区 -->
-    <div class="main-right" >
+  </el-col>
+</el-row>
+    </el-aside>
+    <el-main height="100%">
     <router-view class="view"></router-view>
-    </div>
-  </main>
+    </el-main>
+  </el-container>
+</el-container>
   </div>
  </template>
  <script>
  
- export default {
-  name: 'app',
-  data: function (){
+ export default{
+  name: 'admin',
+  data(){
   return {
    active:true
   }
+  },
+  methods:{
+     handleOpen(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleClose(key, keyPath) {
+        console.log(key, keyPath);
+      }
   }
+
  }
  </script>
  <style>
-  body{margin: 0;}
- #app {
-  min-width: 1200px;
-  margin: 0 auto;
-  font-family: "Helvetica Neue","PingFang SC",Arial,sans-serif;
- }
- /* 头部导航 */
- header{z-index: 1000;min-width: 1200px;transition: all 0.5s ease; border-top: solid 4px #3091F2; background-color: #fff; box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04); }
- header.header-fixed{position: fixed;top: 0;left: 0;right: 0;}
- header .el-menu-demo{padding-left: 300px!important;}
- /* 主内容区 */
-  main{ display: -webkit-box; display: -ms-flexbox; display: flex; min-height: 800px; border: solid 40px #E9ECF1; background-color: #FCFCFC; }
-  main .main-left{text-align: center;width: 200px;float: left;}
-  main .main-right{-webkit-box-flex: 1; -ms-flex: 1; flex: 1; background-color: #fff; padding: 50px 70px; }
-  main .el-menu{background-color: transparent!important;}
+ .el-header, .el-footer {
+    background-color: #B3C0D1;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+  }
+  
+  .el-aside {
+    background-color: #545c64;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+  }
+  
+  .el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+    min-height:100vh;
+  }
+  
+  body > .el-container {
+    margin-bottom: 40px;
+  }
+  
+  .el-container:nth-child(5) .el-aside,
+  .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+  }
+  
+  .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+  }
  </style>

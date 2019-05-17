@@ -1,69 +1,88 @@
 book=[{
       id: 0,
       name: "肖申克的救赎",
+      detail:"",
       outline:"abcdefghifiashdioasdihsahdiasdkasi",
       price: 30,
       number: 4,
       member_price:25,
       star:4,
       image_url: require('../../assets/images/books/xskdjs.jpg'),
+      url: "../../../assets/images/books/xskdjs.jpg",
       author:"MotherFucker",
+      date:"2016-07-12 20:30",
+      is_shelf:true
       
     }, {
       id: 1,
       name: "冰与火之歌",
+      detail: "",
       outline: "abcdefghifiashdioasdihsahdiasdkasi",
       price: 30,
       number: 4,
       member_price: 25,
       star: 4,
       image_url: require('../../assets/images/books/byhzg.jpg'),
+      url: "../../../assets/images/books/byhzg.jpg",
       author: "MotherFucker",
-
+      date: "2016-07-12 20:30",
+      is_shelf: true
     }, {
       id: 2,
       name: "机器学习",
+      detail: "",
       outline: "abcdefghifiashdioasdihsahdiasdkasi",
       price: 30,
       number: 4,
       member_price: 25,
       star: 4,
       image_url: require('../../assets/images/books/jqxx.jpg'),
+      url: "../../../assets/images/books/jqxx.jpg",
       author: "MotherFucker",
-
+      date: "2016-07-12 20:30",
+      is_shelf: true
     }, {
       id: 3,
       name: "Head first JAVA",
+      detail: "",
       outline: "abcdefghifiashdioasdihsahdiasdkasi",
       price: 30,
       number: 4,
       member_price: 25,
       star: 4,
       image_url: require('../../assets/images/books/hfjava.jpg'),
+      url: "../../../assets/images/books/hfjava.jpg",
       author: "MotherFucker",
-
+      date: "2016-07-12 20:30",
+        is_shelf: true
     }, {
       id: 4,
       name: "TensorFlow 学习",
+      detail: "",
       outline: "abcdefghifiashdioasdihsahdiasdkasi",
       price: 30,
       number: 4,
       member_price: 25,
       star: 4,
       image_url: require('../../assets/images/books/tensorflow.jpg'),
+      url: "../../../assets/images/books/tensorflow.jpg",
       author: "MotherFucker",
-
+      date: "2016-07-12 20:30",
+      is_shelf: true
     }, {
       id: 5,
       name: "What If",
+      detail: "",
       outline: "abcdefghifiashdioasdihsahdiasdkasi",
       price: 30,
       number: 4,
       member_price: 25,
       star: 4,
       image_url: require('../../assets/images/books/whatif.jpg'),
+      url: "../../../assets/images/books/whatif.jpg",
       author: "MotherFucker",
-
+      date: "2016-07-12 20:30",
+      is_shelf: false 
     },
 
 ]
