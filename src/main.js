@@ -9,6 +9,9 @@ import store from './store'
 import axios from 'axios'
 import qs from 'qs';
 import VueAreaLinkage from 'vue-area-linkage';
+import myCharts from './assets/util/myChart.js'
+
+Vue.use(myCharts)
 
 Vue.use(VueAreaLinkage)
 Vue.config.productionTip = false

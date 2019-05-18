@@ -163,6 +163,12 @@ v-loading="totalLoading"
       <el-button type="primary" icon="el-icon-plus"  @click="innerVisible = true;outerVisible= false">注册账号</el-button>
     </div>
   </el-dialog>
+  <!-- 底部信息 -->
+  <div class="demo-badge-content" color="transparent">
+      Copyright
+      <span style="font-size: 20px; color: red;" slot="content">&copy;</span>
+      2019 SCUTBOOKSTORE All Rights Reserved.
+    </div>
   </el-footer>
     </el-container>
     </el-container>
@@ -343,6 +349,12 @@ v-loading="totalLoading"
 <style >
 
 @import "../assets/css/search.css";
+.demo-badge-content {
+  padding: 12px;
+  margin-left: 16px;
+  margin-right: 16px;
+
+}
 .round{
   height: 60px;
   width: 60px;

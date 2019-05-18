@@ -33,7 +33,38 @@ const router= new Router({
         name: 'order',
         meta: {
           title: '订单中心'
-        }
+        },
+        children:[
+          {
+            path: '/home/order/all',
+              component: resolve => require(['../pages/home/order/all.vue'], resolve),
+              name: 'allorder',
+              meta: {
+                title: '所有订单'
+              }
+          }, {
+            path: '/home/order/unpaid',
+            component: resolve => require(['../pages/home/order/unpaid.vue'], resolve),
+            name: 'unpaidorder',
+            meta: {
+              title: '未付款'
+            }, 
+          },{
+              path: '/home/order/completed',
+              component: resolve => require(['../pages/home/order/completed.vue'], resolve),
+              name: 'completedorder',
+              meta: {
+                title: '已完成'
+              }
+            }, {
+              path: '/home/order/unevaluated',
+              component: resolve => require(['../pages/home/order/unevaluated.vue'], resolve),
+              name: 'unevaluatedorder',
+              meta: {
+                title: '未评价'
+              }
+            }
+        ]
       }
       , {
         path: '/home/homepage',
@@ -79,12 +110,19 @@ const router= new Router({
         component: resolve => require(['../pages/test/test.vue'], resolve),
         name: 'test',
       }, {
-        path: '/admin/home',
+        path: '/admin',
         component: resolve => require(['../pages/admin/home.vue'], resolve),
         name: 'admin',
 
         children:[
-          {
+            {
+              path: '/admin/index',
+              component: resolve => require(['../pages/admin/index.vue'], resolve),
+              name: 'adminIndex',
+              meta: {
+                title:"后台主页"
+              }
+            },{
         path: '/admin/bookshelf',
         component: resolve => require(['../pages/admin/book/bookShelf.vue'], resolve),
         name: 'bookShelf',

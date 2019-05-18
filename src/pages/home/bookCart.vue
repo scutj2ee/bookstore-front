@@ -12,26 +12,33 @@
   </el-header>
   <el-main>
   <el-table
-    :data="tableData"
+    :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+    :default-sort = "{prop: 'id', order: 'descending'}"
+    show-summary
     stripe
     style="width: 100%" 
     v-show="tableData.length" 
-    highlight-current-row>
+    highlight-current-row
+    row-key="id">
     <el-table-column 
     label="选择" 
     width="100" 
     style="color:red" 
     :render-header="renderHeader"
     align="center">
+  
   <el-checkbox 
   prop="is_check"
   ></el-checkbox>
 </el-table-column>
     <el-table-column
-      prop="id"
+    prop="id"
       label="序号"
       width="180"
       align="center">
+        <!-- <template slot-scope="scope">
+        <div v-model="scope.row.index"></div>
+        </template> -->
     </el-table-column>
     <el-table-column
       prop="name"
@@ -43,6 +50,7 @@
       prop="price"
       label="单价"
       width="180"
+      sortable
       align="center">
     </el-table-column>
      <el-table-column
@@ -67,18 +75,22 @@
          <img v-bind:src="scope.row.image_url" style="width: 100px;height:100px;" >
       </template>
   </el-table-column>
-    <el-table-column label="删除功能">
-            
-                    <el-popover placement="top" width="160" v-model="tableData.remove">
-                        <p>亲！确定删除此商品吗？</p>
-                        <div style="text-align: right; margin: 0">
-                            <el-button size="mini" type="text" @click="tableData.remove=false">取消</el-button>
-                            <el-button type="primary" size="mini" @click="removeId(tableData.id)">确定</el-button>
-                        </div>
-                        <el-button type="danger" icon="el-icon-delete" circle slot="reference"></el-button>
-                        
-                    </el-popover>
+    <el-table-column 
+    label="操作"
+    align="center"
+    >
+    <template slot="header" slot-scope="scope">
+        <el-input
+         
+          v-model="search"
+          size="medium"
+          placeholder="输入关键字搜索"/>
+      </template>
+    <template slot-scope="scope">
+    <el-button   type="danger" icon="el-icon-delete" circle @click="removeId(scope.row.id)"></el-button>
+    </template>
             </el-table-column>
+            
   </el-table>
  <div >
  <div class="btn_box">
@@ -189,6 +201,7 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
 
 
       return {
+         search: '',//搜索
         address: areajson, //调用外部js文件的json数据
         //自定义 默认值
         addressSelect:areaSelected ,
@@ -209,6 +222,7 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
         show: false,
         isDisabled: false,
         active: 1,
+        isRemove:true,
         tableData: cart,
                     count: 0,
                     istrue: false,
@@ -228,10 +242,11 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
       };
     },
     mounted(){
-  this.$watch("tableData",function () {
-    for(let i=0;i<tableData.length;i++){
+  this.$watch("number",function () {
+    for(let i=0;i<this.tableData.length;i++){
       this.tableData[i].total=this.tableData[i].number*this.tableData[i].price;
     }
+    
   
 });
     },
@@ -241,6 +256,19 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
     },
 
     methods:{
+      //删除item
+      removeId(val){
+        let index=0;
+        for(let i=0;i<this.tableData.length;i++){
+          if(this.tableData[i].id==val){
+            index=i;
+          }
+
+        }
+        console.log(this.tableData[index]);
+        this.tableData.splice(index,1);  //index 位置   1个数
+       
+      },
       // 控制进度条
       next() {
        

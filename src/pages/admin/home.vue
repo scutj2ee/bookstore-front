@@ -5,9 +5,15 @@
   <el-row>
   <el-col :span="6"></el-col>
    <el-col :span="12">
-    <el-menu default-active="5" class="el-menu-demo" mode="horizontal" @select="">
-    <el-menu-item index="1">高级插件</el-menu-item>
-    <el-menu-item index="2">在线商城</el-menu-item>
+    <el-menu 
+    default-active="/admin/index"
+    class="el-menu-demo" 
+    background-color="#545c64"
+    text-color="#fff"
+    mode="horizontal"
+    :router="true">
+    <el-menu-item index="/admin/index">首页</el-menu-item>
+    <el-menu-item index="/home/homepage">在线商城</el-menu-item>
     <el-menu-item index="3">客户管理</el-menu-item>
     <el-menu-item index="4">系统设置</el-menu-item>
     <el-menu-item index="5">活动发布</el-menu-item>
@@ -21,7 +27,6 @@
     <el-col >
    
     <el-menu
-    default-active="/admin/bookshelf"
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose"
@@ -79,7 +84,7 @@
  export default{
   name: 'admin',
   data(){
-  return {
+  return{
    active:true
   }
   },
@@ -96,7 +101,7 @@
  </script>
  <style>
  .el-header, .el-footer {
-    background-color: #B3C0D1;
+    background-color: #545c64;
     color: #333;
     text-align: center;
     line-height: 60px;
