@@ -68,7 +68,7 @@
       <template slot-scope="scope">
         <el-button @click="handleClick(scope.row)" type="info"  icon="el-icon-search" circle></el-button>
         <el-button type="primary" icon="el-icon-edit" circle ></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle slot="reference"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle slot="reference" @click="handleDelete(scope.$index)" ></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -120,6 +120,10 @@ import defaultImg from "../../../assets/images/logo/logo.png"
       }
     },handleAdd(){
       this.$router.push({path: '/admin/bookshelf/add'});
+    },
+    //删除商品
+    handleDelete(rowIndex){
+this.tableData.splice(rowIndex,1);
     }
     },
   }

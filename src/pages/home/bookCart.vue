@@ -72,7 +72,7 @@
      width="120" 
      align="center">
       <template slot-scope="scope">
-         <img v-bind:src="scope.row.image_url" style="width: 100px;height:100px;" >
+         <img v-bind:src="scope.row.image_url" style="width: 100px;height:100px;" @click="openImg(scope.row.image_url)" >
       </template>
   </el-table-column>
     <el-table-column 
@@ -81,7 +81,7 @@
     >
     <template slot="header" slot-scope="scope">
         <el-input
-         
+          style="border-color:#f6a7ba"
           v-model="search"
           size="medium"
           placeholder="输入关键字搜索"/>
@@ -95,7 +95,11 @@
  <div >
  <div class="btn_box">
  <el-button style="margin-top: 12px; background-color:#f6a7ba " icon="el-icon-arrow-right" circle  @click="next" :disabled="isDisabled" ></el-button>
- 
+  <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
+      <el-card :body-style="{ padding: '0px' }">
+        <img v-bind:src="dialogImgUrl" width="100%" height="100%">
+      </el-card>
+    </el-dialog>
  </div>
  <div v-show="show" class="btn_box">
       <transition name="el-fade-in-linear">
@@ -223,14 +227,16 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
         isDisabled: false,
         active: 1,
         isRemove:true,
+        dialogImgUrl:null,
         tableData: cart,
-                    count: 0,
-                    istrue: false,
-                    addressForm2: {
-                        name: '',
-                        price: '',
-                        age: ''
-                    },
+        count: 0,
+        istrue: false,
+        imgVisible:false,
+        addressForm2: {
+          name: '',
+          price: '',
+          age: ''
+        },
                     rules2: {
                         age: [
                             { validator: checkAge, trigger: 'blur' }
@@ -256,6 +262,13 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
     },
 
     methods:{
+       // 展示图片
+    openImg(url) {
+      if (url) {
+        this.imgVisible = true
+        this.dialogImgUrl = url
+      }
+    },
       //删除item
       removeId(val){
         let index=0;
