@@ -68,7 +68,7 @@ v-loading="totalLoading"
   <i class="el-icon-bell"></i>
   消息中心
  </el-menu-item>
-  <el-menu-item index="/home/order" >
+  <el-menu-item index="/home/order/all" >
   <i class="el-icon-tickets"></i>
   订单管理</el-menu-item>
   <el-menu-item index="/home/bookcart" ><i class="el-icon-goods"></i>书栏</el-menu-item>

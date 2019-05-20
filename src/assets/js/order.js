@@ -41,10 +41,11 @@ order=[{
       total: 30
     }
   ],
-  total: 80
+  total: 80,
+  state: 0,
 }, {
   id: 1,
-  createTime: "2016-07-12 20:30",
+  createTime: "2016-07-12 20:35",
   user: {
     id: 1,
     address: ['340000', '340100', '340104'],
@@ -83,7 +84,8 @@ order=[{
     is_check: true,
     total: 30
   }],
-  total: 80
+  total: 80,
+  state: 1,
 }
 
 ]

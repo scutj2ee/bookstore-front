@@ -8,15 +8,14 @@
     <el-row :gutter="20">
     <el-col :span="6" v-for="(item, index) in props.row.items" :key="index" >
     <el-card shadow="hover" :body-style="{ padding: '5px' }">
-    <img  v-bind:src="item.image_url" style="width:100px;height:100px;">
+    <img  v-bind:src="item.image_url" style="width:180px;height:180px;">
         
         <div class="bottom clearfix">
         <div class="sub-tit">{{item.name}}</div><br>
            <div class="card-show">
            {{item.author }}</div><br>
            <div class="price">活动价：￥ {{item.member_price}}</div><br>
-           <div class="card-show">市场价：￥<del>
-           {{item.price }}</del></div>    
+           <div>数目：X{{item.number+" 总价： "+item.total}}</div>   
       </div>
     </el-card>
   </el-col>
@@ -24,14 +23,21 @@
       </template>
     </el-table-column>
     <el-table-column
+      label="订单号"
+      prop="id"
+      align="center">
+    </el-table-column>
+    <el-table-column
       label="下单时间"
       prop="createTime"
-      align="center">
+      align="center"
+      sortable>
     </el-table-column>
     <el-table-column
       label="收货信息"
       prop="reciever"
-      align="center">
+      align="center"
+      width="500px">
       <template slot-scope="scope">
 <span> 
 <el-cascader
@@ -52,6 +58,15 @@
       label="总价"
       prop="total">
     </el-table-column>
+    <el-table-column
+      label="操作"
+      >
+      <template  slot-scope="scope">
+      <el-button type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)" >删除</el-button>
+        <el-button v-show="scope.row.state" type="primary" icon="el-icon-money" >付款</el-button>
+        
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 
@@ -65,6 +80,7 @@ import area from "../../../assets/js/select_area.js";
         tableData: order,
         area:areajson,
         address:{},
+        
       }
     },
    mounted: function() {
@@ -77,19 +93,17 @@ import area from "../../../assets/js/select_area.js";
    })
  },
  methods:{
-   getAddress(){
-     let list=[];
-     for(let i=0;i<this.tableData.length;i++){
-       list.push(this.tableData[i].user.address);
-     }
-    //  console.log(list);
-    for(let i=0;i<list.length;i++){
-      for(let j=0;j<areajson.length;j++){
-        if(areajson[j].value==list[i][0]){
-          let province=areajson[j].label
+   handleDelete(val){
+     let index=0;
+        for(let i=0;i<this.tableData.length;i++){
+          if(this.tableData[i].id==val){
+            index=i;
+          }
+
         }
-      }
-    }
+        console.log(this.tableData[index]);
+        this.tableData.splice(index,1);  //index 位置   1个数
+       
    }
  }
   }

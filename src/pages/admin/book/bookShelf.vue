@@ -2,10 +2,13 @@
  <div id="bookshelf">
   <!-- 步骤组件 -->
   <el-table
-    max-height="800"
-    :data="tableData"
+    
+    :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
     style="width: 100%"
-    :row-class-name="tableRowClassName">
+    
+    v-show="tableData.length" 
+    :row-class-name="tableRowClassName"
+    row-key="id">
     <el-table-column
       fixed
       prop="name"
@@ -63,8 +66,14 @@
     <el-table-column
       fixed="right"
       label="操作"
-      
       >
+      <template slot="header" slot-scope="scope">
+        <el-input
+          style="border-color:#f6a7ba"
+          v-model="search"
+          size="medium"
+          placeholder="输入关键字搜索"/>
+      </template>
       <template slot-scope="scope">
         <el-button @click="handleClick(scope.row)" type="info"  icon="el-icon-search" circle></el-button>
         <el-button type="primary" icon="el-icon-edit" circle ></el-button>
@@ -97,6 +106,7 @@ import defaultImg from "../../../assets/images/logo/logo.png"
     data() {
       
       return {
+        search:null,
         tableData: book,
         defaultImg:defaultImg,
         imgVisible: false,
@@ -121,7 +131,7 @@ import defaultImg from "../../../assets/images/logo/logo.png"
     },handleAdd(){
       this.$router.push({path: '/admin/bookshelf/add'});
     },
-    //删除商品
+    //删除
     handleDelete(rowIndex){
 this.tableData.splice(rowIndex,1);
     }
