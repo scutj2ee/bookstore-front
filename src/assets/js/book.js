@@ -2,7 +2,7 @@ book=[{
       id: 0,
       name: "肖申克的救赎",
       detail:"",
-      outline: "肖申克的救赎正版书籍原版英文版引进翻译斯蒂芬金小说肖生克电影原著史蒂芬金外国悬疑恐怖惊",
+      outline: "abcdefghifiashdioasdihsahdiasdkasi",
       price: 25,
       number: 4,
       member_price:25,

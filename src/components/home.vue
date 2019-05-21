@@ -18,7 +18,7 @@ v-loading="totalLoading"
   <!-- 搜索栏 -->
   <div class="outter">
   <div class="inner" >
-  <el-input type="text" placeholder="请输入内容" v-model="input3" class="searchClass">
+  <el-input type="text" placeholder="请输入内容" v-model="searchContent" class="searchClass">
   <div slot="prepend">
         <div class="centerClass">
     <el-select v-model="select" slot="prepend" placeholder="请选择">
@@ -40,7 +40,6 @@ v-loading="totalLoading"
   <el-col :span="8"><div class="grid-content">
   <!-- 主页菜单 -->
   <el-menu
-  :default-active="activeIndex2"
   class="el-menu-demo"
   mode="horizontal"
   @select="handleSelect"
@@ -50,7 +49,10 @@ v-loading="totalLoading"
   default-active="/home/homepage"
   :router="true"
   >
-  <el-menu-item  @click="outerVisible = true"><i class="el-icon-user"></i>登陆</el-menu-item>
+  <el-menu-item  
+  @click="outerVisible = true">
+  <i class="el-icon-user"></i>登陆
+  </el-menu-item>
   <el-submenu index="2">
     <template slot="title">
     <i class="el-icon-notebook-1"></i>书单</template>
@@ -65,8 +67,10 @@ v-loading="totalLoading"
     </el-submenu>
   </el-submenu>
   <el-menu-item index="3" >
+  <el-badge :value="13" class="item">
   <i class="el-icon-bell"></i>
   消息中心
+  </el-badge>
  </el-menu-item>
   <el-menu-item index="/home/order/all" >
   <i class="el-icon-tickets"></i>
@@ -140,6 +144,13 @@ v-loading="totalLoading"
   <el-form-item label="邮箱" prop="email">
     <el-input type="e-mail" v-model="ruleForm.email" autocomplete="off"></el-input>
   </el-form-item>
+  <el-form-item label="验证码" prop="code" class="pr">
+        <el-input prop="code" v-model="ruleForm.code" placeholder="验证码"></el-input>
+        <el-button type="primary" plain @click="getCode()" class="code-btn" :disabled="!show">
+          <span v-show="show">发送验证码</span>
+          <span v-show="!show" class="count">{{count}} s</span>
+        </el-button>
+      </el-form-item>
    <el-form-item label="手机号码" prop="phone">
     <el-input v-model.number="ruleForm.phone" autocomplete="off"></el-input>
   </el-form-item>
@@ -175,6 +186,7 @@ v-loading="totalLoading"
     </el-container>
 </template>
 <script>
+const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
  export default {
    name: 'home',
     data() {
@@ -190,6 +202,7 @@ v-loading="totalLoading"
           callback();
         }
       };
+      //再次输入密码验证
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
@@ -199,9 +212,23 @@ v-loading="totalLoading"
           callback();
         }
       }
+         // 验证码校验
+    let validateCheckCode = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('验证码不可为空'))
+      } else {
+        if (value !== '') {
+          let reg = /^[0-9]{6}$/;//正则验证
+          if (!reg.test(value)) {
+            callback(new Error('请输入收到的6位随机验证码'))
+          }
+        }
+        callback();
+      }
+    }
 
       return {
-      
+      //登陆表格
         loginForm:{
           userName:'',
           password:'',
@@ -209,18 +236,24 @@ v-loading="totalLoading"
         //注册检测
          ruleForm: {
            email:'',
+           code: '',
            userName:'',
-          pass: '',
-          checkPass: '',
-          phone: ''
+            pass: '',
+            checkPass: '',
+            phone: ''
         },
+        //约束规则表格
         rules: {
           email :[{
             required: true, message:'登陆邮箱不能为空',trigger: 'blur'
           }],
+          code: [
+            { validator: validateCheckCode, trigger: 'blur' }
+          ],
            userName :[{
             required: true, message:'用户名不能为空',trigger: 'blur'
           }],
+
           pass: [
             { validator: validatePass, trigger: 'blur' }
           ],
@@ -282,22 +315,20 @@ v-loading="totalLoading"
              aim:'',
                star: 4}
             ],
-            hotForm:[],
-        activeIndex: '1',
-        activeIndex2: '1',
         currentDate:new Date(),
-        input3: '',
-        select: '',
+        searchContent: '',//搜索内容
+        select: '',//选择搜索按钮
         outerVisible: false,//登陆栏
         innerVisible: false,//注册栏
-        activeName: 'first',
-        loading:true,
-        totalLoading:true
+        totalLoading:true,//加载中
+        show: true,//验证码按钮
+        count: '',//验证倒计时
+        timer: null,//计时器变量
       };
     },
      mounted() {
        
-       this.totalLoading=false;
+      this.totalLoading=false;
       this.list = this.states.map(item => {
         return { value: item, label: item };
       });
@@ -309,21 +340,42 @@ v-loading="totalLoading"
       handleDetail(){
 
       },
-      remoteMethod(query) {
-        if (query !== '') {
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.options = this.list.filter(item => {
-              return item.label.toLowerCase()
-                .indexOf(query.toLowerCase()) > -1;
-            });
-          }, 200);
-        } else {
-          this.options = [];
+      // 向后端发请求的点击事件
+      getCode () {
+      let _this = this
+      if (this.ruleForm.email === '') {
+        _this.$message.error('请先输入邮箱再点击获取验证码')
+      } else {
+        // 注释为重要代码，不可删除，这里是写一个测试方法
+        // axios({
+        //   method: 'post',
+        //   url: '/mail/getCheckCode',
+        //   data: {
+        //     'email': this.ruleForm.email
+        //   }
+        // }).then(function (res) {
+        //   sessionStorage.setItem('checkCode', md5(res.data.data))  // 这里我没用redis做缓存，用的浏览器sessionStorage+md5加密存下来的
+        // })
+        //测试验证码
+        this.ruleForm.code=154757;
+        // 验证码倒计时
+        if (!this.timer) {
+          this.count = TIME_COUNT
+          this.show = false
+          this.timer = setInterval(() => {
+            if (this.count > 0 && this.count <= TIME_COUNT) {
+              this.count--
+            } else {
+              this.show = true
+              clearInterval(this.timer)
+              this.timer = null
+            }
+          }, 1000)
         }
-      },
-         submitForm(formName) {
+      }
+    },
+     
+    submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');
@@ -515,4 +567,11 @@ position:relative;
     height: 100%;
   
   }
+  .item {
+  
+  margin-right: 0px;
+}
+.code-btn{
+margin-top :15px;
+}
 </style>
