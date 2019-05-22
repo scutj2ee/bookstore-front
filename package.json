@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "babel": "^6.23.0",
     "echarts": "^4.2.1",
     "echarts-wordcloud": "^1.1.3",
     "element-ui": "^2.8.2",
@@ -66,5 +67,15 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "main": ".postcssrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scutj2ee/bookstore-front.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scutj2ee/bookstore-front/issues"
+  },
+  "homepage": "https://github.com/scutj2ee/bookstore-front#readme"
 }

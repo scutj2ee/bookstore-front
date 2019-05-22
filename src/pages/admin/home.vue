@@ -41,8 +41,8 @@
         </template>
           <el-menu-item index="/admin/bookshelf">查看</el-menu-item>
           <el-menu-item index="/admin/bookshelf/add">添加</el-menu-item>
-          <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
-          <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item>
+          <!-- <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item> -->
       </el-submenu>
       <el-menu-item index="/admin/user">
         <i class="el-icon-user"></i>
@@ -55,8 +55,8 @@
         </template>
           <el-menu-item index="/admin/bookshelf">查看</el-menu-item>
           <el-menu-item index="/admin/bookshelf/add">添加</el-menu-item>
-          <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
-          <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item>
+          <!-- <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item> -->
       </el-submenu>
       <el-submenu index="3" >
        <template slot="title">
@@ -65,8 +65,8 @@
         </template>
           <el-menu-item index="/admin/bookshelf">查看</el-menu-item>
           <el-menu-item index="/admin/bookshelf/add">添加</el-menu-item>
-          <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
-          <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item>
+          <!-- <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
+          <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item> -->
       </el-submenu>
     </el-menu>
   </el-col>
