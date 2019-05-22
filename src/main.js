@@ -28,5 +28,6 @@ new Vue({
   el: '#app',
   router,
   components: { App },
+  store, //vuex导入
   template: '<App/>'
 })

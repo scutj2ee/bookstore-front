@@ -1,10 +1,8 @@
-const mutations = {
 
-  setUserList(state, data) {
+export const modifyLoginForm= (state, loginForm) => {
+  state.loginForm = loginForm;
+}
 
-    state.userList = data;
-
-  
-  }
-
+export const modifyRuleForm = (state, ruleForm) => {
+  state.ruleForm = ruleForm;
 }

@@ -29,9 +29,12 @@
     </el-table-column>
     <el-table-column
       label="下单时间"
-      prop="createTime"
       align="center"
       sortable>
+      <template slot-scope="scope">
+       <i class="el-icon-time"></i>
+       {{scope.row.createTime}}
+      </template>
     </el-table-column>
     <el-table-column
       label="收货信息"
@@ -40,13 +43,13 @@
       width="500px">
       <template slot-scope="scope">
 <span> 
+<i class="el-icon-location"></i>
 <el-cascader
 		:options="area"
 		change-on-select
 		v-model="scope.row.user.address"
 		expand-trigger="hover"
-		@change="handleChange" 
-		class="wd400"
+	
     disabled>
 	</el-cascader>
       {{scope.row.user.detail+" "
@@ -57,13 +60,24 @@
     <el-table-column
       label="总价"
       prop="total">
+      <template slot-scope="scope">
+      <div style="font-size:20px;color: red;">￥{{scope.row.total}}</div>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="状态"
+      prop="state">
+      <template slot-scope="scope">
+<div  class="block" > {{scope.row.state}}</div>
+      </template>
+
     </el-table-column>
     <el-table-column
       label="操作"
       >
       <template  slot-scope="scope">
       <el-button type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)" >删除</el-button>
-        <el-button v-show="scope.row.state" type="primary" icon="el-icon-money" >付款</el-button>
+        <el-button v-show="scope.row.state=='未付款'" type="primary" icon="el-icon-money" >付款</el-button>
         
       </template>
     </el-table-column>
@@ -104,7 +118,8 @@ import area from "../../../assets/js/select_area.js";
         console.log(this.tableData[index]);
         this.tableData.splice(index,1);  //index 位置   1个数
        
-   }
+   },
+   
  }
   }
 </script>
@@ -125,5 +140,11 @@ import area from "../../../assets/js/select_area.js";
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+  }
+  .block{
+  
+    font-size:18px;
+    color:red;
+   
   }
 </style>

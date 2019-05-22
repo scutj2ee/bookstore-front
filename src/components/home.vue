@@ -86,7 +86,7 @@ v-loading="totalLoading"
     <el-aside width="200px">
     <!-- 侧栏 -->
 <!-- 侧栏 -->
-<el-collapse v-model="activeNames" @change="handleChange"  >
+<el-collapse @change="handleChange"  >
   <el-collapse-item title="生活 LIFE" name="1">
   <i class="el-icon-s-promotion"></i>
     <div><el-link type="primary">主要链接</el-link></div>
@@ -124,10 +124,8 @@ v-loading="totalLoading"
     <el-input type="text" v-model="loginForm.userName" autocomplete="off"></el-input>
   </el-form-item>
   <el-form-item label="密码" prop="password">
-    <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+    <el-input type="password" v-model="loginForm.password" autocomplete="off"></el-input>
   </el-form-item>
-
-
  
 </el-form>
    
@@ -170,7 +168,8 @@ v-loading="totalLoading"
 
     <div slot="footer" class="dialog-footer">
       <el-button @click="outerVisible = false" icon="el-icon-arrow-left">取 消</el-button>
-      <el-button type="success" icon="el-icon-check"  @click="outerVisible = false">登陆</el-button>
+      <el-checkbox v-model="checked" style="color:#a0a0a0;">一周内自动登录</el-checkbox>
+      <el-button type="success" icon="el-icon-check"  @click="submitLoginForm('loginForm'); ">登陆</el-button>
       <el-button type="primary" icon="el-icon-plus"  @click="innerVisible = true;outerVisible= false">注册账号</el-button>
     </div>
   </el-dialog>
@@ -186,12 +185,20 @@ v-loading="totalLoading"
     </el-container>
 </template>
 <script>
+  import {mapActions,mapGetters} from 'vuex';
 const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
  export default {
    name: 'home',
     data() {
       // 登陆验证
- 
+      var validatePassword=(rule,value,callback)=>{
+          if(!value){
+            callback(new Error("请输入密码1"));
+          }
+            callback();
+          
+      };
+      //注册密码验证
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
@@ -233,6 +240,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           userName:'',
           password:'',
         },
+        checked:false,//记住密码七天内免登陆
         //注册检测
          ruleForm: {
            email:'',
@@ -253,7 +261,9 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
            userName :[{
             required: true, message:'用户名不能为空',trigger: 'blur'
           }],
-
+          password: [
+            { validator: validatePassword, trigger: 'blur' }
+          ],
           pass: [
             { validator: validatePass, trigger: 'blur' }
           ],
@@ -329,9 +339,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
      mounted() {
        
       this.totalLoading=false;
-      this.list = this.states.map(item => {
-        return { value: item, label: item };
-      });
+      this.getCookie();
     },
     methods: {
       handleSelect(key, keyPath) {
@@ -340,7 +348,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       handleDetail(){
 
       },
-      // 向后端发请求的点击事件
+      // 向后端发请求的点击事件 获取验证码
       getCode () {
       let _this = this
       if (this.ruleForm.email === '') {
@@ -374,13 +382,48 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         }
       }
     },
-     
+    //登陆功能
+
+    submitLoginForm(formName){
+        this.$refs[formName].validate((valid) => {
+         if (valid) {
+            const self = this;
+            //判断复选框是否被勾选 勾选则调用配置cookie方法
+            if (self.checked == true) {
+                //传入账号名，密码，和保存天数3个参数
+                self.setCookie(self.loginForm.userName, self.loginForm.password, 7);
+            }else {
+              console.log("清空Cookie");
+              //清空Cookie
+              self.clearCookie();
+          }
+          //使用vuex 来管理数据
+          this.$store.commit('modifyLoginForm',this.loginForm);
+          //写入seesionStorage来保存数据
+            sessionStorage.removeItem('state');
+            sessionStorage.setItem('state',JSON.stringify(this.$store.state));
+            alert('登录成功!');
+            this.outerVisible = false;
+            // this.$router.push({ name: 'Home',params:{user:self.ruleForm.username,pwd:self.ruleForm.password}});
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+    },
+     //注册
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            localStorage.setItem('user_name',this.ruleForm.userName);
+            localStorage.setItem('user_password',this.ruleForm.pass);
+            console.log(JSON.stringify(self.ruleForm));
+            this.$store.commit('modifyRuleForm',this.ruleForm);
+            sessionStorage.removeItem('state');
+            sessionStorage.setItem('state',JSON.stringify(this.$store.state));
+            alert('注册成功');
           } else {
-            console.log('error submit!!');
+            console.log('注册失败');
             return false;
           }
         });
@@ -391,12 +434,40 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
        handleClick(tab, event) {
         console.log(tab, event);
       }, 
-//       handleGetBookSheet(){
-// this.$router.push({path: '/home/bookcart'});
-//       }
-    }
+      //设置cookie
+      setCookie(c_name, c_pwd, exdays) {
+          var exdate = new Date(); //获取时间
+          exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays); //保存的天数
+          //字符串拼接cookie
+          window.document.cookie = "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
+          window.document.cookie = "password" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
+
+      },
+      //读取cookie
+      getCookie: function() {
+          if (document.cookie.length > 0) {
+              var arr = document.cookie.split('; '); //这里显示的格式需要切割一下自己可输出看下
+              for (var i = 0; i < arr.length; i++) {
+                  var arr2 = arr[i].split('='); //再次切割
+                  //判断查找相对应的值
+                  if (arr2[0] == 'userName') {
+                    //  console.log(arr2[1])
+                      this.loginForm.userName = arr2[1]; //保存到保存数据的地方
+                  } else if (arr2[0] == 'password') {
+                    // console.log(arr2[1])
+                      this.loginForm.password = arr2[1];
+                  }
+              }
+               this.checked = true;
+          }
+      },
+       //清除cookie
+      clearCookie: function() {
+          this.setCookie("", "", -1); //修改2值都为空，天数为负1天就好了
+      }
     
   }
+ }
 </script>
 <style >
 

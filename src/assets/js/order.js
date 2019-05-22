@@ -42,7 +42,7 @@ order=[{
     }
   ],
   total: 80,
-  state: 0,
+  state: "未付款",
 }, {
   id: 1,
   createTime: "2016-07-12 20:35",
@@ -85,7 +85,7 @@ order=[{
     total: 30
   }],
   total: 80,
-  state: 1,
+  state: "已完成",
 }
 
 ]
