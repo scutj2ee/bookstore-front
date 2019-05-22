@@ -13,12 +13,10 @@
   <el-main>
   <el-table
     :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-    :default-sort = "{prop: 'id', order: 'descending'}"
-    show-summary
-    stripe
+    :default-sort = "{prop: 'id', order: 'ascending'}"
     style="width: 100%" 
     v-show="tableData.length" 
-    highlight-current-row
+    :row-class-name="tableRowClassName"
     row-key="id">
     <el-table-column 
     label="选择" 
@@ -26,19 +24,16 @@
     style="color:red" 
     :render-header="renderHeader"
     align="center">
-  
-  <el-checkbox 
-  prop="is_check"
-  ></el-checkbox>
+  <template slot-scope="scope">
+ <el-checkbox v-model="scope.row.is_check"  ></el-checkbox>
+  </template>
 </el-table-column>
+
     <el-table-column
     prop="id"
       label="序号"
       width="180"
       align="center">
-        <!-- <template slot-scope="scope">
-        <div v-model="scope.row.index"></div>
-        </template> -->
     </el-table-column>
     <el-table-column
       prop="name"
@@ -63,9 +58,11 @@
       </template>
     </el-table-column>
     <el-table-column
-      prop="total"
       label="总价"
       align="center">
+      <template slot-scope="scope">
+      {{scope.row.price*scope.row.number }}
+      </template>
     </el-table-column>
     <el-table-column 
      label="图片" 
@@ -84,7 +81,7 @@
           style="border-color:#f6a7ba"
           v-model="search"
           size="medium"
-          placeholder="输入关键字搜索"/>
+          placeholder="输入书名搜索"/>
       </template>
     <template slot-scope="scope">
     <el-button   type="danger" icon="el-icon-delete" circle @click="removeId(scope.row.id)"></el-button>
@@ -92,22 +89,29 @@
             </el-table-column>
             
   </el-table>
- <div >
- <div class="btn_box">
- <el-button style="margin-top: 12px; background-color:#f6a7ba " icon="el-icon-arrow-right" circle  @click="next" :disabled="isDisabled" ></el-button>
-  <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
+  <!-- 账单 -->
+ <div  class="pay-card">
+<div class="sub-card">
+<div class="btn_box pay-text">
+ 共：{{totalItem}}本书 总价钱:￥ {{countList}}</div>
+   <div class="btn_box">
+   <el-button style="margin-top: 12px; margin-left:10px; margin-right:10px; background-color:#feb9c8 " icon="el-icon-arrow-right"  type="primary"  @click="next" :disabled="isDisabled" >下一步</el-button>
+   </div>
+   <div v-show="show" class="btn_box">
+      <transition name="el-fade-in-linear">
+         <el-button   style="margin-top: 12px; margin-right:10px; " type="primary"  @click="pay" icon="el-icon-bank-card"  >去付款</el-button>
+      </transition>
+      </div>
+</div>
+</div>
+
+
+
+ <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
       <el-card :body-style="{ padding: '0px' }">
         <img v-bind:src="dialogImgUrl" width="100%" height="100%">
       </el-card>
     </el-dialog>
- </div>
- <div v-show="show" class="btn_box">
-      <transition name="el-fade-in-linear">
-         <el-button   type="primary" @click="pay" icon="el-icon-bank-card" circle ></el-button>
-      </transition>
-      </div>
-  </div>
-
    
    
     
@@ -169,7 +173,7 @@
     </el-dialog>
     <div slot="footer" class="dialog-footer">
       <el-button @click="outerVisible = false" icon="el-icon-arrow-left">取 消</el-button>
-      <el-button type="success" icon="el-icon-check"  @click="onSubmit; outerVisible = false; show = !show">确认信息</el-button>
+      <el-button type="success" icon="el-icon-check"  @click="onSubmit; outerVisible = false; show = true;">确认信息</el-button>
       <el-button type="primary" icon="el-icon-plus"  @click="outerVisible= false;innerVisible=true">添加地址</el-button>
     </div>
   </el-dialog>
@@ -228,10 +232,11 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
         active: 1,
         isRemove:true,
         dialogImgUrl:null,
-        tableData: cart,
+        tableData: cart,//导入购物车json文件
         count: 0,
         istrue: false,
         imgVisible:false,
+        total:0,//总商品件数
         addressForm2: {
           name: '',
           price: '',
@@ -247,21 +252,72 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
                     },          
       };
     },
-    mounted(){
-  this.$watch("number",function () {
-    for(let i=0;i<this.tableData.length;i++){
-      this.tableData[i].total=this.tableData[i].number*this.tableData[i].price;
+    computed:{
+      countList: function () {
+                    var a = 0;
+                    for (let i = 0; i < this.tableData.length; i++) {
+                        if (this.tableData[i].is_check == true) {
+
+                            a += this.tableData[i].price * this.tableData[i].number
+                        }
+                    }
+                    this.count = a;
+                    return this.count
+                },
+    totalItem:function(){
+      var total=0;
+      var book=0;
+      for(let i=0;i<this.tableData.length;i++){
+        if(this.tableData[i].is_check==true){
+          book+=1;
+          total+=this.tableData[i].number;
+        }
+      
+      }
+      this.total=total;
+      return this.total;
     }
-    
+
+    },
+    mounted(){
+//   this.$watch("number",function () {
+//     for(let i=0;i<this.tableData.length;i++){
+//       this.tableData[i].total=this.tableData[i].number*this.tableData[i].price;
+//     }
+//     return this.tableData;
   
-});
+// });
+
+
+
+
     },
     watch:{
+          istrue: function () {
+                    if (this.istrue == true) {
+                        for (let k = 0; k < this.tableData.length; k++) {
+                            this.tableData[k].is_check = true;
+                        }
+                    } else {
+                        for (let k = 0; k < this.tableData.length; k++) {
+                            this.tableData[k].is_check = false;
+                        }
+                    }
 
+                }
      
     },
 
     methods:{
+        //行变色
+        tableRowClassName({row, rowIndex}) {
+        if (this.tableData[rowIndex].is_check === false) {
+          return 'warning-row';
+        } else if (this.tableData[rowIndex].is_check=== true) {
+          return 'success-row';
+        }
+        return '';
+      },
        // 展示图片
     openImg(url) {
       if (url) {
@@ -290,7 +346,6 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
       },
       //提交地址
        onSubmit() {
-        this. writed=!this.writed;
         console.log('submit!');
         this. paymentVisiable=true;
       },
@@ -311,12 +366,40 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
       },
       handleGetTotal(id, value){
         this.tableData[id].number=value*this.tableData[id].price;
-      }
-    }
+      }, 
+      renderHeader: function (h, params) {//实现table表头添加
+                    var self = this;
+                    return h('div', [
+                        h('el-checkbox', {
+                            on: {
+                                change: (i) => {
+                                    self.istrue = i;
+                                }
+                            }
+                        }, '全选')
+                    ]);
+
+                },
+
+
+
+
+    },
+     
+
   }
 </script>
 <style>
+.pay-card{
+  height:200px;
+
+  background-color:#feb9c8;
+  text-align:center;
+  position:center;
+  
+}
 .btn_box{
+  float:center;
   display:inline;
 }
 .sub-header{
@@ -364,4 +447,31 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
     padding: 10px 0;
     background-color: #f9fafc;
   }
+    .el-table .warning-row {
+    background: oldlace;
+  }
+
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
+  .pay-text{
+    font-family:"微软雅黑";
+    font-size:25px;
+    color:#fff;
+  }
+ .sub-card{
+   position:relative;
+   width:fit-content;
+  width:-webkit-fit-content;
+  width:-moz-fit-content;
+   height:150px;
+   top:50%;
+   left :50%;
+   transform:translate(-50%,-50%);
+   background-color:#d2f3e0;
+   /* overflow: hidden; */
+   border-radius:15px;
+
+
+ }
 </style>

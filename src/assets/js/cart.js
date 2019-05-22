@@ -11,8 +11,8 @@ cart = [{
     url: "../../../assets/images/books/xskdjs.jpg",
     author: "MotherFucker",
     date: "2016-07-12 20:30",
-    is_shelf: true,
-    is_check:true,
+    is_shelf: false,
+    is_check: false,
     total:30
 
   }, {
@@ -29,7 +29,7 @@ cart = [{
     author: "MotherFucker",
     date: "2016-07-12 20:30",
     is_shelf: true,
-    is_check: true,
+    is_check: false,
     total: 30
   }, {
     id: 2,
@@ -45,7 +45,7 @@ cart = [{
     author: "MotherFucker",
     date: "2016-07-12 20:30",
     is_shelf: true,
-    is_check: true,
+    is_check: false,
     total: 30
   }, {
     id: 3,
@@ -61,7 +61,7 @@ cart = [{
     author: "MotherFucker",
     date: "2016-07-12 20:30",
     is_shelf: true,
-    is_check: true,
+    is_check: false,
     total: 30
   }, {
     id: 4,
@@ -77,7 +77,7 @@ cart = [{
     author: "MotherFucker",
     date: "2016-07-12 20:30",
     is_shelf: true,
-    is_check: true,
+    is_check: false,
     total: 30
   }, {
     id: 5,
@@ -93,7 +93,7 @@ cart = [{
     author: "MotherFucker",
     date: "2016-07-12 20:30",
     is_shelf: false,
-    is_check: true,
+    is_check: false,
     total: 30
   },
 

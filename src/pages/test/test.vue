@@ -1,22 +1,13 @@
 
 <template>
 
-  <div class="search bar2">
-        <form>
-            <input type="text" placeholder="请输入您要搜索的内容...">
-            <button type="submit"></button>
-        </form>
-    </div>
+
+
 </template>
  
 <script>
 export default {
-  data () {
-    return {
-      input: '',
-      select: ''
-    };
-  }
+   
 };
 </script>
 <style>

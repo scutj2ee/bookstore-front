@@ -95,11 +95,6 @@ const router= new Router({
        }
 
      }
-     ,{
-      path: '/home/cart',
-      component: resolve => require(['../pages/home/cart.vue'], resolve),
-      name: 'cart',
-    }
     // , {
     //   path: '/home/bookcart',
     //   component: resolve => require(['../pages/home/bookCart.vue'], resolve),
