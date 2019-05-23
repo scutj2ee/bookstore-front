@@ -147,4 +147,9 @@ const router= new Router({
     
   ]
 })
+
+// router.beforEach((to,from,next) => {
+//   //登陆界面登陆成功后，会把信息保存在会话里面
+//   let user=sessionStorage.getItem('state');
+// });
 export default router

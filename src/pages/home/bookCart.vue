@@ -93,11 +93,11 @@
  <div  class="pay-card">
 <div class="sub-card">
 <div class="btn_box pay-text">
- 共：{{totalItem}}本书 总价钱:￥ {{countList}}</div>
+ 共：{{totalItem}}本书 &nbsp 总价钱:￥ {{countList}}</div>
    <div class="btn_box">
    <el-button style="margin-top: 12px; margin-left:10px; margin-right:10px; background-color:#feb9c8 " icon="el-icon-arrow-right"  type="primary"  @click="next" :disabled="isDisabled" >下一步</el-button>
    </div>
-   <div v-show="show" class="btn_box">
+   <div  class="btn_box">
       <transition name="el-fade-in-linear">
          <el-button   style="margin-top: 12px; margin-right:10px; " type="primary"  @click="pay" icon="el-icon-bank-card"  >去付款</el-button>
       </transition>
@@ -173,7 +173,7 @@
     </el-dialog>
     <div slot="footer" class="dialog-footer">
       <el-button @click="outerVisible = false" icon="el-icon-arrow-left">取 消</el-button>
-      <el-button type="success" icon="el-icon-check"  @click="onSubmit; outerVisible = false; show = true;">确认信息</el-button>
+      <el-button type="success" icon="el-icon-check"  @click="onSubmit; outerVisible = false; ">确认信息</el-button>
       <el-button type="primary" icon="el-icon-plus"  @click="outerVisible= false;innerVisible=true">添加地址</el-button>
     </div>
   </el-dialog>
@@ -227,7 +227,6 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
         outerVisible:false,//选择地址
         innerVisible:false,//添加地址
         paymentVisiable:false,//付款按钮
-        show: false,
         isDisabled: false,
         active: 1,
         isRemove:true,
@@ -340,9 +339,16 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
       },
       // 控制进度条
       next() {
-       
+       if(this.istrue==false){
+          this.$confirm('您还没有选择任何商品', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        });
+       }else{
           this.outerVisible=true;
         if (this.active++ > 2) this.active = 0;
+       }
+         
       },
       //提交地址
        onSubmit() {

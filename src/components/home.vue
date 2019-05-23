@@ -49,10 +49,19 @@ v-loading="totalLoading"
   default-active="/home/homepage"
   :router="true"
   >
-  <el-menu-item  
+  <!-- <el-menu-item  
   @click="outerVisible = true">
   <i class="el-icon-user"></i>登陆
-  </el-menu-item>
+  </el-menu-item> -->
+  <el-submenu index=1>
+  <template slot="title">
+    <i class="el-icon-user"></i>{{loginTitle}}</template>
+
+    <el-menu-item index="/home/user/usercenter" v-if="loginState" ><i class="el-icon-bell"></i>个人中心</el-menu-item>
+    <el-menu-item @click="handleLogin();"  ><i class="el-icon-switch-button"></i>{{isLogin}}</el-menu-item>
+      
+  </el-submenu>
+
   <el-submenu index="2">
     <template slot="title">
     <i class="el-icon-notebook-1"></i>书单</template>
@@ -66,12 +75,6 @@ v-loading="totalLoading"
       <el-menu-item index="2-4-3">烹饪</el-menu-item>
     </el-submenu>
   </el-submenu>
-  <el-menu-item index="3" >
-  <el-badge :value="13" class="item">
-  <i class="el-icon-bell"></i>
-  消息中心
-  </el-badge>
- </el-menu-item>
   <el-menu-item index="/home/order/all" >
   <i class="el-icon-tickets"></i>
   订单管理</el-menu-item>
@@ -235,6 +238,12 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
     }
 
       return {
+        //用户名
+        loginTitle:"请登录",
+        //是否登陆校验
+        isLogin: "登录",
+        //登录状态
+        loginState:0,
       //登陆表格
         loginForm:{
           userName:'',
@@ -325,9 +334,8 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
              aim:'',
                star: 4}
             ],
-        currentDate:new Date(),
         searchContent: '',//搜索内容
-        select: '',//选择搜索按钮
+        select: '',//选择搜索栏内容
         outerVisible: false,//登陆栏
         innerVisible: false,//注册栏
         totalLoading:true,//加载中
@@ -337,9 +345,15 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       };
     },
      mounted() {
-       
+      
       this.totalLoading=false;
-      this.getCookie();
+      this.getCookie();//读取cookie
+      
+    },
+    watch:{
+      // loginForm:function(){
+      // this.checkUser();
+      // }
     },
     methods: {
       handleSelect(key, keyPath) {
@@ -402,10 +416,16 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           //写入seesionStorage来保存数据
             sessionStorage.removeItem('state');
             sessionStorage.setItem('state',JSON.stringify(this.$store.state));
-            alert('登录成功!');
+            this.$message({
+          message: '登录成功',
+          type: 'success'
+            });
+            this.loginState=1;//登录成功
             this.outerVisible = false;
+            this.checkUser();//更新状态
             // this.$router.push({ name: 'Home',params:{user:self.ruleForm.username,pwd:self.ruleForm.password}});
           } else {
+            this.$message.error('登录失败');
             console.log('error submit!!');
             return false;
           }
@@ -421,8 +441,13 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
             this.$store.commit('modifyRuleForm',this.ruleForm);
             sessionStorage.removeItem('state');
             sessionStorage.setItem('state',JSON.stringify(this.$store.state));
-            alert('注册成功');
+            this.$message({
+          message: '注册成功！',
+          type: 'success'
+            });
+            this.innerVisible=false;
           } else {
+           this.$message.error('注册失败！');
             console.log('注册失败');
             return false;
           }
@@ -464,6 +489,32 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
        //清除cookie
       clearCookie: function() {
           this.setCookie("", "", -1); //修改2值都为空，天数为负1天就好了
+          //清空登录
+          this.loginForm.userName="";
+          this.loginForm.password="";
+      },
+      //修改DOM
+      checkUser(){
+        if(this.loginForm.userName!=""){
+          this.loginTitle=this.loginForm.userName;
+          this.loginState=1;
+          this.isLogin="退出登录";
+        }else{
+           this.loginState=0;//退出登录
+          this.loginTitle="请登录";
+         
+          this.isLogin="登录";
+
+        }
+      },
+      //跳转登录或者退出登录
+      handleLogin(){
+        if( this.loginState==0){
+          this.outerVisible=true;
+        }else{
+          this.clearCookie();
+          this.checkUser();
+        }
       }
     
   }
