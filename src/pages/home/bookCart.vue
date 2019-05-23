@@ -95,11 +95,11 @@
 <div class="btn_box pay-text">
  共：{{totalItem}}本书 &nbsp 总价钱:￥ {{countList}}</div>
    <div class="btn_box">
-   <el-button style="margin-top: 12px; margin-left:10px; margin-right:10px; background-color:#feb9c8 " icon="el-icon-arrow-right"  type="primary"  @click="next" :disabled="isDisabled" >下一步</el-button>
+   <el-button style="margin-top: 12px; margin-left:10px; margin-right:10px; background-color:#feb9c8 " icon="el-icon-arrow-right"  type="primary"  @click="next"  >下一步</el-button>
    </div>
    <div  class="btn_box">
       <transition name="el-fade-in-linear">
-         <el-button   style="margin-top: 12px; margin-right:10px; " type="primary"  @click="pay" icon="el-icon-bank-card"  >去付款</el-button>
+         <el-button   style="margin-top: 12px; margin-right:10px; " type="primary"  @click="pay" icon="el-icon-bank-card" v-show="paymentVisiable"  >去付款</el-button>
       </transition>
       </div>
 </div>
@@ -173,7 +173,7 @@
     </el-dialog>
     <div slot="footer" class="dialog-footer">
       <el-button @click="outerVisible = false" icon="el-icon-arrow-left">取 消</el-button>
-      <el-button type="success" icon="el-icon-check"  @click="onSubmit; outerVisible = false; ">确认信息</el-button>
+      <el-button type="success" icon="el-icon-check"  @click="onSubmit(); outerVisible = false; ">确认信息</el-button>
       <el-button type="primary" icon="el-icon-plus"  @click="outerVisible= false;innerVisible=true">添加地址</el-button>
     </div>
   </el-dialog>
@@ -212,13 +212,9 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
          search: '',//搜索
         address: areajson, //调用外部js文件的json数据
         //自定义 默认值
-        addressSelect:areaSelected ,
-        addressSelected: '',
+        addressSelect:areaSelected ,//导入已写入地址json
+        addressSelected: '',//选择地址
         addressForm:{
-        // province:"",
-        // city:"",
-        // distinct:"",
-        // stress:"",
         area: ['340000', '340100', '340104'], //此处填写对应的value值
         detail:"",
         phone:"",
@@ -227,7 +223,6 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
         outerVisible:false,//选择地址
         innerVisible:false,//添加地址
         paymentVisiable:false,//付款按钮
-        isDisabled: false,
         active: 1,
         isRemove:true,
         dialogImgUrl:null,
@@ -236,19 +231,14 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
         istrue: false,
         imgVisible:false,
         total:0,//总商品件数
-        addressForm2: {
-          name: '',
-          price: '',
-          age: ''
-        },
-                    rules2: {
-                        age: [
-                            { validator: checkAge, trigger: 'blur' }
-                        ],
-                        price: [
-                            { validator: checkAge, trigger: 'blur' }
-                        ]
-                    },          
+        rules2: {
+            age: [
+                { validator: checkAge, trigger: 'blur' }
+            ],
+            price: [
+                { validator: checkAge, trigger: 'blur' }
+            ]
+        },          
       };
     },
     computed:{
@@ -302,7 +292,7 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
                             this.tableData[k].is_check = false;
                         }
                     }
-                   }
+                   },
     },
 
     methods:{
@@ -350,8 +340,14 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
       },
       //提交地址
        onSubmit() {
+         if(this.addressSelected){
+           if(this.total){
         console.log('submit!');
         this. paymentVisiable=true;
+           }
+         }
+         return null;
+        
       },
       //提交新地址
       submitForm(formName) {

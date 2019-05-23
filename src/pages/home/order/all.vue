@@ -40,7 +40,7 @@
       label="收货信息"
       prop="reciever"
       align="center"
-      width="500px">
+      width="700px">
       <template slot-scope="scope">
 <span> 
 <i class="el-icon-location"></i>
@@ -59,14 +59,16 @@
     </el-table-column>
     <el-table-column
       label="总价"
-      prop="total">
+      prop="total"
+      width="80px">
       <template slot-scope="scope">
       <div style="font-size:20px;color: red;">￥{{scope.row.total}}</div>
       </template>
     </el-table-column>
     <el-table-column
       label="状态"
-      prop="state">
+      prop="state"
+      width="80px">
       <template slot-scope="scope">
 <div  class="block" > {{scope.row.state}}</div>
       </template>

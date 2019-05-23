@@ -3,8 +3,8 @@
 <el-container>
   <el-aside width="500px">
     <div class="block">
-    <el-image v-bind:src="tableData.image_url">
-    </el-image>
+    <img v-bind:src="tableData.image_url" @click="openImg(tableData.image_url)">
+    </img>
     </div>
     <div class="line">书名：{{tableData.name}}</div>
     <div class="line">作者：{{tableData.author}}</div>
@@ -36,8 +36,33 @@
     
     
     </el-tab-pane>
-    <el-tab-pane label="用户评论" name="second">配置管理</el-tab-pane>
+    <el-tab-pane label="用户评论" name="second">
+    <div class="block">
+     <el-timeline  >
+    <el-timeline-item 
+        v-for="(comment, index) in tableData.comments"
+        :key="index"
+        :timestamp="comment.date"
+        icon="el-icon-s-comment"
+        size="large"
+        type="primary"
+     placement="top">
+      <el-card class="box-card">
+      <div class="text item">
+      <h4>{{comment.userName}}:{{comment.content}}</h4>
+      </div>
+      </el-card>
+    </el-timeline-item>
+     </el-timeline>
+   </div> 
+    
+    </el-tab-pane>
   </el-tabs>
+  <el-dialog width="500px" :visible.sync="imgVisible" class="img-dialog">
+      <el-card :body-style="{ padding: '0px' }">
+        <img v-bind:src="dialogImgUrl" width="100%" height="100%">
+      </el-card>
+    </el-dialog>
   <div>
   <el-button type="info" icon="el-icon-star-on" >加入收藏夹</el-button>
   <el-button type="primary" icon="el-icon-shopping-cart-2"  :disabled="!tableData.store_mount" >加入购物车</el-button>
@@ -52,12 +77,23 @@
 <script>
 import book  from "../../assets/js/book_detail.js";
 export default {
-    data() {
+    data(){
       return {
         tableData: bookDetail,
         card:1,
+        dialogImgUrl:null,//展示照片
+        imgVisible:false,//展示照片的对话
       }
-    }
+    },
+      methods:{
+          // 展示图片
+    openImg(url) {
+      if (url) {
+        this.imgVisible = true;
+        this.dialogImgUrl = url;
+      }
+    },
+    }  
   }
 </script>
 <style>
@@ -83,4 +119,23 @@ export default {
 color:red;
 font-size:25px;
 }
+.text {
+   position:relative;
+    left:0;
+    top:50%;
+  float:center;
+  transform:translate(0,-50%);
+    font-size: 18px;
+  }
+
+  .item {
+    
+  }
+
+  .box-card {
+   
+    float:center;
+    height:100px;
+    
+  }
 </style>

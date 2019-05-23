@@ -129,7 +129,9 @@ v-loading="totalLoading"
   <el-form-item label="密码" prop="password">
     <el-input type="password" v-model="loginForm.password" autocomplete="off"></el-input>
   </el-form-item>
- 
+  <el-form-item >
+ <el-checkbox v-model="checked" style="float:left; color:#a0a0a0;">一周内自动登录</el-checkbox>
+ </el-form-item>
 </el-form>
    
     <el-dialog
@@ -171,7 +173,7 @@ v-loading="totalLoading"
 
     <div slot="footer" class="dialog-footer">
       <el-button @click="outerVisible = false" icon="el-icon-arrow-left">取 消</el-button>
-      <el-checkbox v-model="checked" style="color:#a0a0a0;">一周内自动登录</el-checkbox>
+      
       <el-button type="success" icon="el-icon-check"  @click="submitLoginForm('loginForm'); ">登陆</el-button>
       <el-button type="primary" icon="el-icon-plus"  @click="innerVisible = true;outerVisible= false">注册账号</el-button>
     </div>
@@ -193,10 +195,23 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
  export default {
    name: 'home',
     data() {
+      //手机验证
+      var phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/
+      var validatePhone = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('手机号码不能为空'))
+        }
+        if (!phoneReg.test(value)) {
+          callback(new Error('手机号码输入格式有误'))
+        } else {
+          callback()
+        }
+      };
+
       // 登陆验证
       var validatePassword=(rule,value,callback)=>{
           if(!value){
-            callback(new Error("请输入密码1"));
+            callback(new Error("请输入密码"));
           }
             callback();
           
@@ -236,7 +251,20 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         callback();
       }
     }
-
+    //验证邮箱
+       var emailReg = /^\w+@\w+\.(com|cn|gov)$/
+      var validateEmail = (rule, value, callback) => {
+        //电子邮箱可不填
+        if (value) {
+          if (!emailReg.test(value)) {
+            callback(new Error('电子邮箱输入格式有误'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
+        }
+      };
       return {
         //用户名
         loginTitle:"请登录",
@@ -262,7 +290,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         //约束规则表格
         rules: {
           email :[{
-            required: true, message:'登陆邮箱不能为空',trigger: 'blur'
+            required: true,validator: validateEmail,trigger: 'blur'
           }],
           code: [
             { validator: validateCheckCode, trigger: 'blur' }
@@ -279,8 +307,8 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           checkPass: [
             { validator: validatePass2, trigger: 'blur' }
           ],
-        phone :[{
-            required: true, message:'手机号码不能为空',trigger: 'blur'
+          phone :[{
+            required: true, validator: validatePhone,trigger: 'blur'
           }],
         },
        
@@ -317,7 +345,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
                star: 4
                },
             {
-              title : 'The Polaroid Book--the story of Polaroid',
+              title : 'The story of Polaroid',
               url: require('../assets/images/homepages/add2.jpg'),
                content: '新书发售，白金收藏',
                 aim:'',
@@ -348,7 +376,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       
       this.totalLoading=false;
       this.getCookie();//读取cookie
-      
+       this.$router.push('/home/homepage');//默认打开链接
     },
     watch:{
       // loginForm:function(){
@@ -435,8 +463,8 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            localStorage.setItem('user_name',this.ruleForm.userName);
-            localStorage.setItem('user_password',this.ruleForm.pass);
+            // localStorage.setItem('user_name',this.ruleForm.userName);
+            // localStorage.setItem('user_password',this.ruleForm.pass);
             console.log(JSON.stringify(self.ruleForm));
             this.$store.commit('modifyRuleForm',this.ruleForm);
             sessionStorage.removeItem('state');
@@ -446,6 +474,10 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           type: 'success'
             });
             this.innerVisible=false;
+            this.loginForm.userName=this.ruleForm.userName;
+            this.loginForm.password=this.ruleForm.pass;
+            this.checked=true;
+            this.submitLoginForm(this.loginForm);
           } else {
            this.$message.error('注册失败！');
             console.log('注册失败');

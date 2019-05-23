@@ -99,7 +99,7 @@
 
  }
  </script>
- <style>
+ <style scoped>
  .el-header, .el-footer {
     background-color: #545c64;
     color: #333;

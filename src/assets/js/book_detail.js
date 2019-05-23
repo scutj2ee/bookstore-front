@@ -19,5 +19,25 @@ bookDetail={
     author: "Mother Fucker",
     date: "2016-07-12 20:30",
     is_shelf: true,
-    store_mount:0
+    store_mount:0,
+    comments:[{
+        user_id:1,
+        userName:'林水泉',
+        content:'书真的垃圾，一看就是阿里员工林少辉写的',
+        date: "2016-07-12 20:30",
+    },
+    {
+      user_id: 2,
+      userName: '林水泉',
+      content: '书真的垃圾，一看就是阿里员工林少辉写的',
+      date: "2016-07-12 20:40",
+    },
+    {
+      user_id: 3,
+      userName: '林水泉',
+      content: '书真的垃圾，一看就是阿里员工林少辉写的',
+      date: "2016-07-12 20:32",
+    }
+]
+
 }

@@ -143,9 +143,6 @@ v-loading="totalLoading"
            <div class="price">活动价：￥ {{item.member_price}}</div><br>
            <div class="card-show">市场价：￥<del>
            {{item.price }}</del></div>
-          
-         
-          
           <el-button type="info" class="button" @click="handleDetail();" icon="el-icon-caret-right" >查看详情</el-button>
       </div>
     </el-card>
