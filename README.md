@@ -1,4 +1,4 @@
-# bookstore
+# bookstore-fron
 
 > A Vue.js project
 

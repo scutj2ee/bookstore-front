@@ -88,7 +88,6 @@ const router= new Router({
         meta: {
           title: '购物车'
         }
-
       }
     ]
     }, {
