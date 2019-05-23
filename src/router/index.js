@@ -73,6 +73,13 @@ const router= new Router({
         meta: {
           title: '书城主页'
         }
+      }, {
+        path: '/home/user/usercenter',
+        component: resolve => require(['../pages/home/user/userCenter.vue'], resolve),
+        name: 'usercenter',
+        meta: {
+          title: '用户中心'
+        }
       }
       , {
 

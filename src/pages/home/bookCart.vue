@@ -302,9 +302,7 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
                             this.tableData[k].is_check = false;
                         }
                     }
-
-                }
-     
+                   }
     },
 
     methods:{
@@ -339,7 +337,7 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
       },
       // 控制进度条
       next() {
-       if(this.istrue==false){
+       if(!this.total){
           this.$confirm('您还没有选择任何商品', '提示', {
           confirmButtonText: '确定',
           type: 'warning'
