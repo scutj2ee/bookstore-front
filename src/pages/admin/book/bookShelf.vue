@@ -1,100 +1,97 @@
 <template>
- <div id="bookshelf">
-  <!-- 步骤组件 -->
-  <el-table
-    
-    :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-    style="width: 100%"
-    
-    v-show="tableData.length" 
-    :row-class-name="tableRowClassName"
-    row-key="id">
-    <el-table-column
-      fixed
-      prop="name"
-      label="书名"
-      width="180"
+  <div id="bookshelf">
+    <!-- 步骤组件 -->
+    <el-table
+      :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+      style="width: 100%"
+      v-show="tableData.length" 
+      :row-class-name="tableRowClassName"
+      row-key="id">
+      <el-table-column
+        fixed
+        prop="name"
+        label="书名"
+        width="180"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="number"
+        label="数目"
+        width="180"
+        align="center">
+      </el-table-column> 
+      <el-table-column
+        prop="price"
+        label="价格"
+        width="180"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="member_price"
+        label="会员价"
+        width="180"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="is_shelf"
+        label="上架"
+        width="180"
+        align="center">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.is_shelf"></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="date"
+        label="上架时间"
+        width="180"
+        align="center">
+      </el-table-column>
+      <el-table-column
+        prop="outline"
+        label="大纲"
+        width="250"
+        align="center">
+      </el-table-column>
+      <el-table-column 
+      label="图片" 
+      width="120" 
       align="center">
-    </el-table-column>
-    <el-table-column
-      prop="number"
-      label="数目"
-      width="180"
-      align="center">
-    </el-table-column> 
-    <el-table-column
-      prop="price"
-      label="价格"
-      width="180"
-      align="center">
-    </el-table-column>
-    <el-table-column
-      prop="member_price"
-      label="会员价"
-      width="180"
-      align="center">
-    </el-table-column>
-    <el-table-column
-      prop="is_shelf"
-      label="上架"
-      width="180"
-      align="center">
-      <template slot-scope="scope">
-      <el-switch v-model="scope.row.is_shelf"></el-switch>
-      </template>
-    </el-table-column>
-    <el-table-column
-      prop="date"
-      label="上架时间"
-      width="180"
-      align="center">
-    </el-table-column>
-    <el-table-column
-      prop="outline"
-      label="大纲"
-      width="250"
-      align="center">
-    </el-table-column>
-     <el-table-column 
-     label="图片" 
-     width="120" 
-     align="center">
-      <template slot-scope="scope">
-         <img v-bind:src="scope.row.image_url||defaultImg" style="width: 100px;height:100px;" @click="openImg(scope.row.image_url)">
-      </template>
-  </el-table-column>
-    <el-table-column
-      fixed="right"
-      label="操作"
-      >
-      <template slot="header" slot-scope="scope">
-        <el-input
-          style="border-color:#f6a7ba"
-          v-model="search"
-          size="medium"
-          placeholder="输入关键字搜索"/>
-      </template>
-      <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="info"  icon="el-icon-search" circle></el-button>
-        <el-button type="primary" icon="el-icon-edit" circle ></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle slot="reference" @click="handleDelete(scope.$index)" ></el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-  <el-pagination
-  background
-  layout="prev, pager, next,jumper"
-  :total="1000">
-  
-</el-pagination>
-<el-button type="primary" @click="handleAdd" >添加书目</el-button>
-  <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
+        <template slot-scope="scope">
+          <img v-bind:src="scope.row.image_url||defaultImg" style="width: 100px;height:100px;" @click="openImg(scope.row.image_url)">
+        </template>
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        >
+        <template slot="header" slot-scope="scope">
+          <el-input
+            style="border-color:#f6a7ba"
+            v-model="search"
+            size="medium"
+            placeholder="输入关键字搜索"/>
+        </template>
+        <template slot-scope="scope">
+          <el-button @click="handleClick(scope.row)" type="info"  icon="el-icon-search" circle></el-button>
+          <el-button type="primary" icon="el-icon-edit" circle ></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle slot="reference" @click="handleDelete(scope.$index)" ></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-pagination
+      background
+      layout="prev, pager, next,jumper"
+      :total="1000">
+    </el-pagination>
+    <el-button type="primary" @click="handleAdd" >添加书目</el-button>
+    <el-dialog width="400px" :visible.sync="imgVisible" class="img-dialog">
       <el-card :body-style="{ padding: '0px' }">
         <img v-bind:src="dialogImgUrl" width="100%" height="100%">
       </el-card>
     </el-dialog>
-    
- </div>
+  </div>
 </template>
 
 
