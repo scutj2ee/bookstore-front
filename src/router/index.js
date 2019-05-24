@@ -144,6 +144,13 @@ const router= new Router({
           title: '新增分类'
         }
       }, {
+        path: '/admin/order',
+        component: resolve => require(['../pages/admin/order/bookOrder.vue'], resolve),
+        name: 'bookOrder',
+        meta: {
+          title: '订单管理'
+        }
+      }, {
         path: '/admin/bookshelf/add',
         component: resolve => require(['../pages/admin/book/addBook.vue'], resolve),
         name: 'add',

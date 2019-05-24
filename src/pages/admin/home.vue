@@ -58,16 +58,20 @@
                 <!-- <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
                 <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item> -->
               </el-submenu>
-              <el-submenu index="3" >
+              <el-menu-item index="/admin/order">
+                <i class="el-icon-document"></i>
+                <span slot="title">订单管理</span>
+              </el-menu-item>
+              <!-- <el-submenu index="3" >
                 <template slot="title">
                   <i class="el-icon-document"></i>
                   <span slot="title">订单管理</span>
                 </template>
-                <el-menu-item index="/admin/bookshelf">查看</el-menu-item>
+                <el-menu-item index="/admin/order">查看</el-menu-item>
                 <el-menu-item index="/admin/bookshelf/add">添加</el-menu-item>
-                <!-- <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
-                <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item> -->
-              </el-submenu>
+                <el-menu-item index="/admin/bookshelf/add">修改</el-menu-item>
+                <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item>
+              </el-submenu> -->
             </el-menu>
           </el-col>
         </el-aside>
