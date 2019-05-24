@@ -99,57 +99,66 @@ const router= new Router({
          title: '书城主页'
        }
 
-     }
+    }
     // , {
     //   path: '/home/bookcart',
     //   component: resolve => require(['../pages/home/bookCart.vue'], resolve),
     //   name: 'bookcart',
     // }
-       ,{
-        path: '/test',
-        component: resolve => require(['../pages/test/test.vue'], resolve),
-        name: 'test',
-      }, {
-        path: '/admin',
-        component: resolve => require(['../pages/admin/home.vue'], resolve),
-        name: 'admin',
+      ,{
+      path: '/test',
+      component: resolve => require(['../pages/test/test.vue'], resolve),
+      name: 'test',
+    }, {
+      path: '/admin',
+      component: resolve => require(['../pages/admin/home.vue'], resolve),
+      name: 'admin',
 
-        children:[
-            {
-              path: '/admin/index',
-              component: resolve => require(['../pages/admin/index.vue'], resolve),
-              name: 'adminIndex',
-              meta: {
-                title:"后台主页"
-              }
-            },{
+      children:[
+      {
+        path: '/admin/index',
+        component: resolve => require(['../pages/admin/index.vue'], resolve),
+        name: 'adminIndex',
+        meta: {
+          title:"后台主页"
+        }
+      }, {
         path: '/admin/bookshelf',
         component: resolve => require(['../pages/admin/book/bookShelf.vue'], resolve),
         name: 'bookShelf',
         meta: {
           title: '书架管理'
-          }
-        }, {
-          path: '/admin/bookshelf/add',
-          component: resolve => require(['../pages/admin/book/addBook.vue'], resolve),
-          name: 'add',
-          meta: {
-            title: '新书上架'
-          },
-        }, {
-
-          path: '/admin/user',
-          component: resolve => require(['../pages/admin/user/user.vue'], resolve),
-          name: 'user',
-          meta: {
-            title: '用户管理'
-          }
-
         }
-
-        ]
-      }
-    
+      }, {
+        path: '/admin/classification',
+        component: resolve => require(['../pages/admin/classification/classification.vue'], resolve),
+        name: 'classification',
+        meta: {
+          title: '分类管理'
+        }
+      }, {
+        path: '/admin/classification/add',
+        component: resolve => require(['../pages/admin/classification/addClass.vue'], resolve),
+        name: 'addClass',
+        meta: {
+          title: '新增分类'
+        }
+      }, {
+        path: '/admin/bookshelf/add',
+        component: resolve => require(['../pages/admin/book/addBook.vue'], resolve),
+        name: 'add',
+        meta: {
+          title: '新书上架'
+        }
+      }, {
+        path: '/admin/user',
+        component: resolve => require(['../pages/admin/user/user.vue'], resolve),
+        name: 'user',
+        meta: {
+          title: '用户管理'
+        }
+      }]
+    }
   ]
 })
 
