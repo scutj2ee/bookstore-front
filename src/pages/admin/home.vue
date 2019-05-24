@@ -91,6 +91,9 @@
    active:true
   }
   },
+  mounted(){
+    this.$router.push('/admin/index');
+  },
   methods:{
      handleOpen(key, keyPath) {
         console.log(key, keyPath);

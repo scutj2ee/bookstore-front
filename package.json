@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "area-data": "^5.0.6",
     "axios": "^0.18.0",
     "babel": "^6.23.0",
     "echarts": "^4.2.1",
