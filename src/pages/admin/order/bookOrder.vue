@@ -75,7 +75,7 @@
 							v-model="scope.row.user.address"
 							expand-trigger="hover"
 							size="mini"
-							disabled>
+							:disabled='scope.row.edit.notedit'>
 						</el-cascader>
 						{{scope.row.user.detail+" "
 						+scope.row.user.reciever+" "
@@ -118,7 +118,8 @@
 			<el-table-column
 				label="操作">
 				<template  slot-scope="scope">
-					<el-button type="info" icon="el-icon-edit" @click="handleEdit(scope.row.id)" round size="mini">编辑</el-button>
+					<el-button v-if="scope.row.edit.notedit==true" type="info" icon="el-icon-edit" @click="handleEdit(scope.row)" round size="mini">编辑</el-button>
+					<el-button v-else type="primary" icon="el-icon-s-claim" @click="handleSave(scope.row)" round size="mini">保存</el-button>
 					<!-- <el-button v-show="scope.row.state=='未付款'" type="primary" icon="el-icon-money" >付款</el-button> -->
 				</template>
 			</el-table-column>
@@ -137,6 +138,7 @@ import area from "../../../assets/js/select_area.js";
 export default {
 	data(){
 		return{
+			notedit: true,
 			keyWord: null,
 			searchSelect: null,
 			tableData: order,
@@ -148,8 +150,11 @@ export default {
 		filterTag(value, row){
 			return row.state == value;
 		},
-		handleEdit(val){
-
+		handleEdit(row){
+			row.edit.notedit = false;
+		},
+		handleSave(row){
+			row.edit.notedit = true;
 		}
 	}
 }

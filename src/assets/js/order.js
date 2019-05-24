@@ -41,6 +41,9 @@ order=[{
       total: 30
     }
   ],
+  edit: {
+    notedit: true
+  },
   total: 80,
   state: "未付款",
 }, {
@@ -84,6 +87,9 @@ order=[{
     is_check: true,
     total: 30
   }],
+  edit: {
+    notedit: true
+  },
   total: 80,
   state: "已完成",
 },
@@ -130,6 +136,9 @@ order=[{
       total: 30
     }
   ],
+  edit: {
+    notedit: true
+  },
   total: 80,
   state: "待评价",
 }
