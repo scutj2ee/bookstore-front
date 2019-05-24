@@ -3,8 +3,8 @@
 v-loading="totalLoading"
 >
   <el-header class="el-header">
-  <el-row>
-  <el-col :span="8"><div class="grid-content left">
+  <el-row type="flex">
+  <el-col :xs="0" :sm="2" :md="2" :lg="4" :xl="8" ><div class="grid-content left">
   <!-- logo -->
   <div class="round">
   <div class="logo-image">
@@ -14,7 +14,7 @@ v-loading="totalLoading"
    </div>
   </div>
   </el-col>
-  <el-col :span="8"><div class="grid-content center">
+  <el-col :xs="0" :sm="6" :md="6" :lg="10" :xl="10"><div class="grid-content center hidden-md-and-down">
   <!-- 搜索栏 -->
   <div class="outter">
   <div class="inner" >
@@ -37,7 +37,7 @@ v-loading="totalLoading"
   </div>
   </div>
   </el-col>
-  <el-col :span="8"><div class="grid-content">
+  <el-col :xs="24" :sm="16" :md="16" :lg="10" :xl="6"><div class="grid-content">
   <!-- 主页菜单 -->
   <el-menu
   class="el-menu-demo"
@@ -62,9 +62,9 @@ v-loading="totalLoading"
       
   </el-submenu>
 
-  <el-submenu index="2">
+  <el-submenu index="2" >
     <template slot="title">
-    <i class="el-icon-notebook-1"></i>书单</template>
+    <i  class="el-icon-notebook-1"></i>书单</template>
     <el-menu-item index="/home/detail">人文</el-menu-item>
     <el-menu-item index="2-2">文学</el-menu-item>
     <el-menu-item index="2-3">生活</el-menu-item>
@@ -75,8 +75,8 @@ v-loading="totalLoading"
       <el-menu-item index="2-4-3">烹饪</el-menu-item>
     </el-submenu>
   </el-submenu>
-  <el-menu-item index="/home/order/all" >
-  <i class="el-icon-tickets"></i>
+  <el-menu-item index="/home/order/all" class="hidden-md-and-down" >
+  <i class="el-icon-tickets"  ></i>
   订单管理</el-menu-item>
   <el-menu-item index="/home/bookcart" ><i class="el-icon-goods"></i>书栏</el-menu-item>
 </el-menu>
@@ -86,7 +86,7 @@ v-loading="totalLoading"
 
 </el-header>
  <el-container>
-    <el-aside width="200px">
+    <el-aside width="200px" class="hidden-md-and-down" >
     <!-- 侧栏 -->
 <!-- 侧栏 -->
 <el-collapse @change="handleChange"  >
@@ -190,6 +190,7 @@ v-loading="totalLoading"
     </el-container>
 </template>
 <script>
+import 'element-ui/lib/theme-chalk/display.css';
   import {mapActions,mapGetters} from 'vuex';
 const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
  export default {

@@ -99,7 +99,7 @@
    </div>
    <div  class="btn_box">
       <transition name="el-fade-in-linear">
-         <el-button   style="margin-top: 12px; margin-right:10px; " type="primary"  @click="pay" icon="el-icon-bank-card" v-show="paymentVisiable"  >去付款</el-button>
+         <el-button   style="margin-top: 12px; margin-right:10px; " type="primary"  @click="handlePay" icon="el-icon-bank-card" v-show="paymentVisiable"  >去付款</el-button>
       </transition>
       </div>
 </div>
@@ -126,8 +126,8 @@
  <el-form-item>
 
  <h3>选择收货地址</h3> 
-  <el-select v-model="addressSelected" placeholder="请选择" size="large" autocomplete="true" width="60%">
-    <el-option
+  <el-select v-model="addressSelected" placeholder="请选择您的收货地址信息" size="large" autocomplete="true" width="250px" >
+    <el-option  class="address-select"
       v-for="item in addressSelect"
       :key="item.value"
       :label="item.label"
@@ -224,21 +224,12 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
         innerVisible:false,//添加地址
         paymentVisiable:false,//付款按钮
         active: 1,
-        isRemove:true,
         dialogImgUrl:null,
         tableData: cart,//导入购物车json文件
         count: 0,
         istrue: false,
         imgVisible:false,
-        total:0,//总商品件数
-        rules2: {
-            age: [
-                { validator: checkAge, trigger: 'blur' }
-            ],
-            price: [
-                { validator: checkAge, trigger: 'blur' }
-            ]
-        },          
+        total:0,//总商品件数         
       };
     },
     computed:{
@@ -333,8 +324,8 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
           type: 'warning'
         });
        }else{
-          this.outerVisible=true;
-        if (this.active++ > 2) this.active = 0;
+        this.outerVisible=true;
+      
        }
          
       },
@@ -344,7 +335,10 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
            if(this.total){
         console.log('submit!');
         this. paymentVisiable=true;
+         this.active++;
            }
+         }else{
+           this.$message.error('请选择收货地址');
          }
          return null;
         
@@ -380,8 +374,9 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
                     ]);
 
                 },
-
-
+    handlePay(){
+      this.active++;
+    }
 
 
     },
@@ -390,6 +385,9 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
   }
 </script>
 <style>
+.address-select{
+  width:250px;
+}
 .pay-card{
   height:200px;
 

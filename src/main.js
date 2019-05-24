@@ -10,10 +10,8 @@ import axios from 'axios'
 import qs from 'qs';
 import VueAreaLinkage from 'vue-area-linkage';
 import myCharts from './assets/util/myChart.js'
-
-Vue.use(myCharts)
-
-Vue.use(VueAreaLinkage)
+Vue.use(myCharts)//e-chart
+Vue.use(VueAreaLinkage)//pca三级联调
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.config.productionTip = false //关闭生产模式下给出的提示
