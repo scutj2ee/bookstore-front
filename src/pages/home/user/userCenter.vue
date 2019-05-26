@@ -8,14 +8,37 @@
     </div>
     
     </div>
-   
-   <p> <li class="el-icon-user-solid">用户名：{{user.userName}}</li></p>
-    <p> <li class="el-icon-message">邮箱：{{user.email}}</li></p>
-   <p>  <li class="el-icon-coin">积分：{{user.integration}}</li></p>
-    
+   <div style="font-size:24px; color:#33313b"> 
+   <p> <i class="el-icon-user-solid"></i>用户名：{{user.userName}}</p>
+    <p> <i class="el-icon-message"></i>邮箱：{{user.email}}</p>
+   <p>  <i class="el-icon-coin"></i>积分：{{user.integration}}</p>
+   <p>  <i class="el-icon-setting"></i> <router-link to="/home/checkpsw"  >修改密码</router-link></p>
+    </div>
    
     </el-aside>
-    <el-main>Main</el-main>
+    <el-main>
+    <div class="main-container">
+    <div class="head-main-container">
+    <!-- 标题 -->
+     <h2 style="margin-left:10px;"><i class="el-icon-s-order"></i>我的订单</h2>
+    </div>
+    <div class="body-main-container">
+     <el-card shadow="hover" class="sub-main-container">
+     <i class="main-i el-icon-goods"></i><p>待付款</p>
+    </el-card>
+    <el-card shadow="hover" class="sub-main-container">
+    <i class="main-i el-icon-s-comment"></i><p>未评价</p>
+    </el-card>
+    <el-card shadow="hover" class="sub-main-container">
+    <i class="main-i el-icon-shopping-bag-2"></i><p>已完成</p>
+    </el-card>
+    <el-card shadow="hover" class="sub-main-container">
+   <i class="main-i el-icon-more-outline"></i> <p>所有订单</p>
+    </el-card>
+    </div>
+   
+    </div>
+    </el-main>
   </el-container>
 </el-container>
 </template>
@@ -34,6 +57,12 @@ export default{
 
 </script>
 <style scoped>
+a {
+    text-decoraction: none;
+}
+  .router-link-active {
+    text-decoration: none;
+  }
  .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
@@ -42,9 +71,9 @@ export default{
   }
   
   .el-aside {
-    background-color: #D3DCE6;
+    background-color: #d2f3e0;
     color: #333;
-    text-align: center;
+    text-align: left;
     line-height: 30px;
   
   }
@@ -52,12 +81,11 @@ export default{
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
-    line-height: 160px;
+    min-height:100vh;
   }
   
   body > .el-container {
-    margin-bottom: 40px;
+  
   }
   
   .el-container:nth-child(5) .el-aside,
@@ -87,5 +115,44 @@ export default{
     max-width:120px;
     overflow:hidden;
     border-radius:50%;
+  }
+  .main-container{
+    height:440px;
+    width:1200px;
+    background-color:#348498;
+  }
+  .head-main-container{
+    height:80px;
+    width:100%;
+    margin:0 auto;
+    position:relative;
+    background-color:#348498;
+    color:white;
+    float:top;
+    text-align:left;
+    line-height: 80px;
+    
+  }
+  .body-main-container{
+    height:300px;
+    width:1200px;
+    margin:80 auto;
+    position:relative;
+    background-color:#5bd1d7;
+  }
+  .sub-main-container{
+    margin:10px 8px 10px 8px;
+    position:relative;
+    width:280px;
+    height:280px;
+    float:left;
+    background-color:#fcf9ec;
+    border-radius:5px;
+    border: 2px #2d132c dashed ;
+    line-height: 10px;
+    font-size:30px;
+  }
+  .main-i{
+font-size:160px;
   }
 </style>

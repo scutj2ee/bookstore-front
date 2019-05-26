@@ -666,7 +666,7 @@ position:relative;
     color: #333;
     text-align: center;
     line-height: 200px;
-    
+    min-height:100vh;
   }
   
   .el-main {
@@ -674,7 +674,7 @@ position:relative;
     color: #333;
     text-align: center;
     line-height: 160px;
-    min-height:80vh;
+    min-height:100vh;
 
 
   }
