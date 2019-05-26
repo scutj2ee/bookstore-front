@@ -9,6 +9,7 @@ import store from './store'
 import axios from 'axios'
 import qs from 'qs';
 import VueAreaLinkage from 'vue-area-linkage';
+import 'vue-area-linkage/dist/index.css';
 import myCharts from './assets/util/myChart.js'
 Vue.use(myCharts)//e-chart
 Vue.use(VueAreaLinkage)//pca三级联调

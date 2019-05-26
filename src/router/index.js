@@ -159,6 +159,13 @@ const router= new Router({
       path: '/test',
       component: resolve => require(['../pages/test/test.vue'], resolve),
       name: 'test',
+    }, {
+      path: '/403',
+      component: resolve => require(['../pages/403.vue'], resolve),
+      name: '403',
+      meta: {
+        title: '错误页面'
+      }
     }
   ]
 })
