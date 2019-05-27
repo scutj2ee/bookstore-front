@@ -36,7 +36,7 @@
               :router="true">
               <el-submenu index="1">
                 <template slot="title">
-                  <i class="el-icon-notebook-1"></i>
+                  <i class="el-icon-reading"></i>
                   <span>书架管理</span>
                 </template>
                   <el-menu-item index="/admin/bookshelf">查看</el-menu-item>
@@ -50,7 +50,7 @@
               </el-menu-item>
               <el-submenu>
                 <template slot="title">
-                  <i class="el-icon-document"></i>
+                  <i class="el-icon-s-fold"></i>
                   <span slot="title">分类管理</span>
                 </template>
                 <el-menu-item index="/admin/classification">查看</el-menu-item>
@@ -59,7 +59,7 @@
                 <el-menu-item index="/admin/bookshelf/add">删除</el-menu-item> -->
               </el-submenu>
               <el-menu-item index="/admin/order">
-                <i class="el-icon-document"></i>
+                <i class="el-icon-s-order"></i>
                 <span slot="title">订单管理</span>
               </el-menu-item>
               <!-- <el-submenu index="3" >
