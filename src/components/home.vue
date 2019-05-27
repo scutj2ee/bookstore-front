@@ -3,8 +3,8 @@
 v-loading="totalLoading"
 >
   <el-header class="el-header">
-  <el-row>
-  <el-col :span="8"><div class="grid-content left">
+  <el-row type="flex">
+  <el-col :xs="0" :sm="2" :md="2" :lg="2" :xl="8" ><div class="grid-content left">
   <!-- logo -->
   <div class="round">
   <div class="logo-image">
@@ -14,7 +14,7 @@ v-loading="totalLoading"
    </div>
   </div>
   </el-col>
-  <el-col :span="8"><div class="grid-content center">
+  <el-col :xs="0" :sm="6" :md="6" :lg="10" :xl="8"><div class="grid-content center hidden-md-and-down">
   <!-- 搜索栏 -->
   <div class="outter">
   <div class="inner" >
@@ -37,13 +37,13 @@ v-loading="totalLoading"
   </div>
   </div>
   </el-col>
-  <el-col :span="8"><div class="grid-content">
+  <el-col :xs="24" :sm="16" :md="16" :lg="12" :xl="8"><div class="grid-content">
   <!-- 主页菜单 -->
   <el-menu
   class="el-menu-demo"
   mode="horizontal"
   @select="handleSelect"
-  background-color="#f6a7ba"
+  background-color="#004d61"
   text-color="#fff"
   active-text-color="#d2f3e0"
   default-active="/home/homepage"
@@ -57,14 +57,14 @@ v-loading="totalLoading"
   <template slot="title">
     <i class="el-icon-user"></i>{{loginTitle}}</template>
 
-    <el-menu-item index="/home/user/usercenter" v-if="loginState" ><i class="el-icon-bell"></i>个人中心</el-menu-item>
+    <el-menu-item index="/home/user/usercenter" v-if="loginState" > <img  src="../assets/images/default_profile.jpg" width="30px" height="30px"  />个人中心</el-menu-item>
     <el-menu-item @click="handleLogin();"  ><i class="el-icon-switch-button"></i>{{isLogin}}</el-menu-item>
       
   </el-submenu>
 
-  <el-submenu index="2">
+  <el-submenu index="2" >
     <template slot="title">
-    <i class="el-icon-notebook-1"></i>书单</template>
+    <i  class="el-icon-notebook-1"></i>书单</template>
     <el-menu-item index="/home/detail">人文</el-menu-item>
     <el-menu-item index="2-2">文学</el-menu-item>
     <el-menu-item index="2-3">生活</el-menu-item>
@@ -75,8 +75,8 @@ v-loading="totalLoading"
       <el-menu-item index="2-4-3">烹饪</el-menu-item>
     </el-submenu>
   </el-submenu>
-  <el-menu-item index="/home/order/all" >
-  <i class="el-icon-tickets"></i>
+  <el-menu-item index="/home/order/all" class="hidden-md-and-down" >
+  <i class="el-icon-tickets"  ></i>
   订单管理</el-menu-item>
   <el-menu-item index="/home/bookcart" ><i class="el-icon-goods"></i>书栏</el-menu-item>
 </el-menu>
@@ -85,8 +85,8 @@ v-loading="totalLoading"
 </el-row>
 
 </el-header>
- <el-container>
-    <el-aside width="200px">
+ <el-container ref="aside" >
+    <el-aside  width="200px" class="hidden-md-and-down" >
     <!-- 侧栏 -->
 <!-- 侧栏 -->
 <el-collapse @change="handleChange"  >
@@ -179,10 +179,10 @@ v-loading="totalLoading"
     </div>
   </el-dialog>
   <!-- 底部信息 -->
-  <div class="demo-badge-content" color="transparent">
-      Copyright
+  <div  ref="aside" class="demo-badge-content" color="transparent">
+      <label style="color:#fff;"> Copyright</label>
       <span style="font-size: 20px; color: red;" slot="content">&copy;</span>
-      2019 SCUTBOOKSTORE All Rights Reserved.
+       <label style="color:#fff;"> 2019 SCUTBOOKSTORE &nbsp All Rights Reserved.</label>
     </div>
   </el-footer>
     </el-container>
@@ -190,6 +190,7 @@ v-loading="totalLoading"
     </el-container>
 </template>
 <script>
+import 'element-ui/lib/theme-chalk/display.css';
   import {mapActions,mapGetters} from 'vuex';
 const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
  export default {
@@ -370,6 +371,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         show: true,//验证码按钮
         count: '',//验证倒计时
         timer: null,//计时器变量
+        clientHeight:'',//浏览器高度
       };
     },
      mounted() {
@@ -377,13 +379,31 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       this.totalLoading=false;
       this.getCookie();//读取cookie
        this.$router.push('/home/homepage');//默认打开链接
+        // 获取浏览器可视区域高度
+      this.clientHeight =   `${document.documentElement.clientHeight}`              
+      //document.body.clientWidth;
+      //console.log(self.clientHeight);
+      window.onresize = function temp() {
+        this.clientHeight = `${document.documentElement.clientHeight}`;
+      };
     },
-    watch:{
-      // loginForm:function(){
-      // this.checkUser();
-      // }
+  watch: {
+      // 如果 `clientHeight` 发生改变，这个函数就会运行
+      clientHeight: function () {
+        this.changeFixed(this.clientHeight)
+      }
     },
+
     methods: {
+
+      //动态修改样式
+      changeFixed(clientHeight){ 
+        // console.log(clientHeight);
+        // console.log(this.$refs.homePage.$el.style.height);
+        this.$refs.aside.$el.style.height = clientHeight-20+'px';
+      },
+
+
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
@@ -439,7 +459,48 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
               //清空Cookie
               self.clearCookie();
           }
-          //使用vuex 来管理数据
+
+          //传输信息给后台
+          //这一部分等完善登录功能的后台再进行联调
+          // let request=this.$qs.stringify({
+          //   userName:userName,
+          //   password:password,
+          // });
+          // this.$ajax({
+          //   method:'post',
+          //   url:'user/login.do'
+          //   data: request,
+          // }).then(function(response){
+          //   if(response.data.success){
+          //   this.$store.commit('modifyLoginForm',this.loginForm);
+          //   //写入seesionStorage来保存数据
+          //   sessionStorage.removeItem('user');
+          //   sessionStorage.setItem('state',JSON.stringify(this.$store.state.loginForm));
+          //   this.$message({
+          // message: '登录成功',
+          // type: 'success'
+          //   });
+          //   this.loginState=1;//登录成功
+          //   this.outerVisible = false;
+          //   this.checkUser();//更新状态
+          //   }else{
+          //     that.$msgbox({
+          //         title: '登录失败',
+          //         message: response.data.msg,
+          //         type: 'error'
+          //       });
+          //   }
+          // }).catch(function (error) {
+          //     that.$msgbox({
+          //       title: '登录失败',
+          //       message: '服务器异常',
+          //       type: 'error'
+          //     });
+          //   })
+
+
+          //********************这是静态管理的登录***********/
+          //使用vuex 来管理数据(登录数据不可用vuex)
           this.$store.commit('modifyLoginForm',this.loginForm);
           //写入seesionStorage来保存数据
             sessionStorage.removeItem('state');
@@ -593,7 +654,7 @@ position:relative;
    
 }
 .el-header, .el-footer {
-    background-color: #feb9c8;
+    background-color: #004d61;
     color: #333;
     text-align: center;
     line-height: 60px;
@@ -601,15 +662,15 @@ position:relative;
   }
   
   .el-aside {
-    background-color: #d2f3e0;
+    background-color: #348498;
     color: #333;
     text-align: center;
     line-height: 200px;
-    
+    min-height:100vh;
   }
   
   .el-main {
-    background-color: #f5fbf1;
+    background-color: #d8eff0;
     color: #333;
     text-align: center;
     line-height: 160px;
@@ -631,7 +692,7 @@ position:relative;
     line-height: 320px;
   }
  .el-carousel__item h3 {
-    color: #475669;
+    color: #004d61;
     font-size: 14px;
     opacity: 0.75;
     line-height: 150px;
@@ -639,11 +700,11 @@ position:relative;
   }
 
   .el-carousel__item:nth-child(2n) {
-     background-color: #99a9bf;
+     background-color: #004d61;
   }
   
   .el-carousel__item:nth-child(2n+1) {
-     background-color: #d3dce6;
+     background-color: #004d61;
   }
    .time {
     font-size: 13px;
@@ -695,7 +756,7 @@ position:relative;
   }
   .row-bg {
     padding: 10px 0;
-    background-color: #f9fafc;
+    background-color: #004d61;
   }
     .el-select .el-input {
     width: 130px;

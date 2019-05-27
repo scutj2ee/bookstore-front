@@ -99,16 +99,6 @@ const router= new Router({
          title: '书城主页'
        }
 
-    }
-    // , {
-    //   path: '/home/bookcart',
-    //   component: resolve => require(['../pages/home/bookCart.vue'], resolve),
-    //   name: 'bookcart',
-    // }
-      ,{
-      path: '/test',
-      component: resolve => require(['../pages/test/test.vue'], resolve),
-      name: 'test',
     }, {
       path: '/admin',
       component: resolve => require(['../pages/admin/home.vue'], resolve),
@@ -165,6 +155,17 @@ const router= new Router({
           title: '用户管理'
         }
       }]
+    },  {
+      path: '/test',
+      component: resolve => require(['../pages/test/test.vue'], resolve),
+      name: 'test',
+    }, {
+      path: '/403',
+      component: resolve => require(['../pages/403.vue'], resolve),
+      name: '403',
+      meta: {
+        title: '错误页面'
+      }
     }
   ]
 })

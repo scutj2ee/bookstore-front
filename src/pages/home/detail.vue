@@ -2,28 +2,16 @@
 
 <el-container>
   <el-aside width="500px">
-    <div class="block">
-    <img v-bind:src="tableData.image_url" @click="openImg(tableData.image_url)">
-    </img>
+  <div class="container">
+    <div class="sub-container">
+    <img class="head-pic" v-bind:src="tableData.image_url" @click="openImg(tableData.image_url)" />
     </div>
-    <div class="line">书名：{{tableData.name}}</div>
-    <div class="line">作者：{{tableData.author}}</div>
-    <div class="line price">会员价：{{tableData.member_price}}</div>
-    <div class="line" ><del>市场价：{{tableData.price}}</del></div> 
-    <div class="line">出版日期：{{tableData.date}}</div>   
-    <div class="line rate">评分
-    <el-rate
-  v-model="tableData.star"
-  disabled
-  allow-half="true"
-  show-score
-  text-color="#ff9900"
-  score-template="{value}"
-  size="30px">
-</el-rate>
-</div>
-
-  </div>
+    </div>
+    <p><i class="el-icon-notebook-2">书名：{{tableData.name}}</i></p>
+    <p><i class="el-icon-coin">价格：￥{{tableData.price}}</i></p>
+    <p> <i class="el-icon-edit">作者：{{tableData.author}}</i></p>
+    <p> <i class="el-icon-coin">出版日期：{{tableData.date}}</i></p>
+    <p><i class="el-icon-notebook-2">大纲：{{tableData.outline}}</i></p>
   </el-aside>
     <el-main>
     <!-- 主体-->
@@ -96,29 +84,49 @@ export default {
     }  
   }
 </script>
-<style>
-.rate{
+<style scoped>
+ .el-header, .el-footer {
+    background-color: #B3C0D1;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+  }
   
-  float:center;
-}
+  .el-aside {
+    background-color: #D3DCE6;
+    color: #333;
+    text-align: center;
+    line-height: 30px;
+    min-height:100vh;
+  }
+  
+  .el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+    min-height:100vh;
+  }
+  
+  body > .el-container {
+    margin-bottom: 40px;
+  }
+  
+  .el-container:nth-child(5) .el-aside,
+  .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+  }
+  
+  .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+  }
+
 .title{
  
   font-family:"微软雅黑";
   color:#feb9c8;
 }
-.block{
-  margin-top:25px;
-}
-.line{
-  font-size:20px;
-  height:40px;
-  width:350px;
-  word-wrap:break-word;
-}
-.price{
-color:red;
-font-size:25px;
-}
+
 .text {
    position:relative;
     left:0;
@@ -137,5 +145,23 @@ font-size:25px;
     float:center;
     height:100px;
     
+  }
+   .container{
+    height:60%;
+    width:100%;
+    /* background-color:red; */
+  }
+  .sub-container{
+    height:400px;
+    width:400px;
+    position:relative;
+    top:50%;
+    left:50%;
+    margin: -200px 0px 0px -200px;
+    
+  }
+  .head-pic{
+    max-width:400px;
+    overflow:hidden;
   }
 </style>

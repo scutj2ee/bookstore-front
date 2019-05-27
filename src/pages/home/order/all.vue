@@ -60,6 +60,7 @@
     <el-table-column
       label="总价"
       prop="total"
+      align="center"
       width="80px">
       <template slot-scope="scope">
       <div style="font-size:20px;color: red;">￥{{scope.row.total}}</div>
@@ -68,6 +69,7 @@
     <el-table-column
       label="状态"
       prop="state"
+      align="center"
       width="80px">
       <template slot-scope="scope">
 <div  class="block" > {{scope.row.state}}</div>
@@ -75,11 +77,14 @@
 
     </el-table-column>
     <el-table-column
-      label="操作"
+      label="操作" 
+      width="300px"
+      
       >
       <template  slot-scope="scope">
       <el-button type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)" >删除</el-button>
         <el-button v-show="scope.row.state=='未付款'" type="primary" icon="el-icon-money" >付款</el-button>
+        <el-button v-show="scope.row.state=='待评价'" type="primary" icon="el-icon-s-comment" >评价</el-button>
         
       </template>
     </el-table-column>
@@ -96,7 +101,7 @@ import area from "../../../assets/js/select_area.js";
         tableData: order,
         area:areajson,
         address:{},
-        
+        key: '',
       }
     },
    mounted: function() {
@@ -104,9 +109,8 @@ import area from "../../../assets/js/select_area.js";
  //如果cartView函数要执行，必须先执行钩子函数
  //这个钩子函数完成了对cratView函数的调用
  //应该注意的是，使用mounted 并不能保证钩子函数中的 this.$el 在 document 中。为此还应该引入       Vue.nextTick/vm.$nextTick
-    this.$nextTick(function () {
-     this.getAddress();
-   })
+
+    
  },
  methods:{
    handleDelete(val){

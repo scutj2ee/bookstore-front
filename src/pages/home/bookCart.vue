@@ -95,11 +95,11 @@
 <div class="btn_box pay-text">
  共：{{totalItem}}本书 &nbsp 总价钱:￥ {{countList}}</div>
    <div class="btn_box">
-   <el-button style="margin-top: 12px; margin-left:10px; margin-right:10px; background-color:#feb9c8 " icon="el-icon-arrow-right"  type="primary"  @click="next"  >下一步</el-button>
+   <el-button style="margin-top: 12px; margin-left:10px; margin-right:10px; background-color:#ff502f " icon="el-icon-arrow-right"  type="primary"  @click="next"  >下一步</el-button>
    </div>
    <div  class="btn_box">
       <transition name="el-fade-in-linear">
-         <el-button   style="margin-top: 12px; margin-right:10px; " type="primary"  @click="pay" icon="el-icon-bank-card" v-show="paymentVisiable"  >去付款</el-button>
+         <el-button   style="margin-top: 12px; margin-right:10px; " type="primary"  @click="handlePay" icon="el-icon-bank-card" v-show="paymentVisiable"  >去付款</el-button>
       </transition>
       </div>
 </div>
@@ -126,8 +126,8 @@
  <el-form-item>
 
  <h3>选择收货地址</h3> 
-  <el-select v-model="addressSelected" placeholder="请选择" size="large" autocomplete="true" width="60%">
-    <el-option
+  <el-select v-model="addressSelected" placeholder="请选择您的收货地址信息" size="large" autocomplete="true" width="250px" >
+    <el-option  class="address-select"
       v-for="item in addressSelect"
       :key="item.value"
       :label="item.label"
@@ -144,19 +144,25 @@
       append-to-body
       center>
       <!-- 注册 -->
-        <el-form :model="addressForm" status-icon   label-width="100px" class="demo-addressForm">
+        <el-form :label-position="labelPosition" :model="addressForm" status-icon   label-width="180px" >
   <el-form-item label="收货人" prop="receiver">
-    <el-input type="text" v-model="addressForm.receiver" autocomplete="off"></el-input>
+    <el-input type="text" v-model="addressForm.receiver" ></el-input>
   </el-form-item>
-<el-form-item label="地点">
-  	<el-cascader
+<el-form-item label="地点" prop="area">
+  	<!-- <el-cascader
 		:options="address"
 		change-on-select
 		v-model="addressForm.area"
 		expand-trigger="hover"
 		@change="handleChange" 
 		class="wd400">
-	</el-cascader>
+	</el-cascader> -->
+  <!-- <area-cascader 
+  v-model="addressForm.area"  
+  :type='text' :level='2' 
+  :data="pcaa">
+  </area-cascader> -->
+  <area-select type='text' :level='2' v-model="addressForm.area" :data="pcaa" autocomplete="off"></area-select>
   </el-form-item>
    <el-form-item label="详细地址" prop="detail">
     <el-input v-model="addressForm.detail" autocomplete="off"></el-input>
@@ -174,7 +180,7 @@
     <div slot="footer" class="dialog-footer">
       <el-button @click="outerVisible = false" icon="el-icon-arrow-left">取 消</el-button>
       <el-button type="success" icon="el-icon-check"  @click="onSubmit(); outerVisible = false; ">确认信息</el-button>
-      <el-button type="primary" icon="el-icon-plus"  @click="outerVisible= false;innerVisible=true">添加地址</el-button>
+      <el-button type="primary" icon="el-icon-plus"  @click="outerVisible= false;innerVisible=true; ">添加地址</el-button>
     </div>
   </el-dialog>
    
@@ -189,6 +195,8 @@
 import areaJs from '../../assets/js/select_area.js';//引入省市区联级json
 import areaSelectedJs from '../../assets/js/area.js';//引入本地一些已保存地址json
 import carts from '../../assets/js/cart.js';//引入本地已保存商品信息json
+import { pca, pcaa } from 'area-data';
+import 'vue-area-linkage/dist/index.css'; // 样式
  export default {
     data() {
             var checkAge = (rule, value, callback) => {
@@ -209,13 +217,14 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
 
 
       return {
-         search: '',//搜索
-        address: areajson, //调用外部js文件的json数据
+        pcaa: pcaa,
+        search: '',//搜索
+        // address: areajson, //调用外部js文件的json数据
         //自定义 默认值
         addressSelect:areaSelected ,//导入已写入地址json
         addressSelected: '',//选择地址
         addressForm:{
-        area: ['340000', '340100', '340104'], //此处填写对应的value值
+        area: [], //此处填写对应的value值
         detail:"",
         phone:"",
         receiver:""
@@ -224,21 +233,12 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
         innerVisible:false,//添加地址
         paymentVisiable:false,//付款按钮
         active: 1,
-        isRemove:true,
         dialogImgUrl:null,
         tableData: cart,//导入购物车json文件
         count: 0,
         istrue: false,
         imgVisible:false,
-        total:0,//总商品件数
-        rules2: {
-            age: [
-                { validator: checkAge, trigger: 'blur' }
-            ],
-            price: [
-                { validator: checkAge, trigger: 'blur' }
-            ]
-        },          
+        total:0,//总商品件数         
       };
     },
     computed:{
@@ -333,8 +333,8 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
           type: 'warning'
         });
        }else{
-          this.outerVisible=true;
-        if (this.active++ > 2) this.active = 0;
+        this.outerVisible=true;
+      
        }
          
       },
@@ -344,7 +344,10 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
            if(this.total){
         console.log('submit!');
         this. paymentVisiable=true;
+         this.active++;
            }
+         }else{
+           this.$message.error('请选择收货地址');
          }
          return null;
         
@@ -354,6 +357,7 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');
+            console.log(this.addressForm.area);
           } else {
             console.log('error submit!!');
             return false;
@@ -380,8 +384,9 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
                     ]);
 
                 },
-
-
+    handlePay(){
+      this.active++;
+    }
 
 
     },
@@ -390,10 +395,13 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
   }
 </script>
 <style>
+.address-select{
+  width:250px;
+}
 .pay-card{
   height:200px;
 
-  background-color:#feb9c8;
+  background-color:#5bd1d7;
   text-align:center;
   position:center;
   
@@ -468,7 +476,7 @@ import carts from '../../assets/js/cart.js';//引入本地已保存商品信息j
    top:50%;
    left :50%;
    transform:translate(-50%,-50%);
-   background-color:#d2f3e0;
+   background-color:#348498;
    /* overflow: hidden; */
    border-radius:15px;
 
