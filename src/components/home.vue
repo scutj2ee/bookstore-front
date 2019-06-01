@@ -57,7 +57,7 @@ v-loading="totalLoading"
   <template slot="title">
     <i class="el-icon-user"></i>{{loginTitle}}</template>
 
-    <el-menu-item index="/home/user/usercenter" v-if="loginState" > <img  src="../assets/images/default_profile.jpg" width="30px" height="30px"  />个人中心</el-menu-item>
+    <el-menu-item index="/home/user/index" v-if="loginState" > <img  src="../assets/images/default_profile.jpg" width="30px" height="30px"  />个人中心</el-menu-item>
     <el-menu-item @click="handleLogin();"  ><i class="el-icon-switch-button"></i>{{isLogin}}</el-menu-item>
       
   </el-submenu>
@@ -416,16 +416,16 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       if (this.ruleForm.email === '') {
         _this.$message.error('请先输入邮箱再点击获取验证码')
       } else {
-        // 注释为重要代码，不可删除，这里是写一个测试方法
-        // axios({
-        //   method: 'post',
-        //   url: '/mail/getCheckCode',
-        //   data: {
-        //     'email': this.ruleForm.email
-        //   }
-        // }).then(function (res) {
-        //   sessionStorage.setItem('checkCode', md5(res.data.data))  // 这里我没用redis做缓存，用的浏览器sessionStorage+md5加密存下来的
-        // })
+       // 注释为重要代码，不可删除，这里是写一个测试方法
+        axios({
+          method: 'post',
+          url: '/mail/getCheckCode',
+          data: {
+            'email': this.ruleForm.email
+          }
+        }).then(function (res) {
+          sessionStorage.setItem('checkCode', md5(res.data.data))  // 这里我没用redis做缓存，用的浏览器sessionStorage+md5加密存下来的
+        })
         //测试验证码
         this.ruleForm.code=154757;
         // 验证码倒计时
@@ -460,15 +460,15 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
               self.clearCookie();
           }
 
-          //传输信息给后台
-          //这一部分等完善登录功能的后台再进行联调
+          // 传输信息给后台
+          // 这一部分等完善登录功能的后台再进行联调
           // let request=this.$qs.stringify({
           //   userName:userName,
           //   password:password,
           // });
           // this.$ajax({
           //   method:'post',
-          //   url:'user/login.do'
+          //   url:'user/login.do',
           //   data: request,
           // }).then(function(response){
           //   if(response.data.success){

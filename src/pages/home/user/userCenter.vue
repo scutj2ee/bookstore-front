@@ -12,36 +12,13 @@
    <p> <i class="el-icon-user-solid"></i>用户名：{{user.userName}}</p>
     <p> <i class="el-icon-message"></i>邮箱：{{user.email}}</p>
    <p>  <i class="el-icon-coin"></i>积分：{{user.integration}}</p>
-   <p>  <i class="el-icon-setting"></i> <router-link to="/home/checkpsw"  >修改密码</router-link></p>
+   <p>  <i class="el-icon-setting"></i> <router-link to="/home/user/checkpsw"  >修改密码</router-link></p>
+   <p>  <i class="el-icon-s-comment"></i> <router-link to="/home/user/comment"  >评论管理</router-link></p>
+   <p>  <i class="el-icon-location"></i> <router-link to="/home/user/address"  >地址管理</router-link></p>
     </div>
-   
     </el-aside>
     <el-main>
-    <div class="main-container">
-    <div class="head-main-container">
-    <!-- 标题 -->
-     <h2 style="margin-left:10px;"><i class="el-icon-s-order"></i>我的订单</h2>
-    </div>
-    <div class="body-main-container">
-    <router-link :to="{path:'/home/order/unpaid'}">
-     <el-card shadow="hover" class="sub-main-container" >
-     <i class="main-i el-icon-goods"></i><p>待付款</p>
-    </el-card></router-link>
-    <router-link :to="{path:'/home/order/unevaluated'}">
-    <el-card shadow="hover" class="sub-main-container">
-    <i class="main-i el-icon-s-comment"></i><p>未评价</p>
-    </el-card></router-link>
-    <router-link :to="{path:'/home/order/completed'}">
-    <el-card shadow="hover" class="sub-main-container">
-    <i class="main-i el-icon-shopping-bag-2"></i><p>已完成</p>
-    </el-card></router-link>
-    <router-link :to="{path:'/home/order/all'}">
-    <el-card shadow="hover" class="sub-main-container">
-   <i class="main-i el-icon-more-outline"></i> <p>所有订单</p>
-    </el-card></router-link>
-    </div>
-   
-    </div>
+     <router-view class="view"></router-view>
     </el-main>
   </el-container>
 </el-container>
@@ -54,7 +31,10 @@ export default{
         user:userDetail,
 
       }
-    }
+    },
+    mounted(){
+        this.$router.push('/home/user/index');//默认打开主页
+      }
 
 }
 
@@ -119,44 +99,5 @@ a {
     max-width:120px;
     overflow:hidden;
     border-radius:50%;
-  }
-  .main-container{
-    height:440px;
-    width:1200px;
-    background-color:#348498;
-  }
-  .head-main-container{
-    height:80px;
-    width:100%;
-    margin:0 auto;
-    position:relative;
-    background-color:#348498;
-    color:white;
-    float:top;
-    text-align:left;
-    line-height: 80px;
-    
-  }
-  .body-main-container{
-    height:300px;
-    width:1200px;
-    margin:80 auto;
-    position:relative;
-    background-color:#5bd1d7;
-  }
-  .sub-main-container{
-    margin:10px 8px 10px 8px;
-    position:relative;
-    width:280px;
-    height:280px;
-    float:left;
-    background-color:#fcf9ec;
-    border-radius:5px;
-    border: 2px #2d132c dashed ;
-    line-height: 10px;
-    font-size:30px;
-  }
-  .main-i{
-font-size:160px;
   }
 </style>

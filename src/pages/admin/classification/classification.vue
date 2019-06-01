@@ -10,20 +10,32 @@
     stripe
     style="width: 100%">
     <el-table-column
-      prop="date"
+      prop="cate_id"
       label="日期"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="classfication"
+      prop="name"
       label="类别"
       width="180"
       :disabled=false>
     </el-table-column>
-    <!-- <el-table-column
-      prop="address"
-      label="地址">
-    </el-table-column> -->
+    <el-table-column
+      prop="parent_id"
+      label="父类">
+    </el-table-column>
+    <el-table-column
+      prop="status"
+      label="状态">
+    </el-table-column>
+    <el-table-column
+      prop="created"
+      label="创建时间">
+    </el-table-column>
+       <el-table-column
+      prop="update"
+      label="修改时间">
+    </el-table-column>
   <el-table-column label="操作">
       <template slot-scope="scope">
         <el-button
@@ -40,27 +52,27 @@
 </template>
 
 <script>
+ import {mapActions,mapGetters} from 'vuex'
+ const CURRENT_DAY=new Date();
+ import DateUtil from '../../../assets/util/DateUtil.js'
 export default {
+  
  data() {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          classfication: '科技',
-          // address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          classfication: '人文',
-          // address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          classfication: '艺术',
-          // address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          classfication: '王小虎',
-          // address: '上海市普陀区金沙江路 1516 弄'
-        }]
+        tableData:[{
+  cate_id:1,
+  parent_id: 1,
+  name:"  ",
+  status:0 ,
+  type: 0,
+  created:new Date(),
+  update:new Date(),
+  }],
       }
+    },
+    mounted(){
+        this.tableData=this.$store.state.categories;
+        this.tableData.created=DateUtil.formatDate( this.tableData.created);
     },
      methods: {
     handleEdit(index, row) {

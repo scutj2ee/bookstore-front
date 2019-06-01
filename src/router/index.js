@@ -21,12 +21,7 @@ const router= new Router({
       component: resolve => require(['../pages/home/detail.vue'], resolve),
       name: 'detail',
       }
-      ,{
-          path: '/home/checkpsw',
-          component: resolve => require(['../pages/home/checkpsw.vue'], resolve),
-          name: 'checkpsw',
-        meta: { title: '更改用户密码' }
-      }, {
+    , {
         path: '/home/order',
         component: resolve => require(['../pages/home/order.vue'], resolve),
         name: 'order',
@@ -78,7 +73,40 @@ const router= new Router({
         name: 'usercenter',
         meta: {
           title: '用户中心'
-        }
+        },
+        children:[
+           {
+             path: '/home/user/index',
+             component: resolve => require(['../pages/home/user/index.vue'], resolve),
+             name: 'index',
+             meta: {
+               title: '用户中心'
+             }
+           },
+             {
+              path: '/home/user/checkpsw',
+              component: resolve => require(['../pages/home/user/checkpsw.vue'], resolve),
+              name: 'checkpsw',
+              meta: {
+                title: '更改用户密码'
+              }
+            },
+              {
+                path: '/home/user/address',
+                component: resolve => require(['../pages/home/user/address.vue'], resolve),
+                name: 'address',
+                meta: {
+                  title: '地址管理'
+                }
+              }, {
+                path: '/home/user/comment',
+                component: resolve => require(['../pages/home/user/comment.vue'], resolve),
+                name: 'comment',
+                meta: {
+                  title: '评论管理'
+                }
+              }
+        ]
       }
       , {
 

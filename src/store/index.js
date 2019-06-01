@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import * as getters from './getters' //导入相应的模块，*相当于引入了这个组件下所有导出的事例
 import * as actions from './actions'
 import * as mutations from './mutations'
-
+import DateUtil from '../assets/util/DateUtil'
 Vue.use(Vuex)
 const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {
 
@@ -19,7 +19,17 @@ const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getIte
   pass: '',
   checkPass: '',
   phone: ''
-  }
+  },
+  //书分类
+ categories:[{
+  cate_id:1,
+  parent_id:0,
+  name:"科技",
+  status:1,
+  type:1,
+  created: new Date(),
+  update:new Date(),
+  }]
 
 }
 const store = new Vuex.Store({
