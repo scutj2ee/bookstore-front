@@ -284,9 +284,9 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           checkPass: [
             { validator: validatePass2, trigger: 'blur' }
           ],
-          // phone :[{
-          //   required: true, validator: validatePhone,trigger: 'blur'
-          // }],
+          phone :[{
+            required: true, validator: validatePhone,trigger: 'blur'
+          }],
         },
        
       //走马灯
@@ -500,7 +500,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
               password:that.ruleForm.pass,
               email:that.ruleForm.email,
               phone:that.ruleForm.phone,
-              integration:0
+              integration:50 //618新用户送50积分
             };
             var userStr=JSON.stringify(user);
             var request=this.$qs.stringify({
@@ -587,25 +587,51 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       },
       //修改DOM
       checkUser(){
-        if(this.loginForm.username!=""){
-          this.loginTitle=this.loginForm.username;
+        if(this.$store.state.user!=null){
+          this.loginTitle=this.$store.state.user.username;
           this.loginState=1;
           this.isLogin="退出登录";
         }else{
            this.loginState=0;//退出登录
           this.loginTitle="请登录";
-         
           this.isLogin="登录";
 
         }
       },
       //跳转登录或者退出登录
       handleLogin(){
+        //登录
         if( this.loginState==0){
           this.outerVisible=true;
         }else{
-          this.clearCookie();
-          this.checkUser();
+          //退出
+        var that = this;
+        var id=that.$store.state.user.id;
+        this.$ajax({
+          method: 'get',
+          url: '/user/logout.do',
+          params:{
+            userId:id
+          }
+        }).then(function (response) {
+          if (response.data.success) {
+            that.$message({
+              type:'success',
+              message:"登出成功"
+            });
+          that.clearCookie();
+          that.$store.commit('modifyUser',null);
+          that.checkUser();
+         
+            that.$router.push({
+              path: '/home/homepage',
+            });
+
+          } else {
+            that.$message.error('登出失败');
+          }
+        })
+          
         }
       },
       //跳转

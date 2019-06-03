@@ -19,6 +19,16 @@ const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getIte
     username: "abc",
     password: 123456
   },
+  //添加地址表单
+  address:{
+    userId: 0,
+    province: '',
+    city: '',
+    district: '',
+    detail: '',
+    phone: '',
+    receiver: '',
+  },
   //注册表单
   ruleForm:{
   email: '',

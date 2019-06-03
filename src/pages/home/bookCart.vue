@@ -126,11 +126,11 @@
  <el-form-item>
 
  <h3>选择收货地址</h3> 
-  <el-select v-model="addressSelected" placeholder="请选择您的收货地址信息" size="large" autocomplete="true" width="250px" >
+  <el-select v-model="addressSelected" placeholder="请选择您的收货地址信息"  autocomplete="true" style="width:150px;" >
     <el-option  class="address-select"
       v-for="item in addressSelect"
-      :key="item.value"
-      :label="item.label"
+      :key="item.index"
+      :label="item.address"
       :value="item.value">
     </el-option>
   </el-select>
@@ -144,7 +144,7 @@
       append-to-body
       center>
       <!-- 注册 -->
-        <el-form :label-position="labelPosition" :model="addressForm" status-icon   label-width="180px" >
+        <el-form  :model="addressForm" status-icon   label-width="180px" >
   <el-form-item label="收货人" prop="receiver">
     <el-input type="text" v-model="addressForm.receiver" ></el-input>
   </el-form-item>
@@ -192,8 +192,8 @@
 </template>
 <script>
 // 引入外部js文件
-import areaJs from '../../assets/js/select_area.js';//引入省市区联级json
-import areaSelectedJs from '../../assets/js/area.js';//引入本地一些已保存地址json
+// import areaJs from '../../assets/js/select_area.js';//引入省市区联级json
+// import areaSelectedJs from '../../assets/js/area.js';//引入本地一些已保存地址json
 import carts from '../../assets/js/cart.js';//引入本地已保存商品信息json
 import { pca, pcaa } from 'area-data';
 import 'vue-area-linkage/dist/index.css'; // 样式
@@ -221,7 +221,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
         search: '',//搜索
         // address: areajson, //调用外部js文件的json数据
         //自定义 默认值
-        addressSelect:areaSelected ,//导入已写入地址json
+        addressSelect:[],//导入已写入地址json
         addressSelected: '',//选择地址
         addressForm:{
         area: [], //此处填写对应的value值
@@ -269,11 +269,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
 
     },
     mounted(){
-//   this.$watch("number",function () {
-//     for(let i=0;i<this.tableData.length;i++){
-//       this.tableData[i].total=this.tableData[i].number*this.tableData[i].price;
-//     }
-//     return this.tableData;
+      this.handleGetAddress();
   
 // });
 
@@ -296,6 +292,42 @@ import 'vue-area-linkage/dist/index.css'; // 样式
     },
 
     methods:{
+      //获取地址信息
+      handleGetAddress(){
+         var that=this;
+      var id=that.$store.state.user.id;
+      console.log(id);
+        this.$ajax({
+          method:'get',
+          url:'address/list.do',
+          params: {
+            userId:id,
+            pageNo: 1,
+            pageSize:1000,
+          }
+        }).then(function (response) {
+          console.log(response.data.tableData);
+          var table=response.data.tableData;
+          var addressStr=[];
+          for(var i=0;i<table.length;i++){
+            var str='';
+            var obj={};
+            str=table[i].province+table[i].city+table[i].district+" "+table[i].phone+" "+table[i].receiver;
+            obj={
+              value:table[i].id,
+              address:str,
+            }
+            addressStr.push(obj);
+          }
+          that.addressSelect=addressStr;
+          console.log(that.addressSelect);
+          that.$message({
+            title:"获取成功",
+            type:'success',
+            message:'获取成功'
+          })
+        });
+      },
         //行变色
         tableRowClassName({row, rowIndex}) {
         if (this.tableData[rowIndex].is_check === false) {
@@ -356,8 +388,47 @@ import 'vue-area-linkage/dist/index.css'; // 样式
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
-            console.log(this.addressForm.area);
+           
+            var that=this;
+            var addressArr={
+              userId:that.$store.state.user.id,
+              province:that.addressForm.area[0],
+              city:that.addressForm.area[1],
+              district:that.addressForm.area[2],
+              detail:that.addressForm.detail,
+              phone:that.addressForm.phone,
+              receiver:that.addressForm.receiver,
+            };
+            var address=JSON.stringify(addressArr);
+           
+            var request=this.$qs.stringify({
+              address:address
+            });
+            //vuex
+            that.$store.commit('modifyAddress',addressArr);
+             sessionStorage.setItem('state',JSON.stringify(that.$store.state.address));
+            
+            this.$ajax({
+              method:'post',
+              url:'address/add.do',
+              data:request,
+            }).then(function(response){
+
+                that.handleGetAddress();
+                that.$message({
+              message: "添加成功",
+              type: 'success'
+            });
+            }).catch(function(response){
+              that.$msgbox({
+                title: '添加地址失败',
+                message: '服务器异常',
+                type: 'error'
+              });
+            });
+
+
+            // console.log(this.addressForm.area);
           } else {
             console.log('error submit!!');
             return false;

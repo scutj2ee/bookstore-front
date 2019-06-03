@@ -9,8 +9,9 @@
     
     </div>
    <div style="font-size:24px; color:#33313b"> 
-   <p> <i class="el-icon-user-solid"></i>用户名：{{user.userName}}</p>
+   <p> <i class="el-icon-user-solid"></i>用户名：{{user.username}}</p>
     <p> <i class="el-icon-message"></i>邮箱：{{user.email}}</p>
+    <p>  <i class="el-icon-mobile-phone"></i>手机：{{user.phone}}</p>
    <p>  <i class="el-icon-coin"></i>积分：{{user.integration}}</p>
    <p>  <i class="el-icon-setting"></i> <router-link to="/home/user/checkpsw"  >修改密码</router-link></p>
    <p>  <i class="el-icon-s-comment"></i> <router-link to="/home/user/comment"  >评论管理</router-link></p>
@@ -25,15 +26,24 @@
 </el-container>
 </template>
 <script>
-import user from "../../../assets/js/userDetail.js";
+// import user from "../../../assets/js/userDetail.js";//测试数据，改用vuex，不用js
+
 export default{
     data(){
       return{
-        user:userDetail,
+        user:{
+          id: 0,
+          username:'',
+          email:'',
+          password:'',
+          phone: "",
+          integration:0
+        },//用户对应的表单
 
       }
     },
     mounted(){
+        this.user=this.$store.state.user;
         this.$router.push('/home/user/index');//默认打开主页
       }
 
