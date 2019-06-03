@@ -1,30 +1,14 @@
-
 <template>
-<div id="pca">
-<!-- v5及之后的版本 -->
-<area-select v-model="selected" :data="pca"></area-select>   
-
-<area-cascader v-model="selected2" :data="pca"></area-cascader>
-<!-- setting -->
-<area-select type='all' :level='2' v-model="selected" :data="pcaa"></area-select>
-<area-cascader type='all' v-model="selected2" :level='1' :data="pcaa"></area-cascader>
-</div>
+    <video-bg :sources="[path]" img="../../assets/images/homepages/add1.jpg" >
+  <!-- If you want to add content here, a slot is waiting! -->
+</video-bg>
 </template>
- 
 <script>
-import {pca, pcaa} from 'area-data'; // 城市数据
-import 'vue-area-linkage/dist/index.css'; // 样式
-export default {
-   data () {
-            return {
-                pca: pca,
-                pcaa: pcaa,
-                selected2: '',
-           }
+export default{
+    data () {
+   return {
+     path: require('../../assets/videos/video1.mp4'),
+   }
+ }
 }
-};
 </script>
-<style>
-
-
-</style>

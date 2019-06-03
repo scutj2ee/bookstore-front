@@ -11,15 +11,16 @@ import qs from 'qs';
 import VueAreaLinkage from 'vue-area-linkage';
 import 'vue-area-linkage/dist/index.css';
 import myCharts from './assets/util/myChart.js'
+import VideoBg from 'vue-videobg'
+Vue.component('video-bg', VideoBg)
 Vue.use(myCharts)//e-chart
 Vue.use(VueAreaLinkage)//pca三级联调
-Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.config.productionTip = false //关闭生产模式下给出的提示
 axios.defaults.baseURL = 'http://localhost:8888/'; //请求基地址
 axios.defaults.withCredentials = true //使跨域session请求统一
 Vue.prototype.$ajax = axios //配置axios依赖发起ajax请求
-Vue.prototype.$qs = qs;
+Vue.prototype.$qs = qs //引入qs对json处理
 
 
 /* eslint-disable no-new */

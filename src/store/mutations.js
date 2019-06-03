@@ -10,3 +10,7 @@ export const modifyRuleForm = (state, ruleForm) => {
 export const modifyCategories = (state, categories) => {
   state.categories = categories;
 }
+
+export const modifyUser = (state, user) => {
+  state.user = user;
+}

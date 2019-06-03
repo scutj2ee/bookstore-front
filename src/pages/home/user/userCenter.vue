@@ -18,7 +18,8 @@
     </div>
     </el-aside>
     <el-main>
-     <router-view class="view"></router-view>
+
+      <router-view class="view"></router-view>
     </el-main>
   </el-container>
 </el-container>

@@ -116,6 +116,14 @@ const router= new Router({
         meta: {
           title: '购物车'
         }
+      }, {
+
+        path: '/home/list',
+        component: resolve => require(['../pages/home/list.vue'], resolve),
+        name: 'list',
+        meta: {
+          title: '分类选择'
+        }
       }
     ]
     }, {
@@ -127,7 +135,16 @@ const router= new Router({
          title: '书城主页'
        }
 
-    }, {
+    }, 
+    {
+      path: '/admin/login',
+      component: resolve => require(['../pages/admin/login.vue'], resolve),
+      name: 'adminLogin',
+      meta: {
+        title: '后台登录页面'
+      }
+    },
+    {
       path: '/admin',
       component: resolve => require(['../pages/admin/home.vue'], resolve),
       name: 'admin',
@@ -195,6 +212,7 @@ const router= new Router({
         title: '错误页面'
       }
     }
+
   ]
 })
 

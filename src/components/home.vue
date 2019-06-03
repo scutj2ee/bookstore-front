@@ -8,9 +8,8 @@ v-loading="totalLoading"
   <!-- logo -->
   <div class="round">
   <div class="logo-image">
-  <router-link to="/home/homepage"> <img  src="../assets/images/logo/logo.png" width="50px" height="50px"   margin-top="30px"></router-link>
+  <router-link to="/home/homepage"> <img  src="../assets/images/logo/SCUTBOOK.png" width="250px" height="50px"   margin-top="30px" style="border-radius:10px;" ></router-link>
   </div>
-  
    </div>
   </div>
   </el-col>
@@ -88,30 +87,7 @@ v-loading="totalLoading"
  <el-container ref="aside" >
     <el-aside  width="200px" class="hidden-md-and-down" >
     <!-- 侧栏 -->
-<!-- 侧栏 -->
-<el-collapse @change="handleChange"  >
-  <el-collapse-item title="生活 LIFE" name="1">
-  <i class="el-icon-s-promotion"></i>
-    <div><el-link type="primary">主要链接</el-link></div>
-    <div><el-link type="primary">主要链接</el-link></div>
-  </el-collapse-item>
-  <el-collapse-item title="科技 TECHNOLOGY" name="2" >
-  <i class="el-icon-s-opportunity"></i>
-    <div><el-link type="primary">主要链接</el-link></div>
-    <div><el-link type="primary">主要链接</el-link></div>
-  </el-collapse-item>
-  <el-collapse-item title="效率 EFFICIENCY" name="3">
-  <i class="el-icon-s-data"></i>
-    <div><el-link type="primary">主要链接</el-link></div>
-    <div><el-link type="primary">主要链接</el-link></div>
-    <div><el-link type="primary">主要链接</el-link></div>
-  </el-collapse-item>
-  <el-collapse-item title="文学 LITERATURE" name="4">
-  <i class="el-icon-notebook-1"></i>
-    <div><el-link type="primary">主要链接</el-link></div>
-    <div><el-link type="primary">主要链接</el-link></div>
-  </el-collapse-item>
-</el-collapse>
+<el-button type="primary"  icon="el-icon-setting" @click="handleList()">测试</el-button>
     </el-aside>
     <!-- 主体部分 -->
    <el-container>
@@ -121,10 +97,10 @@ v-loading="totalLoading"
       <el-footer> 
   <el-dialog title="用户登陆" :visible.sync="outerVisible" width="30%" >
   <!-- 登陆面板 -->
-   <img src="../assets/images/logo/logo.png" style="width:80px; height:80px;" >
+   <img src="../assets/images/logo/SCUTBOOK.png" style="width:400px; height:80px; margin: 5px; border-radius:10px;" >
  <el-form :model="loginForm" status-icon :rules="rules" ref="loginForm" label-width="70px" class="demo-ruleForm">
- <el-form-item label="账号" prop="userName">
-    <el-input type="text" v-model="loginForm.userName" autocomplete="off"></el-input>
+ <el-form-item label="账号" prop="username">
+    <el-input type="text" v-model="loginForm.username" autocomplete="off"></el-input>
   </el-form-item>
   <el-form-item label="密码" prop="password">
     <el-input type="password" v-model="loginForm.password" autocomplete="off"></el-input>
@@ -141,8 +117,8 @@ v-loading="totalLoading"
       append-to-body>
       <!-- 注册 -->
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="用户名" prop="userName">
-    <el-input type="text" v-model="ruleForm.userName" autocomplete="off"></el-input>
+  <el-form-item label="用户名" prop="username">
+    <el-input type="text" v-model="ruleForm.username" autocomplete="off"></el-input>
   </el-form-item>
   <el-form-item label="邮箱" prop="email">
     <el-input type="e-mail" v-model="ruleForm.email" autocomplete="off"></el-input>
@@ -275,7 +251,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         loginState:0,
       //登陆表格
         loginForm:{
-          userName:'',
+          username:'',
           password:'',
         },
         checked:false,//记住密码七天内免登陆
@@ -283,7 +259,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
          ruleForm: {
            email:'',
            code: '',
-           userName:'',
+           username:'',
             pass: '',
             checkPass: '',
             phone: ''
@@ -296,7 +272,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           code: [
             { validator: validateCheckCode, trigger: 'blur' }
           ],
-           userName :[{
+           username :[{
             required: true, message:'用户名不能为空',trigger: 'blur'
           }],
           password: [
@@ -308,9 +284,9 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           checkPass: [
             { validator: validatePass2, trigger: 'blur' }
           ],
-          phone :[{
-            required: true, validator: validatePhone,trigger: 'blur'
-          }],
+          // phone :[{
+          //   required: true, validator: validatePhone,trigger: 'blur'
+          // }],
         },
        
       //走马灯
@@ -367,7 +343,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         select: '',//选择搜索栏内容
         outerVisible: false,//登陆栏
         innerVisible: false,//注册栏
-        totalLoading:true,//加载中
+        totalLoading:false,//加载中
         show: true,//验证码按钮
         count: '',//验证倒计时
         timer: null,//计时器变量
@@ -375,14 +351,13 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       };
     },
      mounted() {
-      
-      this.totalLoading=false;
+      this.ruleForm=this.$store.state.ruleForm;
       this.getCookie();//读取cookie
        this.$router.push('/home/homepage');//默认打开链接
         // 获取浏览器可视区域高度
       this.clientHeight =   `${document.documentElement.clientHeight}`              
       //document.body.clientWidth;
-      //console.log(self.clientHeight);
+      //console.log(that.clientHeight);
       window.onresize = function temp() {
         this.clientHeight = `${document.documentElement.clientHeight}`;
       };
@@ -412,22 +387,26 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       },
       // 向后端发请求的点击事件 获取验证码
       getCode () {
-      let _this = this
+      let that = this
       if (this.ruleForm.email === '') {
-        _this.$message.error('请先输入邮箱再点击获取验证码')
+        that.$message.error('请先输入邮箱再点击获取验证码')
       } else {
        // 注释为重要代码，不可删除，这里是写一个测试方法
-        axios({
+        this.$ajax({
           method: 'post',
-          url: '/mail/getCheckCode',
-          data: {
-            'email': this.ruleForm.email
+          url: 'user/code.do',
+          params: {
+            'email': that.ruleForm.email,
+            'username':that.ruleForm.username
           }
         }).then(function (res) {
-          sessionStorage.setItem('checkCode', md5(res.data.data))  // 这里我没用redis做缓存，用的浏览器sessionStorage+md5加密存下来的
-        })
+          this.$message({
+              message: '发送验证码成功',
+              type: 'success'
+            });
+          sessionStorage.setItem('checkCode', res.data.data)  // 这里我没用redis做缓存，用的浏览器sessionStorage+md5加密存下来的
+        });
         //测试验证码
-        this.ruleForm.code=154757;
         // 验证码倒计时
         if (!this.timer) {
           this.count = TIME_COUNT
@@ -449,70 +428,59 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
     submitLoginForm(formName){
         this.$refs[formName].validate((valid) => {
          if (valid) {
-            const self = this;
+            const that = this;
             //判断复选框是否被勾选 勾选则调用配置cookie方法
-            if (self.checked == true) {
+            if (that.checked == true) {
                 //传入账号名，密码，和保存天数3个参数
-                self.setCookie(self.loginForm.userName, self.loginForm.password, 7);
+                that.setCookie(that.loginForm.username, that.loginForm.password, 7);
             }else {
               console.log("清空Cookie");
               //清空Cookie
-              self.clearCookie();
+              that.clearCookie();
           }
 
           // 传输信息给后台
           // 这一部分等完善登录功能的后台再进行联调
           // let request=this.$qs.stringify({
-          //   userName:userName,
+          //   username:username,
           //   password:password,
           // });
-          // this.$ajax({
-          //   method:'post',
-          //   url:'user/login.do',
-          //   data: request,
-          // }).then(function(response){
-          //   if(response.data.success){
-          //   this.$store.commit('modifyLoginForm',this.loginForm);
-          //   //写入seesionStorage来保存数据
-          //   sessionStorage.removeItem('user');
-          //   sessionStorage.setItem('state',JSON.stringify(this.$store.state.loginForm));
-          //   this.$message({
-          // message: '登录成功',
-          // type: 'success'
-          //   });
-          //   this.loginState=1;//登录成功
-          //   this.outerVisible = false;
-          //   this.checkUser();//更新状态
-          //   }else{
-          //     that.$msgbox({
-          //         title: '登录失败',
-          //         message: response.data.msg,
-          //         type: 'error'
-          //       });
-          //   }
-          // }).catch(function (error) {
-          //     that.$msgbox({
-          //       title: '登录失败',
-          //       message: '服务器异常',
-          //       type: 'error'
-          //     });
-          //   })
-
-
-          //********************这是静态管理的登录***********/
-          //使用vuex 来管理数据(登录数据不可用vuex)
-          this.$store.commit('modifyLoginForm',this.loginForm);
-          //写入seesionStorage来保存数据
-            sessionStorage.removeItem('state');
-            sessionStorage.setItem('state',JSON.stringify(this.$store.state));
-            this.$message({
-          message: '登录成功',
-          type: 'success'
+          this.$ajax({
+            method:'post',
+            url:'user/login.do',
+            params: {
+              username:that.loginForm.username,
+              password:that.loginForm.password,
+            }
+          }).then(function(response){
+            
+            if(response.data.success){
+            console.log(response.data);
+            that.$store.commit('modifyUser',response.data.user);
+            //写入seesionStorage来保存数据
+            sessionStorage.setItem('state',JSON.stringify(that.$store.state.user));
+            that.$message({
+                message: '登录成功',
+                type: 'success'
             });
-            this.loginState=1;//登录成功
-            this.outerVisible = false;
-            this.checkUser();//更新状态
-            // this.$router.push({ name: 'Home',params:{user:self.ruleForm.username,pwd:self.ruleForm.password}});
+            that.loginState=1;//登录成功
+            that.outerVisible = false;
+            that.checkUser();//更新状态
+            }else{
+              that.$msgbox({
+                  title: '登录失败',
+                  message: response.data.msg,
+                  type: 'error'
+                });
+            }
+          }).catch(function (error) {
+              that.$msgbox({
+                title: '登录失败',
+                message: '服务器异常',
+                type: 'error'
+              });
+            });
+            // this.$router.push({ name: 'Home',params:{user:that.ruleForm.username,pwd:that.ruleForm.password}});
           } else {
             this.$message.error('登录失败');
             console.log('error submit!!');
@@ -523,22 +491,53 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
      //注册
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
+          var that=this;
           if (valid) {
-            // localStorage.setItem('user_name',this.ruleForm.userName);
+            // localStorage.setItem('user_name',this.ruleForm.username);
             // localStorage.setItem('user_password',this.ruleForm.pass);
-            console.log(JSON.stringify(self.ruleForm));
-            this.$store.commit('modifyRuleForm',this.ruleForm);
-            sessionStorage.removeItem('state');
-            sessionStorage.setItem('state',JSON.stringify(this.$store.state));
-            this.$message({
+            var user={
+              username: that.ruleForm.username,
+              password:that.ruleForm.pass,
+              email:that.ruleForm.email,
+              phone:that.ruleForm.phone,
+              integration:0
+            };
+            var userStr=JSON.stringify(user);
+            var request=this.$qs.stringify({
+              user:userStr,
+              verifyCode:that.ruleForm.code,
+            });
+            this.$ajax({
+              method:'post',
+              url:'user/register.do',
+              data: request,
+            }).then(function(response){
+              if(response.data.success){
+                 that.$message({
           message: '注册成功！',
           type: 'success'
             });
-            this.innerVisible=false;
-            this.loginForm.userName=this.ruleForm.userName;
-            this.loginForm.password=this.ruleForm.pass;
-            this.checked=true;
-            this.submitLoginForm(this.loginForm);
+
+            console.log(JSON.stringify(that.ruleForm));
+            that.$store.commit('modifyRuleForm',that.ruleForm);
+            sessionStorage.removeItem('state');
+            sessionStorage.setItem('state',JSON.stringify(that.$store.state));
+            
+            that.innerVisible=false;
+            that.loginForm.username=that.ruleForm.username;
+            that.loginForm.password=that.ruleForm.pass;
+            that.checked=true;
+            that.submitLoginForm(that.loginForm);//自动登录
+
+              }
+              else{
+                this.$message({
+          message: response.data.msg,
+          type: 'error'
+            });
+              }
+            })
+           
           } else {
            this.$message.error('注册失败！');
             console.log('注册失败');
@@ -557,7 +556,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           var exdate = new Date(); //获取时间
           exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays); //保存的天数
           //字符串拼接cookie
-          window.document.cookie = "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
+          window.document.cookie = "username" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
           window.document.cookie = "password" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
 
       },
@@ -568,9 +567,9 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
               for (var i = 0; i < arr.length; i++) {
                   var arr2 = arr[i].split('='); //再次切割
                   //判断查找相对应的值
-                  if (arr2[0] == 'userName') {
+                  if (arr2[0] == 'username') {
                     //  console.log(arr2[1])
-                      this.loginForm.userName = arr2[1]; //保存到保存数据的地方
+                      this.loginForm.username = arr2[1]; //保存到保存数据的地方
                   } else if (arr2[0] == 'password') {
                     // console.log(arr2[1])
                       this.loginForm.password = arr2[1];
@@ -583,13 +582,13 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       clearCookie: function() {
           this.setCookie("", "", -1); //修改2值都为空，天数为负1天就好了
           //清空登录
-          this.loginForm.userName="";
+          this.loginForm.username="";
           this.loginForm.password="";
       },
       //修改DOM
       checkUser(){
-        if(this.loginForm.userName!=""){
-          this.loginTitle=this.loginForm.userName;
+        if(this.loginForm.username!=""){
+          this.loginTitle=this.loginForm.username;
           this.loginState=1;
           this.isLogin="退出登录";
         }else{
@@ -608,6 +607,10 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           this.clearCookie();
           this.checkUser();
         }
+      },
+      //跳转
+      handleList(){
+        this.$router.push('/home/list')
       }
     
   }
@@ -624,18 +627,17 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
 }
 .round{
   height: 60px;
-  width: 60px;
-  background-color:#d2f3e0;
-  border-radius:50%;
+  width: 260px;
   position:absolute;
+  border-radius:10px;
 }
 
 .logo-image{
   position:relative;
   top:50%;
   left:50%;
-  margin:-25px 0 0 -25px;
- 
+  margin:-25px 0 0 -125px;
+ border-radius:10px;
  height: 20%;
   width: 20%;
   position: absolute;

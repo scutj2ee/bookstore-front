@@ -7,15 +7,23 @@ import DateUtil from '../assets/util/DateUtil'
 Vue.use(Vuex)
 const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {
 
+  user:{
+    id:0,
+    username:'',
+    password:'',
+    email:'',
+    integration:0,
+    phone:'',
+  },
   loginForm: {
-    userName: "abc",
+    username: "abc",
     password: 123456
   },
   //注册表单
   ruleForm:{
   email: '',
   code: '',
-  userName: '',
+  username: '',
   pass: '',
   checkPass: '',
   phone: ''
