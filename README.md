@@ -79,7 +79,7 @@ cd bookstore-front
 npm install
 
 # 建议不要直接使用 cnpm 安装以来，会有各种诡异的 bug。可以通过如下操作解决 npm 下载速度慢的问题
-#(如果你的电脑不支持使用淘宝镜像，建议直接使用npm install)
+#(如果你的电脑安装出错，建议直接使用npm install，虽然比较慢但是不会出错)
 npm install --registry=https://registry.npm.taobao.org
 
 # 启动服务
