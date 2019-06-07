@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import { resolve } from 'url';
+import {mapActions,mapGetters} from 'vuex';
+import store from '../store/index'
 Vue.use(Router)
-
 const router= new Router({
   mode:'history',
   routes: [
@@ -148,14 +149,28 @@ const router= new Router({
       path: '/admin',
       component: resolve => require(['../pages/admin/home.vue'], resolve),
       name: 'admin',
-
+      meta:{
+         title:"后台管理"
+      },
+      beforeEnter: (to,from,next)=> {   //导航守卫
+            console.log(to)
+            console.log(from)
+            console.log(store.state.adminUser);
+            if(store.state.adminUser.username==""||store.state.adminUser.username==null||store.state.adminUser.username==undefined){
+              console.log('用户未登录');
+              next({path: '/admin/login',query:{ Rurl: to.fullPath}});  //未登录则跳转到登陆界面，query:{ Rurl: to.fullPath}表示把当前路由信息传递过去方便登录后跳转回来
+              
+            }else{
+              console.log('用户已经登录');
+              next();
+          }},
       children:[
       {
         path: '/admin/index',
         component: resolve => require(['../pages/admin/index.vue'], resolve),
         name: 'adminIndex',
         meta: {
-          title:"后台主页"
+          title:"后台主页" 
         }
       }, {
         path: '/admin/bookshelf',
@@ -215,9 +230,6 @@ const router= new Router({
 
   ]
 })
+ 
 
-// router.beforEach((to,from,next) => {
-//   //登陆界面登陆成功后，会把信息保存在会话里面
-//   let user=sessionStorage.getItem('state');
-// });
 export default router

@@ -39,17 +39,17 @@
 </script>
 
     <style>
-      .main-container{
+    .main-container{
     height:440px;
     width:1200px;
-    background-color:#348498;
+    background-color:#ff9900;
   }
   .head-main-container{
     height:80px;
     width:100%;
     margin:0 auto;
     position:relative;
-    background-color:#348498;
+    background-color:#ff9900;
     color:white;
     float:top;
     text-align:left;
@@ -61,7 +61,7 @@
     width:1200px;
     margin:80 auto;
     position:relative;
-    background-color:#5bd1d7;
+    background-color:#000;
   }
   .sub-main-container{
     margin:10px 8px 10px 8px;
@@ -71,7 +71,7 @@
     float:left;
     background-color:#fcf9ec;
     border-radius:5px;
-    border: 2px #2d132c dashed ;
+    border: 2px #ff9900 dashed ;
     line-height: 10px;
     font-size:30px;
   }

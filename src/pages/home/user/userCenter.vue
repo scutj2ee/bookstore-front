@@ -8,7 +8,7 @@
     </div>
     
     </div>
-   <div style="font-size:24px; color:#33313b"> 
+   <div style="font-size:24px; color:#ff9900; margin-left:20px;" > 
    <p> <i class="el-icon-user-solid"></i>用户名：{{user.username}}</p>
     <p> <i class="el-icon-message"></i>邮箱：{{user.email}}</p>
     <p>  <i class="el-icon-mobile-phone"></i>手机：{{user.phone}}</p>
@@ -52,10 +52,12 @@ export default{
 
 </script>
 <style scoped>
-a {
-    text-decoraction: none;
+a{
+  color:#cf3030;
+    text-decoration: none;
 }
   .router-link-active {
+    color:#ff9900;
     text-decoration: none;
   }
  .el-header, .el-footer {
@@ -66,15 +68,15 @@ a {
   }
   
   .el-aside {
-    background-color: #d2f3e0;
-    color: #333;
+    background-color: #000;
+    color: #ff9900;
     text-align: left;
     line-height: 30px;
   
   }
   
   .el-main {
-    background-color: #E9EEF3;
+    background-color: #d9d9d9;
     color: #333;
     min-height:100vh;
   }

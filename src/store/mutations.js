@@ -14,6 +14,10 @@ export const modifyCategories = (state, categories) => {
 export const modifyUser = (state, user) => {
   state.user = user;
 }
+//登录管理员
+export const modifyAdminUser = (state, adminUser) => {
+  state.adminUser = adminUser;
+}
 //提交新的地址
 export const modifyAddress = (state, address) => {
   state.address = address;

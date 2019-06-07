@@ -8,32 +8,14 @@ v-loading="totalLoading"
   <!-- logo -->
   <div class="round">
   <div class="logo-image">
-  <router-link to="/home/homepage"> <img  src="../assets/images/logo/SCUTBOOK.png" width="250px" height="50px"   margin-top="30px" style="border-radius:10px;" ></router-link>
+  <router-link to="/home/homepage"> <img  src="../assets/images/logo/scuthub.png" width="150px" height="50px"   margin-top="30px" style="border-radius:10px;" ></router-link>
   </div>
    </div>
   </div>
   </el-col>
   <el-col :xs="0" :sm="6" :md="6" :lg="10" :xl="8"><div class="grid-content center hidden-md-and-down">
   <!-- 搜索栏 -->
-  <div class="outter">
-  <div class="inner" >
-  <el-input type="text" placeholder="请输入内容" v-model="searchContent" class="searchClass">
-  <div slot="prepend">
-        <div class="centerClass">
-    <el-select v-model="select" slot="prepend" placeholder="请选择">
-      <el-option label="书名" value="1"></el-option>
-      <el-option label="作者" value="2"></el-option>
-      <el-option label="类别" value="3"></el-option>
-    </el-select>
-    </div>
-    <div class="centerClass">    
-    <div class="line"></div>  
-    </div> 
-    </div>
-    <el-button type="primary" slot="append" icon="el-icon-search"></el-button>
-  </el-input>
-</div>
-  </div>
+  
   </div>
   </el-col>
   <el-col :xs="24" :sm="16" :md="16" :lg="12" :xl="8"><div class="grid-content">
@@ -42,16 +24,12 @@ v-loading="totalLoading"
   class="el-menu-demo"
   mode="horizontal"
   @select="handleSelect"
-  background-color="#004d61"
+  background-color="#000"
   text-color="#fff"
-  active-text-color="#d2f3e0"
+  active-text-color="#ff9900"
   default-active="/home/homepage"
   :router="true"
   >
-  <!-- <el-menu-item  
-  @click="outerVisible = true">
-  <i class="el-icon-user"></i>登陆
-  </el-menu-item> -->
   <el-submenu index=1>
   <template slot="title">
     <i class="el-icon-user"></i>{{loginTitle}}</template>
@@ -87,7 +65,51 @@ v-loading="totalLoading"
  <el-container ref="aside" >
     <el-aside  width="200px" class="hidden-md-and-down" >
     <!-- 侧栏 -->
+  <el-row>
+  <el-col  v-for="(item,index) in categories" :key="index">
+  <el-popover
+    placement="right-end"
+    :title="item.name"
+    width="200"
+    trigger="click"
+    visible-arrow="false"
+    >
+    <ul v-for="(child,index) in item.children" :key="index">
+    
+    <li > {{child.name}}</li>
+    </ul>
+      <template slot="reference">
+      <div slot="reference" class="board">
+       {{item.name}}
+       </div>
+      </template>
+    
+  </el-popover>
+ 
+  </el-col>
+  </el-row>
+
+  <!-- 侧栏 -->
+  <!-- <el-radio-group v-model="isCollapse" >
+  <el-radio-button :label="false">展开</el-radio-button>
+  <el-radio-button :label="true">收起</el-radio-button>
+</el-radio-group>
+<el-menu  class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+  <el-submenu  v-for="(item,index) in categories" :key="index">
+
+  <template slot="title">
+      <i class="el-icon-location"></i>
+      <span slot="title">{{item.name}}</span>
+    </template>
+      <el-menu-item >选项1</el-menu-item>
+      <el-menu-item >选项2</el-menu-item>
+  </el-submenu>
+</el-menu> -->
+
+
 <el-button type="primary"  icon="el-icon-setting" @click="handleList()">测试</el-button>
+
+
     </el-aside>
     <!-- 主体部分 -->
    <el-container>
@@ -95,9 +117,11 @@ v-loading="totalLoading"
        <router-view class="view"></router-view>
   </el-main>
       <el-footer> 
-  <el-dialog title="用户登陆" :visible.sync="outerVisible" width="30%" >
+  <el-dialog  title="用户登陆" :visible.sync="outerVisible" width="30%" >
   <!-- 登陆面板 -->
-   <img src="../assets/images/logo/SCUTBOOK.png" style="width:400px; height:80px; margin: 5px; border-radius:10px;" >
+  <div style="position:relative;  width:100%; height:100px;" >
+   <img src="../assets/images/logo/scuthub.png" style="position:absolute; width:240px; height:80px; top:50%;left:50%; margin: -40px 0px 0px -120px; border-radius:10px;" >
+   </div>
  <el-form :model="loginForm" status-icon :rules="rules" ref="loginForm" label-width="70px" class="demo-ruleForm">
  <el-form-item label="账号" prop="username">
     <el-input type="text" v-model="loginForm.username" autocomplete="off"></el-input>
@@ -157,7 +181,7 @@ v-loading="totalLoading"
   <!-- 底部信息 -->
   <div  ref="aside" class="demo-badge-content" color="transparent">
       <label style="color:#fff;"> Copyright</label>
-      <span style="font-size: 20px; color: red;" slot="content">&copy;</span>
+      <span style="font-size: 20px; color: #ff9900;" slot="content">&copy;</span>
        <label style="color:#fff;"> 2019 SCUTBOOKSTORE &nbsp All Rights Reserved.</label>
     </div>
   </el-footer>
@@ -167,7 +191,7 @@ v-loading="totalLoading"
 </template>
 <script>
 import 'element-ui/lib/theme-chalk/display.css';
-  import {mapActions,mapGetters} from 'vuex';
+import {mapActions,mapGetters} from 'vuex';
 const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
  export default {
    name: 'home',
@@ -243,6 +267,23 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         }
       };
       return {
+         isCollapse: true,
+        //分类
+        categories:[{
+          id:1,
+          name:"科技",
+          children:[{
+            id:3,
+            name:"天文学"
+          },{
+            id:4,
+            name:"数学"
+          }]
+          },{
+            id:2,
+            name:"生活"
+          }
+        ],
         //用户名
         loginTitle:"请登录",
         //是否登陆校验
@@ -339,8 +380,6 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
              aim:'',
                star: 4}
             ],
-        searchContent: '',//搜索内容
-        select: '',//选择搜索栏内容
         outerVisible: false,//登陆栏
         innerVisible: false,//注册栏
         totalLoading:false,//加载中
@@ -388,6 +427,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       // 向后端发请求的点击事件 获取验证码
       getCode () {
       let that = this
+      
       if (this.ruleForm.email === '') {
         that.$message.error('请先输入邮箱再点击获取验证码')
       } else {
@@ -424,7 +464,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
       }
     },
     //登陆功能
-
+    
     submitLoginForm(formName){
         this.$refs[formName].validate((valid) => {
          if (valid) {
@@ -458,7 +498,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
             console.log(response.data);
             that.$store.commit('modifyUser',response.data.user);
             //写入seesionStorage来保存数据
-            sessionStorage.setItem('state',JSON.stringify(that.$store.state.user));
+            // sessionStorage.setItem('state',JSON.stringify(that.$store.state.user));
             that.$message({
                 message: '登录成功',
                 type: 'success'
@@ -507,6 +547,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
               user:userStr,
               verifyCode:that.ruleForm.code,
             });
+            
             this.$ajax({
               method:'post',
               url:'user/register.do',
@@ -517,7 +558,8 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           message: '注册成功！',
           type: 'success'
             });
-
+            
+            
             console.log(JSON.stringify(that.ruleForm));
             that.$store.commit('modifyRuleForm',that.ruleForm);
             sessionStorage.removeItem('state');
@@ -644,7 +686,6 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
 </script>
 <style >
 
-@import "../assets/css/search.css";
 .demo-badge-content {
   padding: 12px;
   margin-left: 16px;
@@ -669,20 +710,9 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
   position: absolute;
  
 }
-.outter{
-   height: 60px;
-  width: 400px;
-  position:absolute;
-}
-.inner{
-position:relative;
-  top:50%;
-  left:50%;
-  transform: translate(-50%,-50%);
-   
-}
+
 .el-header, .el-footer {
-    background-color: #004d61;
+    background-color: #000;
     color: #333;
     text-align: center;
     line-height: 60px;
@@ -690,19 +720,19 @@ position:relative;
   }
   
   .el-aside {
-    background-color: #348498;
-    color: #333;
+    background-color: #000000;
+    color: #ff9900;
     text-align: center;
-    line-height: 200px;
-    min-height:107vh;
+    line-height: 30px;
+    
   }
   
   .el-main {
-    background-color: #d8eff0;
+    background-color: #d9d9d9;
     color: #333;
     text-align: center;
-    line-height: 160px;
-    min-height:100vh;
+    line-height: 30px;
+    
 
 
   }
@@ -816,5 +846,9 @@ position:relative;
 }
 .code-btn{
 margin-top :15px;
+}
+.board{
+  background-color:#000;
+  color:rgba(255,153,0)
 }
 </style>

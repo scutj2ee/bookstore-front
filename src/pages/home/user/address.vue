@@ -78,11 +78,12 @@
   </el-form-item>
   <el-form-item>
   <el-button type="info" @click="editVisable=false; "  icon="el-icon-arrow-left" >返回</el-button>
-    <el-button type="primary"  icon="el-icon-success" @click="handleEdit('addressForm')">提交</el-button>
+    <el-button type="primary" v-if="isEdit"  icon="el-icon-success" @click="handleEdit('addressForm')">提交</el-button>
+    <el-button type="primary" v-if="!isEdit" icon="el-icon-success" @click="handleAdd()">提交</el-button>
   </el-form-item>
 </el-form>
     </el-dialog>
-    <el-button type="primary" @click="handleAdd()"  icon="el-icon-plus" >返回</el-button>
+    <el-button type="primary" @click="handleOpen()"  icon="el-icon-plus" >添加</el-button>
 </div>
 </template>
 <script>
@@ -96,6 +97,7 @@ export default{
         total:0,//总数
         currentPage:1,//当前页面
         tableData:[],//地址数组
+        isEdit: true,
         editVisable: false,//修改栏
         addressForm:{
         area: [], //此处填写对应的value值
@@ -167,6 +169,7 @@ export default{
       },
       //更改地址
       openEdit(val){
+        this.isEdit=true;
         this.editVisable=true;
         var index=0;
         for(var i=0;i<this.tableData.length;i++){
@@ -175,6 +178,16 @@ export default{
         }
         console.log(this.tableData[index]);
         this.addressForm=this.tableData[index];
+      },
+      handleOpen(){
+        this.isEdit=false;
+        this.addressForm={
+        area: [], //此处填写对应的value值
+        detail:"",
+        phone:"",
+        receiver:""
+        };
+        this.editVisable=true;
       },
       //提交更改
       handleEdit(formName){
