@@ -281,7 +281,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
           istrue: function () {
                     if (this.istrue == true) {
                         for (let k = 0; k < this.tableData.length; k++) {
-                            this.tableData[k].is_check = true;
+                            this.tableData[k].c = true;
                         }
                     } else {
                         for (let k = 0; k < this.tableData.length; k++) {
@@ -457,7 +457,37 @@ import 'vue-area-linkage/dist/index.css'; // 样式
                 },
     handlePay(){
       this.active++;
-    }
+      var that=this;
+      var list=[];
+      for(let i=0;i<that.tableDate.length;i++){
+      if(that.tableData[i].is_check==1){
+      list.push(that.tableData[i].id);
+        }
+      }
+      
+      if(that.$store.state.user.id==''||that.$store.state.user.id==null)
+      {
+      //TODO: 交易失败提醒，可以考虑使用dialogue或者冒泡
+      }
+      this.$ajax({
+        url:'',
+        method:'post',
+        params:{
+        cateIdList:list,
+        }
+      }).then(function(response){
+      that.$message({
+        type:'success',
+        message:'提交成功'
+      });
+      }).then(function(response){
+         that.$message({
+        type:'error',
+        message:'提交失败'
+      });
+      });
+      
+    },
 
 
     },
