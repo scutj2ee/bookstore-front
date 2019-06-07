@@ -281,7 +281,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
           istrue: function () {
                     if (this.istrue == true) {
                         for (let k = 0; k < this.tableData.length; k++) {
-                            this.tableData[k].c = true;
+                            this.tableData[k].is_check = true;
                         }
                     } else {
                         for (let k = 0; k < this.tableData.length; k++) {
