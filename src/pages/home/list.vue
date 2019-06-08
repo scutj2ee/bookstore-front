@@ -2,11 +2,11 @@
 
 <el-container>
 <el-header>Header</el-header>
-<el-main>
+<el-main v-loading="loading">
     <!-- 畅销榜 -->
     <div class="hot-card">
    <el-row :gutter="20">
-  <el-col :span="6" v-for="(item, index) in hotForm" :key="index" >
+  <el-col :span="6" v-for="(item, index) in bookList" :key="index" >
     <el-card shadow="hover" :body-style="{ padding: '5px' }">
       <img  v-bind:src="item.image_url" class="book_image">
 
@@ -16,28 +16,92 @@
         <div class="bottom clearfix">
                 <span>{{item.name}}</span>
            <div class="card-show">{{item.author }}</div><br>
-           <div class="price">活动价：￥ {{item.member_price}}</div>
+           <div class="price">活动价：￥ {{item.price}}</div>
            <div class="card-show">市场价：￥<del>
-           {{item.price }}</del></div>    
-          <el-button type="info" class="button" @click="handleDetail();" icon="el-icon-caret-right" >查看详情</el-button>
+           {{item.marketPrice }}</del></div>    
+          <el-button type="info" class="button" @click="handleDetail(item.bookId);" icon="el-icon-caret-right" >查看详情</el-button>
       </div>
     </el-card>
   </el-col>
 </el-row>
-</div>   
+</div>
+<el-pagination
+  background
+  @size-change="handleSizeChange"
+  @current-change="handleCurrentChange"
+  :currentPage="currentPage"
+  :page-sizes="[10, 20,30,40]"
+  :page-size="pageSize"
+  layout="prev, pager, next,jumper, total, sizes"
+  :total="total">
+</el-pagination>   
 </el-main>
 </el-container>
 
   
 </template>
 <script>
-import books from "../../assets/js/book.js";
+// import books from "../../assets/js/book.js";
 
 export default {
      name: 'index',
     data(){
       return {
-      hotForm:book
+        pageSize:10,//页面大小
+        total:0,//总数
+        currentPage:1,//当前页面
+        bookList:[],
+        cate_id:0,
+        loading:true,
+      }
+    },
+    mounted(){
+      this.cate_id=this.$store.state.cate_id;
+      console.log("cate+++"+ this.cate_id);
+      this.getList();
+    },
+    watch:{
+   
+    },
+    methods:{
+      //更改页码
+      handleCurrentChange(currentPage) {
+        this.currentPage = currentPage;
+       this.getList();
+      },
+      //更改每一页大小
+      handleSizeChange(pageSize) {
+        this.pageSize = pageSize;
+       this.getList();
+      },
+      getList(){
+        var that=this;
+        var BookCategoryId=that.cate_id;
+        this.$ajax({
+          url:'/book/bookCategorySecond.do',
+          method:'post',
+          params:{
+            BookCategoryId:BookCategoryId,
+            pageNo: that.currentPage,
+            pageSize:that.pageSize,
+          }
+        }).then(function(response){
+          if(response.data.success){
+            that.bookList=response.data.totalData;
+            that.loading=false;
+            console.log("bookList"+that.bookList);
+          }
+        }).catch(function(response){
+          that.loading=false;
+          that.$msgbox({
+            type:'error',
+            message:'服务器异常'
+          });
+        })
+      },
+      handleDetail(bookId){
+        console.log(bookId);
+        this.$router.push({ path: '/home/detail',query:{bookId:bookId} });
       }
     }
 

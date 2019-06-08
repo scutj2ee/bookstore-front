@@ -13,14 +13,15 @@ v-loading="totalLoading"
    </div>
   </div>
   </el-col>
-  <el-col :xs="0" :sm="6" :md="6" :lg="10" :xl="8"><div class="grid-content center hidden-md-and-down">
+  <el-col :xs="0" :sm="6" :md="6" :lg="14" :xl="8"><div class="grid-content center hidden-md-and-down">
   <!-- 搜索栏 -->
   
   </div>
   </el-col>
-  <el-col :xs="24" :sm="16" :md="16" :lg="12" :xl="8"><div class="grid-content">
+  <el-col :xs="24" :sm="16" :md="16" :lg="10" :xl="8"><div class="grid-content">
   <!-- 主页菜单 -->
   <el-menu
+  unique-open="true"
   class="el-menu-demo"
   mode="horizontal"
   @select="handleSelect"
@@ -41,16 +42,22 @@ v-loading="totalLoading"
 
   <el-submenu index="2" >
     <template slot="title">
-    <i  class="el-icon-notebook-1"></i>书单</template>
-    <el-menu-item index="/home/detail">人文</el-menu-item>
-    <el-menu-item index="2-2">文学</el-menu-item>
-    <el-menu-item index="2-3">生活</el-menu-item>
-    <el-submenu index="2-4">
-      <template slot="title">技能</template>
-      <el-menu-item index="2-4-1">IT技术</el-menu-item>
-      <el-menu-item index="2-4-2">摄影</el-menu-item>
-      <el-menu-item index="2-4-3">烹饪</el-menu-item>
-    </el-submenu>
+    <i  class="el-icon-notebook-1"></i>书单
+    </template>
+  <el-menu-item>所有图书</el-menu-item>
+  <el-submenu unique-open="true" index="item.index" v-for="(item,index) in categories" :key="index">
+
+  <template slot="title">
+      <i class="el-icon-location"></i>
+      <span slot="title">{{item.name}}</span>
+    </template>
+    <div v-if="item.child.length">
+      <el-menu-item v-for="(second,index) in item.child" :key="index">
+      {{second.name}}
+      </el-menu-item>
+    </div>
+  </el-submenu>
+
   </el-submenu>
   <el-menu-item index="/home/order/all" class="hidden-md-and-down" >
   <i class="el-icon-tickets"  ></i>
@@ -64,45 +71,60 @@ v-loading="totalLoading"
 </el-header>
  <el-container ref="aside" >
     <el-aside  width="200px" class="hidden-md-and-down" >
-    <!-- 侧栏 -->
-  <el-row>
-  <el-col  v-for="(item,index) in categories" :key="index">
-  <el-popover
-    placement="right-end"
-    :title="item.name"
-    width="200"
-    trigger="click"
-    visible-arrow="false"
-    >
-    <ul v-for="(child,index) in item.children" :key="index">
-    
-    <li > {{child.name}}</li>
-    </ul>
-      <template slot="reference">
-      <div slot="reference" class="board">
-       {{item.name}}
-       </div>
-      </template>
-    
-  </el-popover>
  
-  </el-col>
-  </el-row>
 
   <!-- 侧栏 -->
-  <!-- <el-radio-group v-model="isCollapse" >
-  <el-radio-button :label="false">展开</el-radio-button>
-  <el-radio-button :label="true">收起</el-radio-button>
-</el-radio-group>
-<el-menu  class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-  <el-submenu  v-for="(item,index) in categories" :key="index">
 
+ <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#000000"
+             text-color="#ff9900" active-text-color="#20a0ff" unique-opened @select="handleList">
+      <template v-for="item in categories">
+        <template v-if="item.child.length>0">
+          <el-submenu :index="String(item.id)" :key="item.id">
+            <template slot="title">
+             <span slot="title">{{ item.name }}</span>
+            </template>
+            <el-menu-item v-for="(subItem,i) in item.child" :key="i" :index="String(subItem.id)">
+              {{ subItem.name }}
+            </el-menu-item>
+          </el-submenu>
+        </template>
+        <template v-else>
+          <el-menu-item :index="String(item.id)" :key="item.id">
+            <span slot="title">{{ item.name }}</span>
+          </el-menu-item>
+        </template>
+      </template>
+    </el-menu>
+
+<!-- <el-menu 
+ 
+ class="el-menu-vertical-demo"
+ background-color="#000"
+  text-color="#ff9900"
+  active-text-color="#ffd04b"
+  :router="true"
+ >
+  <el-menu-item index="1">所有图书</el-menu-item>
+
+  
+  <NavMenu :navMenus="categories"></NavMenu>
+  <el-menu-item :index="item.name" v-for="(item,index) in categories" :key="item.id" v-if="item.child.length==0">
   <template slot="title">
       <i class="el-icon-location"></i>
       <span slot="title">{{item.name}}</span>
     </template>
-      <el-menu-item >选项1</el-menu-item>
-      <el-menu-item >选项2</el-menu-item>
+  </el-menu-item>
+
+  <el-submenu  v-for="(item,index) in categories" :key="item.id" v-if="item.child.length>0">
+  <template slot="title">
+      <i class="el-icon-location"></i>
+      <span slot="title">{{item.name}}</span>
+    </template>
+      <el-menu-item v-for="(sub,index) in item.child" :key="sub.id" >
+      <template slot="title">
+      <span slot="title">{{sub.name}}</span>
+      </template>
+      </el-menu-item>
   </el-submenu>
 </el-menu> -->
 
@@ -114,7 +136,7 @@ v-loading="totalLoading"
     <!-- 主体部分 -->
    <el-container>
       <el-main> 
-       <router-view class="view"></router-view>
+       <router-view v-if="isRouterAlive" class="view"></router-view>
   </el-main>
       <el-footer> 
   <el-dialog  title="用户登陆" :visible.sync="outerVisible" width="30%" >
@@ -192,9 +214,14 @@ v-loading="totalLoading"
 <script>
 import 'element-ui/lib/theme-chalk/display.css';
 import {mapActions,mapGetters} from 'vuex';
+import NavMenu from './NavMenu.vue';
+
+import bus from './utils/bus';
 const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
  export default {
    name: 'home',
+  components: {NavMenu},
+
     data() {
       //手机验证
       var phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/
@@ -267,7 +294,8 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         }
       };
       return {
-         isCollapse: true,
+        isRouterAlive:true,
+        collapse: false,
         //分类
         categories:[{
           id:1,
@@ -389,14 +417,25 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         clientHeight:'',//浏览器高度
       };
     },
+    computed: {
+      onRoutes() {
+        return this.$route.path.replace('/', '');
+      }
+    },
+    created() {
+       
+      // 通过 Event Bus 进行组件间通信，来折叠侧边栏
+      bus.$on('collapse', msg => {
+        this.collapse = msg;
+      })
+    },
      mounted() {
+       this.getCategories();
       this.ruleForm=this.$store.state.ruleForm;
       this.getCookie();//读取cookie
        this.$router.push('/home/homepage');//默认打开链接
         // 获取浏览器可视区域高度
       this.clientHeight =   `${document.documentElement.clientHeight}`              
-      //document.body.clientWidth;
-      //console.log(that.clientHeight);
       window.onresize = function temp() {
         this.clientHeight = `${document.documentElement.clientHeight}`;
       };
@@ -416,7 +455,18 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         // console.log(this.$refs.homePage.$el.style.height);
         this.$refs.aside.$el.style.height = clientHeight-20+'px';
       },
+      getCategories(){
+        var that=this;
+        this.$ajax({
+          url:"category/list.do",
+          method:'post'
+        }).then(function(response){
+          that.categories=response.data.bookCategoryList;
+          console.log(that.categories);
+        }).catch(function(response){
 
+        })
+      },
 
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
@@ -677,8 +727,17 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         }
       },
       //跳转
-      handleList(){
-        this.$router.push('/home/list')
+      handleList(index,indexPath){
+        // console.log(index);
+        //进行页面的跳转，但是不刷新，可使DOM重新加载
+        this.isRouterAlive = false
+        this.$nextTick(function () {
+        this.isRouterAlive = true
+        });
+        console.log('path'+index);
+        this.$router.push({ path: '/home/list'});
+        this.$store.commit('modifyCateId',index);
+        sessionStorage.setItem('cate_id',index);
       }
     
   }
@@ -717,6 +776,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
     text-align: center;
     line-height: 60px;
     
+    
   }
   
   .el-aside {
@@ -724,7 +784,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
     color: #ff9900;
     text-align: center;
     line-height: 30px;
-    
+   min-height:100vh;
   }
   
   .el-main {
@@ -732,7 +792,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
     color: #333;
     text-align: center;
     line-height: 30px;
-    
+    min-height:100vh;
 
 
   }

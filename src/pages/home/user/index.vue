@@ -61,7 +61,7 @@
     width:1200px;
     margin:80 auto;
     position:relative;
-    background-color:#000;
+    background-color:#ff9900;
   }
   .sub-main-container{
     margin:10px 8px 10px 8px;
@@ -69,9 +69,9 @@
     width:280px;
     height:280px;
     float:left;
-    background-color:#fcf9ec;
+    background-color:#fff;
     border-radius:5px;
-    border: 2px #ff9900 dashed ;
+    border: 2px #000000 dashed ;
     line-height: 10px;
     font-size:30px;
   }

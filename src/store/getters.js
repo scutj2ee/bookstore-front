@@ -6,3 +6,4 @@ export const categories= state=>state.categories
 export const user = state => state.user
 export const adminUser = state => state.adminUser
 export const address = state => state.address
+export const cate_id = state => state.cate_id

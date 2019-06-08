@@ -22,3 +22,7 @@ export const modifyAdminUser = (state, adminUser) => {
 export const modifyAddress = (state, address) => {
   state.address = address;
 }
+//提交分类号
+export const modifyCateId = (state, cate_id) => {
+  state.cate_id = cate_id;
+}

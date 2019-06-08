@@ -6,7 +6,7 @@ import * as mutations from './mutations'
 import DateUtil from '../assets/util/DateUtil'
 Vue.use(Vuex)
 const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {
-
+    //用户表格
     user: {
         id: null,
         username: '',
@@ -15,12 +15,13 @@ const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getIte
         integration: 0,
         phone: '',
     },
+    //超级管理员
     adminUser: {
         username: '',
         password: '',
 
     },
-    //BookInfo
+    //书详细表格
     bookInfo: {
         bookId: 1,
         bookCategoryId: 1,
@@ -30,7 +31,6 @@ const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getIte
         outline: "肖申克的救赎正版书籍原版英文版引进翻译斯蒂芬金小说肖生克电影原著史蒂芬金外国悬疑恐怖惊",
         press: "新华出版社",
         publishDate: "",
-
         version: "精装版",
         size: "大32开",
         translator: "林少辉",
@@ -73,14 +73,14 @@ const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getIte
     },
     //书分类
     categories: [{
-        cate_id: 1,
-        parent_id: 0,
-        name: "科技",
-        status: 1,
-        type: 1,
-        created: new Date(),
-        update: new Date(),
-    }]
+        id:'',
+        name:'',
+        child:[],
+    }],
+
+    //分类id用于页面之间传输分类
+    cate_id:0,
+
 
 }
 const store = new Vuex.Store({

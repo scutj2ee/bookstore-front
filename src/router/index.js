@@ -126,6 +126,7 @@ const router= new Router({
           title: '分类选择'
         }
       }
+    
     ]
     }, {
 

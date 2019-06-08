@@ -69,7 +69,12 @@
      width="120" 
      align="center">
       <template slot-scope="scope">
-         <img v-bind:src="scope.row.image_url" style="width: 100px;height:100px;" @click="openImg(scope.row.image_url)" >
+      <el-image class="head-pic" v-bind:src="scope.row.imageUrl" style="width: 100px;height:100px;" @click="openImg(scope.row.image_url)">
+      <div slot="error" class="image-slot" >
+        <!-- <i  class="el-icon-picture-outline" style="font-size:160px;"></i> -->
+        <el-image v-bind:src="default_img"></el-image>
+      </div>
+      </el-image>
       </template>
   </el-table-column>
     <el-table-column 
@@ -89,8 +94,19 @@
             </el-table-column>
             
   </el-table>
+  
   <!-- 账单 -->
  <div  class="pay-card">
+    <el-pagination
+  background
+  @size-change="handleSizeChange"
+  @current-change="handleCurrentChange"
+  :currentPage="currentPage"
+  :page-sizes="[10, 20,30,40]"
+  :page-size="pageSize"
+  layout="prev, pager, next,jumper, total, sizes"
+  :total="total">
+</el-pagination>
 <div class="sub-card">
 <div class="btn_box pay-text">
  共：{{totalItem}}本书 &nbsp 总价钱:￥ {{countList}}</div>
@@ -149,19 +165,6 @@
     <el-input type="text" v-model="addressForm.receiver" ></el-input>
   </el-form-item>
 <el-form-item label="地点" prop="area">
-  	<!-- <el-cascader
-		:options="address"
-		change-on-select
-		v-model="addressForm.area"
-		expand-trigger="hover"
-		@change="handleChange" 
-		class="wd400">
-	</el-cascader> -->
-  <!-- <area-cascader 
-  v-model="addressForm.area"  
-  :type='text' :level='2' 
-  :data="pcaa">
-  </area-cascader> -->
   <area-select type='text' :level='2' v-model="addressForm.area" :data="pcaa" autocomplete="off"></area-select>
   </el-form-item>
    <el-form-item label="详细地址" prop="detail">
@@ -219,9 +222,11 @@ import 'vue-area-linkage/dist/index.css'; // 样式
       return {
         pcaa: pcaa,
         search: '',//搜索
-        // address: areajson, //调用外部js文件的json数据
+        pageSize:10,//页面大小
+        total:0,//总数
+        currentPage:1,//当前页面
         //自定义 默认值
-        addressSelect:[],//导入已写入地址json
+        addressSelect:[],//已写入的地址
         addressSelected: '',//选择地址
         addressForm:{
         area: [], //此处填写对应的value值
@@ -233,12 +238,13 @@ import 'vue-area-linkage/dist/index.css'; // 样式
         innerVisible:false,//添加地址
         paymentVisiable:false,//付款按钮
         active: 1,
+        default_img:'',//默认图片
         dialogImgUrl:null,
         tableData: cart,//导入购物车json文件
         count: 0,
         istrue: false,
         imgVisible:false,
-        total:0,//总商品件数         
+        totalCount:0,//总商品件数         
       };
     },
     computed:{
@@ -250,31 +256,28 @@ import 'vue-area-linkage/dist/index.css'; // 样式
                             a += this.tableData[i].price * this.tableData[i].number
                         }
                     }
-                    this.count = a;
-                    return this.count
+                    this.count= a;
+                    return this.count;
                 },
     totalItem:function(){
-      var total=0;
+      var totalCount=0;
       var book=0;
       for(let i=0;i<this.tableData.length;i++){
         if(this.tableData[i].is_check==true){
           book+=1;
-          total+=this.tableData[i].number;
+          totalCount+=this.tableData[i].number;
         }
       
       }
-      this.total=total;
-      return this.total;
+      this.totalCount=totalCount;
+      return this.totalCount;
     }
 
     },
     mounted(){
+      this.default_img=require('../../assets/images/default.jpg');
       this.handleGetAddress();
-  
-// });
-
-
-
+      this.handleGetCart();
 
     },
     watch:{
@@ -321,11 +324,11 @@ import 'vue-area-linkage/dist/index.css'; // 样式
           }
           that.addressSelect=addressStr;
           console.log(that.addressSelect);
-          that.$message({
-            title:"获取成功",
-            type:'success',
-            message:'获取成功'
-          })
+          // that.$message({
+          //   title:"获取成功",
+          //   type:'success',
+          //   message:'获取成功'
+          // })
         });
       },
         //行变色
@@ -359,7 +362,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
       },
       // 控制进度条
       next() {
-       if(!this.total){
+       if(!this.totalCount){
           this.$confirm('您还没有选择任何商品', '提示', {
           confirmButtonText: '确定',
           type: 'warning'
@@ -373,7 +376,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
       //提交地址
        onSubmit() {
          if(this.addressSelected){
-           if(this.total){
+           if(this.totalCount){
         console.log('submit!');
         this. paymentVisiable=true;
          this.active++;
@@ -455,6 +458,34 @@ import 'vue-area-linkage/dist/index.css'; // 样式
                     ]);
 
                 },
+                //获取购物车信息
+    handleGetCart(){
+      var that=this;
+      var userId=that.$store.state.user.id;
+      this.$ajax({
+        url:'cart/list.do',
+        method:'post',
+        params:{
+          userId:userId,
+          pageNo: that.currentPage,
+          pageSize:that.pageSize,
+        }
+      }).then(function(response){
+         console.log("tableDta:"+response.data.tableData);
+          that.tableData=response.data.tableData;
+          that.total=response.data.total;
+      })
+    },
+     //更改页码
+      handleCurrentChange(currentPage) {
+        this.currentPage = currentPage;
+       this.handleGetCart();
+      },
+      //更改每一页大小
+      handleSizeChange(pageSize) {
+        this.pageSize = pageSize;
+       this.handleGetCart();
+      },
     handlePay(){
       this.active++;
       var that=this;
@@ -500,7 +531,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
   width:250px;
 }
 .pay-card{
-  height:200px;
+  height:250px;
 
   background-color:#5bd1d7;
   text-align:center;
@@ -522,7 +553,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
   .el-main {
     color: #333;
     text-align: center;
-    line-height: 160px;
+    line-height: 30px;
   }
   
   body > .el-container {

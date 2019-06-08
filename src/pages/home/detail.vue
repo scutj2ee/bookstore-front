@@ -23,10 +23,28 @@
     <el-main>
     <!-- 主体-->
     <div class="title"><h2 >{{tableData.name}}</h2></div>
-    <el-tabs v-model="card" @tab-click="handleClick">
+    <el-tabs v-model="card"  @tab-click="handleClick">
     <el-tab-pane label="详细信息" name="first">
-    <p></p>
-  
+    <div class="title-item"><i class="el-icon-warning-outline"></i>基本信息</div>
+    <div class="content">
+    <p>书名：{{tableData.name}}</p>
+    <p>作者：{{tableData.author}}</p>
+    <p>翻译：{{tableData.translator}}</p>
+    </div>
+    <div class="title-item"><i class="el-icon-notebook-2"></i>出版信息</div>
+    <div  class="content">
+    <p>版本：{{tableData.version}}</p>
+    <p>打包方式：{{tableData.packStyle}}</p>
+    <p>页数：{{tableData.pages}}</p>
+    <p>规格（开）：{{tableData.size}}</p>
+    <p>出版社：{{tableData.press}}</p>
+    <p>出版时间{{tableData.publishDate}}</p>
+    </div>
+    <div class="title-item"><i class="el-icon-notebook-2"></i>内容信息</div>
+     <div  class="content">
+    <p>目录{{tableData.catalog}}</p>
+    <p>详细介绍:{{tableData.detail}}</p>
+    </div>
     </el-tab-pane>
     <el-tab-pane label="用户评论" name="second">
     <div class="block">
@@ -35,7 +53,7 @@
         v-for="(comment, index) in comments"
         :key="index"
         :timestamp="comment.date"
-        icon="el-icon-s-comment"
+        icon="el-icon-chat-dot-square"
         size="large"
         type="primary"
      placement="top">
@@ -57,6 +75,7 @@
     </el-dialog>
   <div>
   <el-input-number v-model="num" @change="handleChange" :min="1" :max="tableData.storeMount" label="数目"></el-input-number>
+  <label style="color:#ff9900;font-size:20px;">总价格：￥{{subTotal}}</label>
   <el-button type="info" icon="el-icon-star-on" >加入收藏夹</el-button>
   <el-button type="primary" icon="el-icon-shopping-cart-2"  :disabled="!tableData.storeMount" @click="handleToCart()" >加入购物车</el-button>
   </div>
@@ -73,21 +92,22 @@ import dateUtil  from "../../assets/util/DateUtil.js"
 export default {
     data(){
       return {
+        bookId:0,
         tableData: {
           author: "",
           bookCategory: null,
           bookCategoryId: 1,
           bookId: 1,
           catalog: "",
-          dealMount: 213,
+          dealMount: 0,
           detail: "",
-          discount: 312,
+          discount: 0,
           imageUrl: "",
           isShelf: 1,
           isbn: "",
-          lookMount: 123,
-          marketPrice: 213,
-          memberPrice: 213,
+          lookMount: 0,
+          marketPrice: 0,
+          memberPrice: 0,
           name: "",
           outline: "",
           packStyle: "",
@@ -104,24 +124,29 @@ export default {
         comments:[],
         num:1,//数目
         subTotal:0,//总价格
-        card:1,
+        card:"first",
         dialogImgUrl:null,//展示照片
         imgVisible:false,//展示照片的对话
         default_img:null,
       }
     },
     mounted(){
+       this.bookId=this.$route.query.bookId;
+      console.log("success"+this.bookId);
       this.handleGet();
+      this.subTotal=this.tableData.price;
       this.default_img=require('../../assets/images/default.jpg');
-    },
+     
+          },
       methods:{
       handleGet(){
         var that=this;
+        var bookInfoId=that.bookId;
         this.$ajax({
           method:"get",
           url:"book/info.do",
           params:{
-            bookInfoId:1,
+            bookInfoId:bookInfoId,
           }
         }).then(function (response) {
           if(response.data.success){
@@ -130,12 +155,10 @@ export default {
             for(var i=0;i<that.comments.length;i++){
               that.comments[i].date=dateUtil.formatTime(that.comments[i].date);
             }
-           
             console.log(that.comments);
              console.log(dateUtil.formatTime(that.tableData.publishDate));
              that.tableData.publishDate=dateUtil.formatTime(that.tableData.publishDate);
              that.tableData.storeTime=dateUtil.formatTime(that.tableData.storeTime);
-
             console.log(that.tableData);
           }
        
@@ -187,7 +210,7 @@ export default {
       }
     },
      handleChange(value) {
-        this.subTotal=this.tableData.memberPrice*this.num;
+        this.subTotal=this.tableData.price*this.num;
       }
     }  
   }
@@ -213,7 +236,7 @@ export default {
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
+    text-align: left;
     line-height: 30px;
     min-height:100vh;
   }
@@ -234,7 +257,7 @@ export default {
 .title{
  
   font-family:"微软雅黑";
-  color:#feb9c8;
+  color:#ff9900;
 }
 
 .text {
@@ -245,11 +268,6 @@ export default {
   transform:translate(0,-50%);
     font-size: 18px;
   }
-
-  .item {
-    
-  }
-
   .box-card {
    
     float:center;
@@ -273,5 +291,12 @@ export default {
   .head-pic{
     max-width:400px;
     overflow:hidden;
+  }
+  .title-item{
+    width:100%;
+    height:30px;
+    background-color:#ff9900;
+    font-size:30px;
+    color:#fff;
   }
 </style>
