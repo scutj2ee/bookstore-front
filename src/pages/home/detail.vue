@@ -15,10 +15,11 @@
     </div>
     </div>
     <p><i class="el-icon-notebook-2">书名：{{tableData.name}}</i></p>
-    <p><i class="el-icon-coin">价格：￥{{tableData.price}}</i></p>
     <p> <i class="el-icon-edit">作者：{{tableData.author}}</i></p>
     <p> <i class="el-icon-coin">出版日期：{{tableData.publishDate}}</i></p>
     <p><i class="el-icon-notebook-2">大纲：{{tableData.outline}}</i></p>
+     <p><i class="el-icon-coin">价格：￥{{tableData.price}}</i></p>
+      <p><i class="el-icon-coin">市场价：<del>￥{{tableData.marketPrice}}</del></i></p>
   </el-aside>
     <el-main>
     <!-- 主体-->
@@ -76,7 +77,6 @@
   <div>
   <el-input-number v-model="num" @change="handleChange" :min="1" :max="tableData.storeMount" label="数目"></el-input-number>
   <label style="color:#ff9900;font-size:20px;">总价格：￥{{subTotal}}</label>
-  <el-button type="info" icon="el-icon-star-on" >加入收藏夹</el-button>
   <el-button type="primary" icon="el-icon-shopping-cart-2"  :disabled="!tableData.storeMount" @click="handleToCart()" >加入购物车</el-button>
   </div>
 

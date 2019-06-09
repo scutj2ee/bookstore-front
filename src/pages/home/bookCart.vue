@@ -36,32 +36,36 @@
       align="center">
     </el-table-column>
     <el-table-column
-      prop="name"
       label="商品名称"
       width="180"
       align="center">
+      <template slot-scope="scope">
+      {{scope.row.bookInfo.name}}
+      </template>
     </el-table-column>
      <el-table-column
-      prop="price"
       label="单价"
       width="180"
       sortable
       align="center">
+       <template slot-scope="scope">
+      {{scope.row.bookInfo.price}}
+      </template>
     </el-table-column>
      <el-table-column
-      prop="number"
+      prop="buyNum"
       label="数量"
       width="220"
       align="center">
       <template slot-scope="scope">
-      <el-input-number v-model="scope.row.number"   :min="1" :max="10"  ></el-input-number>
+      <el-input-number v-model="scope.row.buyNum"   :min="0" :max="20"  ></el-input-number>
       </template>
     </el-table-column>
     <el-table-column
       label="总价"
       align="center">
       <template slot-scope="scope">
-      {{scope.row.price*scope.row.number }}
+      {{scope.row.bookInfo.price*scope.row.buyNum }}
       </template>
     </el-table-column>
     <el-table-column 
@@ -138,7 +142,7 @@
   width="60%" 
   center>
   <!-- 地址选择 -->
- <el-form :model="addressForm" status-icon  ref="addressForm" label-width="70px" class="demo-addressForm">
+ <el-form  status-icon  label-width="70px" class="demo-addressForm">
  <el-form-item>
 
  <h3>选择收货地址</h3> 
@@ -227,7 +231,10 @@ import 'vue-area-linkage/dist/index.css'; // 样式
         currentPage:1,//当前页面
         //自定义 默认值
         addressSelect:[],//已写入的地址
-        addressSelected: '',//选择地址
+        addressSelected: {
+          address:'',
+          value:0
+        },//选择地址
         addressForm:{
         area: [], //此处填写对应的value值
         detail:"",
@@ -240,7 +247,9 @@ import 'vue-area-linkage/dist/index.css'; // 样式
         active: 1,
         default_img:'',//默认图片
         dialogImgUrl:null,
-        tableData: cart,//导入购物车json文件
+        tableData: [{
+          is_check:false,
+        }],//导入购物车json文件
         count: 0,
         istrue: false,
         imgVisible:false,
@@ -253,7 +262,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
                     for (let i = 0; i < this.tableData.length; i++) {
                         if (this.tableData[i].is_check == true) {
 
-                            a += this.tableData[i].price * this.tableData[i].number
+                            a += this.tableData[i].bookInfo.price * this.tableData[i].buyNum;
                         }
                     }
                     this.count= a;
@@ -265,7 +274,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
       for(let i=0;i<this.tableData.length;i++){
         if(this.tableData[i].is_check==true){
           book+=1;
-          totalCount+=this.tableData[i].number;
+          totalCount+=this.tableData[i].buyNum;
         }
       
       }
@@ -278,6 +287,9 @@ import 'vue-area-linkage/dist/index.css'; // 样式
       this.default_img=require('../../assets/images/default.jpg');
       this.handleGetAddress();
       this.handleGetCart();
+      for(var i=0;i<this.tableData.length;i++){
+        console.log("----------"+this.tableData[i].is_check);
+      }
 
     },
     watch:{
@@ -443,7 +455,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
         this.$refs[formName].resetFields();
       },
       handleGetTotal(id, value){
-        this.tableData[id].number=value*this.tableData[id].price;
+        this.tableData[id].buyNum=value*this.tableData[id].price;
       }, 
       renderHeader: function (h, params) {//实现table表头添加
                     var self = this;
@@ -471,8 +483,16 @@ import 'vue-area-linkage/dist/index.css'; // 样式
           pageSize:that.pageSize,
         }
       }).then(function(response){
-         console.log("tableDta:"+response.data.tableData);
+         console.log("tableData:"+response.data.tableData);
           that.tableData=response.data.tableData;
+          // for(var i=0;i<that.tableData.length;i++){
+          //   var key="is_check";
+          //   var value=true;
+          //   // eval("that.tableData[i].p"+ key + "='" + value + "'");
+          //   that.tableData[i][key]=value;
+          //  console.log(that.tableData[i].is_check);
+          // }
+          
           that.total=response.data.total;
       })
     },
@@ -490,28 +510,35 @@ import 'vue-area-linkage/dist/index.css'; // 样式
       this.active++;
       var that=this;
       var list=[];
-      for(let i=0;i<that.tableDate.length;i++){
+      console.log("dizhishi"+that.addressSelected);
+      var addressId=that.addressSelected;
+      for(let i=0;i<that.tableData.length;i++){
       if(that.tableData[i].is_check==1){
       list.push(that.tableData[i].id);
         }
       }
-      
+      console.log(list);
       if(that.$store.state.user.id==''||that.$store.state.user.id==null)
       {
       //TODO: 交易失败提醒，可以考虑使用dialogue或者冒泡
       }
+      var request=that.$qs.stringify({
+        userId:that.$store.state.user.id,
+        addressId:addressId,
+        cartIdList:list,
+      })
       this.$ajax({
-        url:'',
+        url:'order/submit.do',
         method:'post',
         params:{
-        cateIdList:list,
+        request:request,
         }
       }).then(function(response){
       that.$message({
         type:'success',
         message:'提交成功'
       });
-      }).then(function(response){
+      }).catch(function(response){
          that.$message({
         type:'error',
         message:'提交失败'
@@ -531,9 +558,9 @@ import 'vue-area-linkage/dist/index.css'; // 样式
   width:250px;
 }
 .pay-card{
-  height:250px;
+  height:180px;
 
-  background-color:#5bd1d7;
+  background-color:#ff9900;
   text-align:center;
   position:center;
   
@@ -604,13 +631,13 @@ import 'vue-area-linkage/dist/index.css'; // 样式
    width:fit-content;
   width:-webkit-fit-content;
   width:-moz-fit-content;
-   height:150px;
+   height:100px;
    top:50%;
    left :50%;
    transform:translate(-50%,-50%);
    background-color:#348498;
    /* overflow: hidden; */
-   border-radius:15px;
+   border-radius:10px;
 
 
  }
