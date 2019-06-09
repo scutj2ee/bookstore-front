@@ -28,7 +28,6 @@ v-loading="totalLoading"
   background-color="#000"
   text-color="#fff"
   active-text-color="#ff9900"
-  default-active="/home/homepage"
   :router="true"
   >
   <el-submenu index=1>
@@ -75,7 +74,7 @@ v-loading="totalLoading"
 
   <!-- 侧栏 -->
 
- <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#000000"
+ <el-menu v-loading="menuLoading" class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#000000"
              text-color="#ff9900" active-text-color="#20a0ff" unique-opened @select="handleList">
       <template v-for="item in categories">
         <template v-if="item.child.length>0">
@@ -129,7 +128,7 @@ v-loading="totalLoading"
 </el-menu> -->
 
 
-<el-button type="primary"  icon="el-icon-setting" @click="handleList()">测试</el-button>
+<!-- <el-button type="primary"  icon="el-icon-setting" @click="handleList()">测试</el-button> -->
 
 
     </el-aside>
@@ -294,6 +293,7 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         }
       };
       return {
+        menuLoading:true,
         isRouterAlive:true,
         collapse: false,
         //分类
@@ -463,8 +463,12 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
         }).then(function(response){
           that.categories=response.data.bookCategoryList;
           console.log(that.categories);
+          that.menuLoading=false;
         }).catch(function(response){
-
+          that.$msgbox({
+            type:'error',
+            message:'服务器异常，请重启'
+          })
         })
       },
 

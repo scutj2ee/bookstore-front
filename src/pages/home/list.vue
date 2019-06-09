@@ -7,14 +7,16 @@
     <div class="hot-card">
    <el-row :gutter="20">
   <el-col :span="6" v-for="(item, index) in bookList" :key="index" >
-    <el-card shadow="hover" :body-style="{ padding: '5px' }">
-      <img  v-bind:src="item.image_url" class="book_image">
-
-        <!-- <p v-html="item.outline"></p>
-          <p v-html="item.author"></p>
-          <p class="price"  v-html="item.price">活动价：￥</p> -->
+    <el-card shadow="hover" class="card" :body-style="{ padding: '5px' }">
+    <div class="img-box">
+      <el-image class="image" :src="item.imageUrl"  >
+      <div slot="error"  >
+        <el-image v-bind:src="default_img"></el-image>
+      </div>
+    </el-image>
+    </div>
         <div class="bottom clearfix">
-                <span>{{item.name}}</span>
+                <p style="overflow:hidden;font-size:15px;">{{item.name}}</p>
            <div class="card-show">{{item.author }}</div><br>
            <div class="price">活动价：￥ {{item.price}}</div>
            <div class="card-show">市场价：￥<del>
@@ -53,6 +55,7 @@ export default {
         bookList:[],
         cate_id:0,
         loading:true,
+        default_img:require('../../assets/images/default.jpg'),
       }
     },
     mounted(){
@@ -87,7 +90,9 @@ export default {
           }
         }).then(function(response){
           if(response.data.success){
+            that.bookList=[];
             that.bookList=response.data.totalData;
+            that.total=response.data.total;
             that.loading=false;
             console.log("bookList"+that.bookList);
           }
@@ -130,7 +135,7 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 70px;
+    line-height: 30px;
     min-height:0px;
   }
   
@@ -162,9 +167,7 @@ export default {
     font-size: 18px;
   }
 
-  .item {
-    
-  }
+ 
 
   .box-card {
    
@@ -198,6 +201,17 @@ export default {
 
   .el-row {
     margin-bottom: 30px;
+
+  }
+  .image {
+    width: 100%;
+    max-height:400px;
+    display: block;
+  }
+  .card{
+   
+    height:600px;
+    max-height:600px;
 
   }
 </style>

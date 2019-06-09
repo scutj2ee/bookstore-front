@@ -13,9 +13,32 @@
     <p> <i class="el-icon-message"></i>邮箱：{{user.email}}</p>
     <p>  <i class="el-icon-mobile-phone"></i>手机：{{user.phone}}</p>
    <p>  <i class="el-icon-coin"></i>积分：{{user.integration}}</p>
-   <p>  <i class="el-icon-setting"></i> <router-link to="/home/user/checkpsw"  >修改密码</router-link></p>
+    <el-menu
+      width="100%"
+      default-active="2"
+      class="el-menu-vertical-demo"
+      @open="handleOpen"
+      @close="handleClose"
+      background-color="#000000"
+      text-color="#ff9900"
+      active-text-color="#ffd04b"
+      router>
+      <el-menu-item index="/home/user/checkpsw" >
+        <i class="el-icon-setting"></i>
+        <span slot="title">修改密码</span>
+      </el-menu-item>
+      <el-menu-item index="/home/user/comment">
+        <i class="el-icon-s-comment"></i>
+        <span slot="title">评论管理</span>
+      </el-menu-item>
+      <el-menu-item index="/home/user/address">
+        <i class="el-icon-location"></i>
+        <span slot="title">地址管理</span>
+      </el-menu-item>
+    </el-menu>
+   <!-- <p>  <i class="el-icon-setting"></i> <router-link to="/home/user/checkpsw"  >修改密码</router-link></p>
    <p>  <i class="el-icon-s-comment"></i> <router-link to="/home/user/comment"  >评论管理</router-link></p>
-   <p>  <i class="el-icon-location"></i> <router-link to="/home/user/address"  >地址管理</router-link></p>
+   <p>  <i class="el-icon-location"></i> <router-link to="/home/user/address"  >地址管理</router-link></p> -->
     </div>
     </el-aside>
     <el-main>
@@ -94,6 +117,7 @@ a{
     line-height: 320px;
   }
   .container{
+    position:relative;
     height:40%;
     width:100%;
     /* background-color:red; */

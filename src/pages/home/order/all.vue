@@ -40,7 +40,7 @@
       label="收货信息"
       prop="reciever"
       align="center"
-      width="700px">
+      width="1000px">
       <template slot-scope="scope">
 <span> 
 <i class="el-icon-location"></i>

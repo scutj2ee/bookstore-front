@@ -4,11 +4,10 @@
   <el-aside width="500px">
   <div class="container">
     <div class="sub-container">
-     <el-image class="head-pic" v-bind:src="tableData.imageUrl" @click="openImg(tableData.imageUrl)">
-      <div slot="error" class="image-slot" >
+     <el-image class="head-pic" :src="tableData.imageUrl" @click="openImg(tableData.imageUrl)">
+      <div slot="error"  >
         <!-- <i  class="el-icon-picture-outline" style="font-size:160px;"></i> -->
         <el-image v-bind:src="default_img"></el-image>
-       
       </div>
     </el-image>
     <!-- <img class="head-pic" v-bind:src="tableData.imageUrl||default_img" @click="openImg(tableData.imageUrl)" /> -->
@@ -71,7 +70,7 @@
   </el-tabs>
   <el-dialog width="500px" :visible.sync="imgVisible" class="img-dialog">
       <el-card :body-style="{ padding: '0px' }">
-        <img v-bind:src="dialogImgUrl" width="100%" height="100%">
+        <img :src="dialogImgUrl" width="100%" height="100%">
       </el-card>
     </el-dialog>
   <div>
@@ -113,7 +112,7 @@ export default {
           packStyle: "",
           pages: 211,
           press: "",
-          price: 231,
+          price: 0,
           publishDate: 1559779960000,
           size: "",
           storeMount: 21,
@@ -134,7 +133,7 @@ export default {
        this.bookId=this.$route.query.bookId;
       console.log("success"+this.bookId);
       this.handleGet();
-      this.subTotal=this.tableData.price;
+   
       this.default_img=require('../../assets/images/default.jpg');
      
           },
@@ -160,6 +159,7 @@ export default {
              that.tableData.publishDate=dateUtil.formatTime(that.tableData.publishDate);
              that.tableData.storeTime=dateUtil.formatTime(that.tableData.storeTime);
             console.log(that.tableData);
+               that .subTotal=that .tableData.price;
           }
        
         });
@@ -275,6 +275,7 @@ export default {
     
   }
    .container{
+     position:relative;
     height:60%;
     width:100%;
     /* background-color:red; */
@@ -289,7 +290,9 @@ export default {
     
   }
   .head-pic{
+    position:relative;
     max-width:400px;
+    max-height:400px;
     overflow:hidden;
   }
   .title-item{

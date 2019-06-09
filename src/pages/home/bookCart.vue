@@ -248,7 +248,7 @@ import 'vue-area-linkage/dist/index.css'; // 样式
         default_img:'',//默认图片
         dialogImgUrl:null,
         tableData: [{
-          is_check:false,
+          is_check:true,
         }],//导入购物车json文件
         count: 0,
         istrue: false,
@@ -401,8 +401,8 @@ import 'vue-area-linkage/dist/index.css'; // 样式
       },
       //提交新地址
       submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
+        // this.$refs[formName].validate((valid) => {
+        //   if (valid) {
            
             var that=this;
             var addressArr={
@@ -444,11 +444,11 @@ import 'vue-area-linkage/dist/index.css'; // 样式
 
 
             // console.log(this.addressForm.area);
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+        //   } else {
+        //     console.log('error submit!!');
+        //     return false;
+        //   }
+        // });
       },
       //reset
       resetForm(formName) {
