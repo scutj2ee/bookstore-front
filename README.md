@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="320" src="https://raw.githubusercontent.com/Cillivian/img-folder/master/scutj2ee/logo.png">
+  <img width="320" src="https://raw.githubusercontent.com/scutj2ee/bookstorefront/master/src/assets/images/logo/scuthub.png">
 </p>
 
 <p align="center">
@@ -88,6 +88,17 @@ npm run dev
 
 浏览器访问 http://localhost:8080 (前台商城)
 浏览器访问 http://localhost:8080/admin (后台管理)
+
+### 更新
+---
+. 2019-06-12(updated)
+我们更换了主题颜色
+```css
+main color: #ff9900
+other color: #000000
+```
+
+同时感谢帮助我们制作logo的[bestony](https://github.com/bestony/logoly)
 
 
 
