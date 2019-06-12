@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="320" src="https://raw.githubusercontent.com/scutj2ee/bookstorefront/master/src/assets/images/logo/scuthub.png">
+  <img width="320" src="https://raw.githubusercontent.com/scutj2ee/bookstore-front/master/src/assets/images/logo/scuthub.png">
 </p>
 
 <p align="center">
