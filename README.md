@@ -99,7 +99,7 @@ other color: #000000
 ```
 
 同时感谢帮助我们制作logo的[bestony](https://github.com/bestony/logoly)
-
+<img width="120" src="https://raw.githubusercontent.com/scutj2ee/bookstore-front/master/src/assets/images/logo/scuthub.png">
 
 
 ## Browsers support
