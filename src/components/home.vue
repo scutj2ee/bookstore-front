@@ -465,9 +465,11 @@ const TIME_COUNT = 60 // 设置一个全局的倒计时的时间
           console.log(that.categories);
           that.menuLoading=false;
         }).catch(function(response){
+          that.categories=[],
           that.$msgbox({
             type:'error',
-            message:'服务器异常，请重启'
+            message:'服务器异常，请重启',
+            
           })
         })
       },
